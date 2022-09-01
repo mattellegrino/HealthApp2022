@@ -66,8 +66,33 @@ module.exports = StyleSheet.create({
     borderRadius: 10,
   },
   secondary_button: {
-    backgroundColor: "#868E96",
+    backgroundColor: "#fff",
+    borderColor: "#4E67EB",
+    borderWidth: 2,
     borderRadius: 10,
+  },
+  tertiary_button: {
+    backgroundColor: "#F9A825",
+    borderRadius: 10,
+  },
+
+  multichoicebutton_selected: {
+   backgroundColor:"#FFF9C4", 
+   borderRadius:20, 
+   padding:10,
+   paddingLeft:20,
+   paddingRight:20
+  },
+
+  multichoicebutton_notselected: {
+   borderRadius:10, 
+   padding:10,
+   paddingLeft:20,
+   paddingRight:20
+  },
+
+  text_selected: {
+    color:"#F9A825"
   },
 
   primary_button_text : size => ({
@@ -88,6 +113,15 @@ module.exports = StyleSheet.create({
 
   }),
 
+  tertiary_button_text : size => ({
+
+    padding: 8,
+    paddingHorizontal: 20,
+    fontSize: size=="medium" ? 15 : size=="big" ? 20 : 10,
+    color: "#FFF"
+
+  }),
+
   
 
   input: {
@@ -100,4 +134,12 @@ module.exports = StyleSheet.create({
     marginBottom: 30,
     paddingLeft: 10,
   },
+
+  copertina_questionario: {
+    width: 100,
+    height:100,
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: "black",
+  }
 });

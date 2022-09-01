@@ -18,6 +18,7 @@ import {
 } from "react-native-chart-kit";
 import { Card } from "react-native-shadow-cards";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { FontAwesome5 } from '@expo/vector-icons'; 
 import CustomButton from "../../CustomButton/CustomButton"
 
 const s = require("../../../core/styles");
@@ -99,8 +100,11 @@ const HomePage = ({ navigation, route }) => {
                 }}
               >
                 <Text style={[s.header(4,"medium","#1565C0"), {paddingTop: 15, width: "100%",textAlign: "center" }]}>Sonno</Text>
-                <Ionicons style={{paddingTop: 50}} name="moon-outline" size={40} color={"#1565C0"}/>
-                <Text style={[s.header(4,"regular","#1565C0"), {paddingTop:50}]}> 6:35h </Text>
+                <Ionicons style={{paddingTop: 50}} name="moon-outline" size={50} color={"#1565C0"}/>
+               <View style={{ paddingTop:45, alignItems: "center"}}>
+                <Text style={[s.text("small","#1565C0")]}> Ore dormite la scorsa notte </Text>
+                <Text style={[s.header(2,"medium","#1565C0")]}> 6:35h </Text>
+               </View>  
               </Card>
             </View>
           </Pressable>
@@ -119,7 +123,7 @@ const HomePage = ({ navigation, route }) => {
            
             <Text style={[ s.header(4,"medium","#008b00"),{ paddingTop: 10, width: "100%", textAlign: "center" }]}> Attività fisica{" "}</Text>
              <View style={{width: "100%", alignItems: "center"}}>
-               <View style={{paddingBottom:50, alignItems: "center"}}>
+               <View style={{paddingTop:10,paddingBottom:50, alignItems: "center"}}>
                 <ProgressChart
                   data={[0.8]}
                   width={150}
@@ -137,13 +141,15 @@ const HomePage = ({ navigation, route }) => {
                     },
                   }}
                 />
-                 <Text style={{position:"absolute", top:35, color:"#008b00"}}> 7898 </Text>
-                <Ionicons name="footsteps" size={32}/>
+                 <Text style={[s.body("bold"),{position:"absolute", top:45, color:"#008b00"}]}> 7898 </Text>
+                 <FontAwesome5 name="running" size={32} color="#008b00" />
                 </View>
-                <View style={{padding: 20}}>
-                 <Image style={{height: 50, width: 50}} source={require("../../../assets/heart-rate.png")}/>
+                <View style={{padding: 50, alignItems: "center", width:300 }}>
+                 <FontAwesome5 name="heartbeat" size={45} color="#008b00" />
+                 <Text style={s.text("small","#008b00")}> Ultimo battito registrato: </Text>
+                 <Text style={s.header(4,"medium","#008b00")}> 83 bpm </Text>
                 </View>
-                  <Text style={s.header(4,"medium","#008b00")}> 83 bpm </Text>
+                 
             </View> 
           </Card>
           </View>
@@ -171,8 +177,9 @@ const HomePage = ({ navigation, route }) => {
               <Text style = {s.header(3,"medium")}> 3 </Text>
               <Text style = {[s.body("medium"), {textAlign: "center"}]}> questionari da {'\n'} compilare </Text>
             </View>
-
-            <CustomButton onPress={()=> navigation.navigate("Questionari")} button="first" text="Compila" fontSize="medium"></CustomButton>
+            <View style={{paddingTop: 30}}>
+             <CustomButton onPress={()=> navigation.navigate("Questionari")} text="Compila" fontSize="medium"></CustomButton>
+            </View>  
           </Card>
           <Card
             cornerRadius={10}
