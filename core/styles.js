@@ -7,7 +7,6 @@ module.exports = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
   },
 
   container_header: {
@@ -51,6 +50,19 @@ module.exports = StyleSheet.create({
     fontWeight: weight == "bold" ? "700" : weight == "medium" ? "500" : "300" 
 
   }),
+
+  link: (weight,fontColor) => ({
+
+    fontSize: 13,
+    textDecorationLine: "underline",
+    color: fontColor ? fontColor : theme.colors.text,
+    fontWeight: weight == "bold" ? "700" : weight == "medium" ? "500" : "300" 
+
+  }),
+  
+  progress_rectangle: {
+
+  },
   
   root: {
     flex: 2,
@@ -139,7 +151,7 @@ module.exports = StyleSheet.create({
     width: 100,
     height:100,
     borderRadius: 50,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: "black",
   }
 });

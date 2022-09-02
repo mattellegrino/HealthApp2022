@@ -10,6 +10,8 @@ import Questionari from "./components/pages/Questionari/Questionari";
 import Sonno from "./components/pages/Sonno/Sonno";
 import Attivitàfisica from "./components/pages/Attività fisica/Attività fisica";
 import Progressi from "./components/pages/Progressi/Progressi";
+import Peso from "./components/pages/Peso/Peso";
+import Questionario from "./components/pages/Questionari/Questionario";
 
 const Stack = createNativeStackNavigator();
 global.matteo = "192.168.1.127";
@@ -33,7 +35,9 @@ const App = () => (
       />
       <Stack.Screen name="Impostazioni" component={Impostazioni} />
       <Stack.Screen name="Questionari" component={Questionari} />
+      <Stack.Screen name="Questionario" component={Questionario} />
       <Stack.Screen name="Sonno" component={Sonno} />
+      <Stack.Screen name="Peso" component={Peso} />
       <Stack.Screen name="Attività fisica" component={Attivitàfisica} />
       <Stack.Screen name="Progressi" component={Progressi} />
       <Stack.Screen name="ServerData" component={ServerData} />

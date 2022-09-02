@@ -89,9 +89,10 @@ const HomePage = ({ navigation, route }) => {
       >
         <View style={{ flex: 1, flexDirection: "column" }}>
           <Pressable style={{ flex: 2 }} onPress={() => navigation.navigate("Sonno")}>
-            <View style={{ flex: 2 }}>
+            <View style={{ flex: 2}}>
               <Card cornerRadius={10}
                style={{
+                  justifyContent: "space-around",
                   backgroundColor: "#E3F2FD",
                   flex: 2,
                   width: "95%",
@@ -99,10 +100,10 @@ const HomePage = ({ navigation, route }) => {
                   alignItems: "center",
                 }}
               >
-                <Text style={[s.header(4,"medium","#1565C0"), {paddingTop: 15, width: "100%",textAlign: "center" }]}>Sonno</Text>
-                <Ionicons style={{paddingTop: 50}} name="moon-outline" size={50} color={"#1565C0"}/>
-               <View style={{ paddingTop:45, alignItems: "center"}}>
-                <Text style={[s.text("small","#1565C0")]}> Ore dormite la scorsa notte </Text>
+                <Text style={[s.header(4,"medium","#1565C0"), {width: "100%",textAlign: "center" }]}>Sonno</Text>
+                <Ionicons style={{}} name="moon-outline" size={50} color={"#1565C0"}/>
+               <View style={{ alignItems: "center"}}>
+                <Text style={[s.text("small","#1565C0")]}>Ore dormite la scorsa notte:</Text>
                 <Text style={[s.header(2,"medium","#1565C0")]}> 6:35h </Text>
                </View>  
               </Card>
@@ -122,7 +123,7 @@ const HomePage = ({ navigation, route }) => {
           >
            
             <Text style={[ s.header(4,"medium","#008b00"),{ paddingTop: 10, width: "100%", textAlign: "center" }]}> Attività fisica{" "}</Text>
-             <View style={{width: "100%", alignItems: "center"}}>
+             <View style={{width: "100%", alignItems: "center",justifyContent: "space-around"}}>
                <View style={{paddingTop:10,paddingBottom:50, alignItems: "center"}}>
                 <ProgressChart
                   data={[0.8]}
@@ -144,7 +145,7 @@ const HomePage = ({ navigation, route }) => {
                  <Text style={[s.body("bold"),{position:"absolute", top:45, color:"#008b00"}]}> 7898 </Text>
                  <FontAwesome5 name="running" size={32} color="#008b00" />
                 </View>
-                <View style={{padding: 50, alignItems: "center", width:300 }}>
+                <View style={{padding: 20, alignItems: "center", width:300 }}>
                  <FontAwesome5 name="heartbeat" size={45} color="#008b00" />
                  <Text style={s.text("small","#008b00")}> Ultimo battito registrato: </Text>
                  <Text style={s.header(4,"medium","#008b00")}> 83 bpm </Text>
@@ -181,6 +182,7 @@ const HomePage = ({ navigation, route }) => {
              <CustomButton onPress={()=> navigation.navigate("Questionari")} text="Compila" fontSize="medium"></CustomButton>
             </View>  
           </Card>
+         <Pressable style={{flex:3}} onPress={()=>navigation.navigate("Progressi")}> 
           <Card
             cornerRadius={10}
             style={{
@@ -193,6 +195,7 @@ const HomePage = ({ navigation, route }) => {
           >
             <Text style={[s.header(4,"medium"),{ paddingTop: 10, width: "100%", textAlign: "center" }]}>Progressi</Text>
           </Card>
+         </Pressable> 
         </View>
       </View>
     </View>
