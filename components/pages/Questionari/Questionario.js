@@ -1,26 +1,34 @@
 import { View, Text } from "react-native";
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Domanda from "./Domanda";
 import CustomButton from "../../CustomButton";
+import { RadioButton } from 'react-native-paper';
 const s = require("../../../core/styles");
 
 export default function Questionario({route,navigation},props) {
 
-  const {nomequestionario} = route.params;
-  const [n_domanda,setNumeroDomanda] = useState(1);
+  const {nomequestionario,domande_e_risposte} = route.params;
+  const [n_domanda,setNumeroDomanda] = useState(0);
+ 
 
   return (
     <View style={s.container}>
       <Text style={s.header(2,"bold")}>{nomequestionario}</Text>
-      <View style={{flex:1, flexDirection: "row"}}>
-        <View></View>
-        <View></View>
-        <View></View>
+      <View style={{flex:1, flexDirection: "row", alignItems:"center",justifyContent:"space-around", width:"80%"}}>
+        {domande_e_risposte.map((_,i)=> (
+           <View key={i} style={n_domanda >= i ? s.progress_rectangle_active : s.progress_rectangle}></View>
+        ))}
+       
       </View>  
-       <Domanda n_domanda={n_domanda}></Domanda>
-        <CustomButton onPress={()=> setNumeroDomanda(n_domanda + 1)} text="Prossima"/>
-        {n_domanda > 1 && (
-        <CustomButton onPress={()=> setNumeroDomanda(n_domanda - 1)} text="Precedente"/> )}
+      <View style={{flex:5, width: "80%", borderWidth:1, borderRadius:15, marginBottom:50}}>
+       <Domanda n_domanda={n_domanda} testo={domande_e_risposte[n_domanda].testo}></Domanda>
+      </View>  
+      <View style={{flex:1, flexDirection:"row", width: "80%", justifyContent: "space-around"}}>
+      {n_domanda > 0 && (
+        <CustomButton button="second" onPress={()=> setNumeroDomanda(n_domanda - 1)} text="Precedente"/> )}
+      {n_domanda + 1 == domande_e_risposte.length ? <CustomButton onPress={()=> navigation.navigate("Questionari")} text="Concludi"></CustomButton> :
+        <CustomButton onPress={()=> setNumeroDomanda(n_domanda + 1)} text="Prossima"/>}
+      </View>
     </View>
   );
 }

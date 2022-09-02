@@ -10,8 +10,12 @@ const s = require("../../../core/styles");
 export default function Questionari({navigation}) {
 
   const [isSelected,setIsSelected] = useState("Tutti");
- 
-
+  
+  let domande_e_risposte = 
+  [{argomento: "Cereali", testo:"Quante volte a settimana consumi cereali raffinati (Pasta, riso bianco, pane)?",risposte:["Meno di una","Una","Due","Tre o più"]}, 
+   {argomento: "Cereali", testo:"Quante volte a settimana consumi cereali integrali (Pasta, riso bianco, pane)?",risposte:["Meno di una","Una","Due","Tre o più"]},
+   {argomento: "Medas", testo:"Quante porzioni di verdura consumi al giorno?",risposte:["Meno di una","Una","Due","Tre o più"]}]
+  
   return (
     <View style={{ flex:8, width:"100%"}}>
       <View style={{flex:1,paddingRight:20,paddingLeft:20,justifyContent:"center"}}>
@@ -35,9 +39,9 @@ export default function Questionari({navigation}) {
       </View>
 
       <View style={{flex: 4, flexDirection: "row", justifyContent: "space-around", alignItems: "center"}}>
-        <CopertinaQuestionario titolo={"Cereali"}></CopertinaQuestionario>
-        <CopertinaQuestionario titolo={"Insomnia"}></CopertinaQuestionario>
-        <CopertinaQuestionario titolo={"Medas"}></CopertinaQuestionario>
+        <CopertinaQuestionario titolo={"Cereali"} domande_e_risposte ={domande_e_risposte.filter((element) => element.argomento=="Cereali")}></CopertinaQuestionario>
+        <CopertinaQuestionario titolo={"Insomnia"}domande_e_risposte ={domande_e_risposte.filter((element) => element.argomento=="Insomnia")}></CopertinaQuestionario>
+        <CopertinaQuestionario titolo={"Medas"} domande_e_risposte ={domande_e_risposte.filter((element) => element.argomento=="Medas")}></CopertinaQuestionario>
       </View>
 
      <Pressable style={{flex:2}}onPress={()=> navigation.navigate("Peso")}>
