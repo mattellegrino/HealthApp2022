@@ -1,10 +1,20 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React,{useState} from "react";
+import CustomNavbar from "../../CustomNavbar/CustomNavbar";
 
 export default function Sonno() {
+
+  var selezioni = ["Giorno","Settimana","Mese"];
+
+  const [isSelected,setIsSelected] = useState("Giorno");
+  
+  const handleselection = (selected) => {
+    setIsSelected(selected);
+  }
+
   return (
-    <View>
-      <Text>Sonno</Text>
-    </View>
+    <View style={{flex:1}}>
+    <CustomNavbar type={"sonno"} isSelected={isSelected} selezioni={selezioni} handleselection={handleselection}></CustomNavbar>
+  </View>
   );
 }

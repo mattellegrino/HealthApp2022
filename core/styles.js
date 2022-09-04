@@ -84,26 +84,29 @@ module.exports = StyleSheet.create({
 
   primary_button: {
     backgroundColor: "#4E67EB",
+    borderWidth: 1,
     borderRadius: 10,
   },
   secondary_button: {
     backgroundColor: "#fff",
     borderColor: "#4E67EB",
-    borderWidth: 2,
+    borderWidth: 1,
     borderRadius: 10,
   },
   tertiary_button: {
     backgroundColor: "#F9A825",
     borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#F9A825"
   },
 
-  multichoicebutton_selected: {
-   backgroundColor:"#FFF9C4", 
+  multichoicebutton_selected : type => ({
+   backgroundColor: type == "questionari" ? "#FFF9C4" : type == "attività" ? "#c6f68d" : "#E3F2FD",
    borderRadius:20, 
    padding:10,
    paddingLeft:20,
    paddingRight:20
-  },
+  }),
 
   multichoicebutton_notselected: {
    borderRadius:10, 
@@ -112,9 +115,9 @@ module.exports = StyleSheet.create({
    paddingRight:20
   },
 
-  text_selected: {
-    color:"#F9A825"
-  },
+  text_selected : type =>  ({
+    color: type == "questionari" ? "#F9A825" : type == "attività" ? "#008b00" : "#1565C0",
+  }),
 
   primary_button_text : size => ({
 

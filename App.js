@@ -12,6 +12,7 @@ import Attivitàfisica from "./components/pages/Attività fisica/Attività fisic
 import Progressi from "./components/pages/Progressi/Progressi";
 import Peso from "./components/pages/Peso/Peso";
 import Questionario from "./components/pages/Questionari/Questionario";
+import Profilo from "./components/pages/Profilo/Profilo";
 
 const Stack = createNativeStackNavigator();
 global.matteo = "192.168.1.127";
@@ -31,15 +32,72 @@ const App = () => (
       <Stack.Screen
         name="Home"
         component={SignInPage}
-        options={{ title: "Welcome to HealthApp" }}
+        options={{
+          title: "Benvenuto in Health App!",
+          headerShadowVisible: false,
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+           fontSize: 16
+          }
+   }}
       />
-      <Stack.Screen name="Impostazioni" component={Impostazioni} />
-      <Stack.Screen name="Questionari" component={Questionari} />
-      <Stack.Screen name="Questionario" component={Questionario} />
-      <Stack.Screen name="Sonno" component={Sonno} />
-      <Stack.Screen name="Peso" component={Peso} />
-      <Stack.Screen name="Attività fisica" component={Attivitàfisica} />
-      <Stack.Screen name="Progressi" component={Progressi} />
+      <Stack.Screen name="Impostazioni" component={Impostazioni} options={{
+         headerShadowVisible: false,
+         headerTitleAlign: "center",
+         headerTitleStyle: {
+          fontSize: 16
+         }
+  }}/>
+      <Stack.Screen name="Profilo" component={Profilo} options={{
+            headerShadowVisible: false,
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontSize: 16
+            }
+      }}/>
+      <Stack.Screen name="Questionari" component={Questionari}  options={{
+         headerShadowVisible: false,
+         headerTitleAlign: "center",
+         headerTitleStyle: {
+          fontSize: 16
+         }
+  }}  />
+      <Stack.Screen name="Questionario" component={Questionario} options={{
+         headerShadowVisible: false,
+         title:"",
+         headerTitleAlign: "center",
+         headerTitleStyle: {
+          fontSize: 16
+         }
+  }} />
+      <Stack.Screen name="Sonno" component={Sonno} options={{
+         headerShadowVisible: false,
+         headerTitleAlign: "center",
+         headerTitleStyle: {
+          fontSize: 16
+         }
+  }} />
+      <Stack.Screen name="Peso" component={Peso} options={{
+         headerShadowVisible: false,
+         headerTitleAlign: "center",
+         headerTitleStyle: {
+          fontSize: 16
+         }
+  }} />
+      <Stack.Screen name="Attività fisica" component={Attivitàfisica} options={{
+         headerShadowVisible: false,
+         headerTitleAlign: "center",
+         headerTitleStyle: {
+          fontSize: 16
+         }
+  }} />
+      <Stack.Screen name="Progressi" component={Progressi}  options={{
+         headerShadowVisible: false,
+         headerTitleAlign: "center",
+         headerTitleStyle: {
+          fontSize: 16
+         }
+  }}/>
       <Stack.Screen name="ServerData" component={ServerData} />
       <Stack.Screen name="SleepChart" component={SleepChart} />
     </Stack.Navigator>

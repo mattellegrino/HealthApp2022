@@ -4,7 +4,7 @@ const s = require("../../core/styles");
 const  CustomButton = ({onPress,text,button,fontSize}) => {
 
     return (
-        <View style={{alignItems: "center" }}>
+        <View style={{alignItems: "center"}}>
         <Pressable onPress={onPress} style={button == "first" ? s.primary_button : button == "second" ? s.secondary_button : s.tertiary_button}>
               {button === "first" 
                 ? <Text style={s.primary_button_text(fontSize)}> {text} </Text>

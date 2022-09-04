@@ -21,13 +21,13 @@ export default function Questionario({route,navigation},props) {
        
       </View>  
       <View style={{flex:5, width: "80%", borderWidth:1, borderRadius:15, marginBottom:50}}>
-       <Domanda n_domanda={n_domanda} testo={domande_e_risposte[n_domanda].testo}></Domanda>
+       <Domanda n_domanda={n_domanda} testo={domande_e_risposte[n_domanda] ? domande_e_risposte[n_domanda].testo : ""} risposte={domande_e_risposte[n_domanda] ? domande_e_risposte[n_domanda].risposte : ""}></Domanda>
       </View>  
       <View style={{flex:1, flexDirection:"row", width: "80%", justifyContent: "space-around"}}>
       {n_domanda > 0 && (
-        <CustomButton button="second" onPress={()=> setNumeroDomanda(n_domanda - 1)} text="Precedente"/> )}
-      {n_domanda + 1 == domande_e_risposte.length ? <CustomButton onPress={()=> navigation.navigate("Questionari")} text="Concludi"></CustomButton> :
-        <CustomButton onPress={()=> setNumeroDomanda(n_domanda + 1)} text="Prossima"/>}
+        <CustomButton button="second" onPress={()=> setNumeroDomanda(n_domanda - 1)} text="Precedente" fontSize="medium"/> )}
+      {n_domanda + 1 == domande_e_risposte.length ? <CustomButton onPress={()=> navigation.navigate("Questionari")} fontSize="medium" text="Concludi"></CustomButton> :
+        <CustomButton onPress={()=> setNumeroDomanda(n_domanda + 1)} text="Prossima" fontSize="medium"/>}
       </View>
     </View>
   );

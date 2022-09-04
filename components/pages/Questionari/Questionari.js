@@ -1,42 +1,33 @@
 import { View, Text, Pressable } from "react-native";
 import React, {useState} from "react";
-import Navbar from "../../Navbar/Navbar";
+import Navbar from "../../CustomNavbar/CustomNavbar";
 import CustomButton from "../../CustomButton/CustomButton";
 import CopertinaQuestionario from "./CopertinaQuestionario";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Card } from "react-native-shadow-cards";
+import CustomNavbar from "../../CustomNavbar/CustomNavbar";
 const s = require("../../../core/styles");
 
 export default function Questionari({navigation}) {
 
   const [isSelected,setIsSelected] = useState("Tutti");
   
+  const handleselection = (selected) => {
+
+    setIsSelected(selected);
+
+  }
+
   let domande_e_risposte = 
   [{argomento: "Cereali", testo:"Quante volte a settimana consumi cereali raffinati (Pasta, riso bianco, pane)?",risposte:["Meno di una","Una","Due","Tre o più"]}, 
    {argomento: "Cereali", testo:"Quante volte a settimana consumi cereali integrali (Pasta, riso bianco, pane)?",risposte:["Meno di una","Una","Due","Tre o più"]},
-   {argomento: "Medas", testo:"Quante porzioni di verdura consumi al giorno?",risposte:["Meno di una","Una","Due","Tre o più"]}]
+   {argomento: "Medas", testo:"Quante porzioni di verdura consumi al giorno?",risposte:["Meno di una","Una","Due","Tre o più"]},
+   {argomento: "Medas", testo:"Usi l'olio di oliva come grasso da condimento principale?",risposte:["Sì","No"]}]
   
   return (
-    <View style={{ flex:8, width:"100%"}}>
-      <View style={{flex:1,paddingRight:20,paddingLeft:20,justifyContent:"center"}}>
-       <View style={{backgroundColor:"white",flex:0,flexDirection:"row",justifyContent:"space-between", borderWidth:0.2, borderColor:"white", borderRadius:30}}>
-       <Pressable onPress={()=> setIsSelected("Tutti")}>
-       <View style={isSelected == "Tutti" ? s.multichoicebutton_selected : s.multichoicebutton_notselected}>
-        <Text style={isSelected == "Tutti" && s.text_selected}> Tutti </Text>
-       </View> 
-       </Pressable>  
-       <Pressable onPress={()=> setIsSelected("Compilare")}>
-       <View style={isSelected == "Compilare" ? s.multichoicebutton_selected : s.multichoicebutton_notselected}>
-        <Text style={isSelected == "Compilare" && s.text_selected}> Da compilare </Text>
-       </View>
-       </Pressable> 
-       <Pressable onPress={()=> setIsSelected("Compilati")}>
-       <View style={isSelected == "Compilati" ? s.multichoicebutton_selected : s.multichoicebutton_notselected}>
-        <Text style={isSelected == "Compilati" && s.text_selected}> Compilati </Text>
-       </View>       
-       </Pressable> 
-       </View> 
-      </View>
+    <View style={{ flex:8, width:"100%", backgroundColor:"#FFFFFF"}}>
+         
+       <CustomNavbar type={"questionari"} isSelected={isSelected} selezioni={["Tutti","Compilare","Compilati"]} handleselection={handleselection}/>
 
       <View style={{flex: 4, flexDirection: "row", justifyContent: "space-around", alignItems: "center"}}>
         <CopertinaQuestionario titolo={"Cereali"} domande_e_risposte ={domande_e_risposte.filter((element) => element.argomento=="Cereali")}></CopertinaQuestionario>
