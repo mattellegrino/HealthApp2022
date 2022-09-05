@@ -116,6 +116,7 @@ module.exports = StyleSheet.create({
   },
 
   text_selected : type =>  ({
+    
     color: type == "questionari" ? "#F9A825" : type == "attività" ? "#008b00" : "#1565C0",
   }),
 

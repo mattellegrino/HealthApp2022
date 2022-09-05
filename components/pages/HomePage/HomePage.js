@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState,useEffect} from "react";
 import {
   SafeAreaView,
   View,
@@ -7,6 +7,8 @@ import {
   StyleSheet,
   Pressable,
   TouchableOpacity,
+  BackHandler,
+  Alert
 } from "react-native";
 import {
   LineChart,
@@ -23,9 +25,17 @@ import CustomButton from "../../CustomButton/CustomButton"
 
 const s = require("../../../core/styles");
 const HomePage = ({ navigation, route }) => {
+
+    const [giorno_dell_anno,setGiorno] = useState("");
+
   /* se vuoi far chiudere l'app con il tasto indietro questo è il codice */
-  /*
+  
      useEffect(() => {
+
+        var currentDate = new Date();
+        setGiorno(currentDate);
+        
+
         const backAction = () => {
             Alert.alert("Arrivederci", "Sei sicuro di voler chiudere l'app?", [
                 {
@@ -46,7 +56,7 @@ const HomePage = ({ navigation, route }) => {
         );
         return () => backHandler.remove();
     }, []);
-  */
+  
 
   return (
     <View style={{ flex: 1, padding: 20, backgroundColor:"#fff"}}>
@@ -109,7 +119,9 @@ const HomePage = ({ navigation, route }) => {
               </Card>
             </View>
           </Pressable>
-        <Pressable style={{ flex: 3 }} onPress={() => navigation.navigate("Attività fisica")}>
+        <Pressable style={{ flex: 3 }} onPress={() => navigation.navigate("Attività fisica", {
+          data: new Date()
+        })}>
          <View style={{ flex:3}}>
           <Card
             cornerRadius={10}
@@ -127,8 +139,8 @@ const HomePage = ({ navigation, route }) => {
                <View style={{paddingTop:10,paddingBottom:50, alignItems: "center"}}>
                 <ProgressChart
                   data={[0.8]}
-                  width={150}
-                  height={90}
+                  width={100}
+                  height={80}
                   strokeWidth={10}
                   hideLegend={true}
                   chartConfig={{
@@ -136,13 +148,13 @@ const HomePage = ({ navigation, route }) => {
                     backgroundGradientFrom: "#c6f68d",
                     backgroundGradientTo: "#c6f68d",
                     decimalPlaces: 2,
-                    color: (opacity = 1) => `rgba(0, 215, 0, ${opacity})`,
+                    color: (opacity = 1) => `rgba(0, 139, 0, ${opacity})`,
                     style: {
                       borderRadius: 16,
                     },
                   }}
                 />
-                 <Text style={[s.body("bold"),{position:"absolute", top:45, color:"#008b00"}]}> 7898 </Text>
+                 <Text style={[s.body("bold"),{position:"absolute", top:"35%", color:"#008b00"}]}> 7898 </Text>
                  <FontAwesome5 name="running" size={32} color="#008b00" />
                 </View>
                 <View style={{padding: 20, alignItems: "center", width:300 }}>
