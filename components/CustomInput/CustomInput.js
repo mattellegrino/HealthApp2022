@@ -1,6 +1,6 @@
 import React from 'react'
 import {TextInput} from "react-native";
-import { styles } from "../../core/styles";
+const styles = require("../../core/styles");
 const  CustomInput = ({value,setValue,placeholder,secureTextEntry}) => {
     return (
                     <TextInput

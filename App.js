@@ -20,12 +20,13 @@ import Sonno_s from "./components/pages/Sonno/Sonno_s";
 import Attività_fisica_s from "./components/pages/Attività fisica/Attività_fisica_s";
 import Attività_fisica_c from "./components/pages/Attività fisica/Attività_fisica_c";
 
-const Stack = createNativeStackNavigator();
 global.matteo = "192.168.1.127";
-global.enrico = "192.168.1.196";
+global.enrico = "192.168.1.51";
+
+const Stack = createNativeStackNavigator();
 const App = () => (
   <NavigationContainer>
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName='Home'>
       <Stack.Screen
         name="HomePage_s"
         component={HomePage_s}

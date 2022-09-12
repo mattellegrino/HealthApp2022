@@ -59,7 +59,7 @@ module.exports = StyleSheet.create({
     fontWeight: weight == "bold" ? "700" : weight == "medium" ? "500" : weight == "regular" ? "400" : "300" 
 
   }),
-  
+
   progress_rectangle: {
     width: "30%",
     height: 10,
@@ -72,7 +72,7 @@ module.exports = StyleSheet.create({
     backgroundColor: "#F9A825",
     borderWidth:1
   },
-  
+
   root: {
     flex: 2,
     width: "80%",
@@ -109,10 +109,10 @@ module.exports = StyleSheet.create({
   }),
 
   multichoicebutton_notselected: {
-   borderRadius:10, 
-   padding:10,
-   paddingLeft:20,
-   paddingRight:20
+    borderRadius:10,
+    padding:10,
+    paddingLeft:20,
+    paddingRight:20
   },
 
   text_selected : type =>  ({

@@ -7,14 +7,13 @@ const s = require("../../../core/styles");
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function CopertinaQuestionario(props) {
-
-  const navigation = useNavigation();
+    const navigation = useNavigation();
 
   const [compilato,setCompilato] = useState(false);
 
   return (
     <View style={{width: '100%',alignItems: 'center'}}>
-     <Text style={[s.header(3,"medium"),{marginBottom: 20}]}>{props.titolo}</Text>
+     <Text style={[s.header(4,"medium"),{marginBottom: 20}]}>{props.titolo}</Text>
       <View style={s.copertina_questionario}>
        <Image source={"../../../assets/favicon.png"}></Image>
       </View> 
@@ -22,7 +21,10 @@ export default function CopertinaQuestionario(props) {
        <Card cornerRadius={10} style={styles.card}>
         <CustomButton onPress={()=>navigation.navigate("Questionario", {
           nomequestionario : props.titolo,
-          domande_e_risposte : props.domande_e_risposte
+          domande_e_risposte : props.domande_e_risposte,
+          username:props.username,
+           ip_add: props.ip_add,
+           user:props.user
         })} text={compilato ? "Modifica" : "Compila"} fontSize="medium"/>
        </Card>         
       </View> 
