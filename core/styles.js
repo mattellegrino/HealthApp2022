@@ -117,7 +117,7 @@ module.exports = StyleSheet.create({
 
   text_selected : type =>  ({
     
-    color: type == "questionari" ? "#F9A825" : type == "attività" ? "#008b00" : "#1565C0",
+    color: type == "questionari" ? "#BB530B" : type == "attività" ? "#008b00" : "#1565C0",
   }),
 
   primary_button_text : size => ({
@@ -165,5 +165,15 @@ module.exports = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 2,
     borderColor: "black",
+  },
+
+  circle: {
+
+    borderWidth: 2,
+    borderColor: "black",
+    borderRadius: 50,
+    width: 20,
+    height: 20
+
   }
 });

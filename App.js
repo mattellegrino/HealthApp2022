@@ -13,6 +13,9 @@ import Progressi from "./components/pages/Progressi/Progressi";
 import Peso from "./components/pages/Peso/Peso";
 import Questionario from "./components/pages/Questionari/Questionario";
 import Profilo from "./components/pages/Profilo/Profilo";
+import Recommendation from "./components/pages/Recommendation";
+import Alimentazione from "./components/pages/Alimentazione/Alimentazione";
+import InserisciAlimento from "./components/pages/Alimentazione/InserisciAlimento";
 
 const Stack = createNativeStackNavigator();
 global.matteo = "192.168.1.127";
@@ -91,7 +94,21 @@ const App = () => (
           fontSize: 16
          }
   }} />
-      <Stack.Screen name="Progressi" component={Progressi}  options={{
+      <Stack.Screen name="Recommendation" component={Recommendation}  options={{
+         headerShadowVisible: false,
+         headerTitleAlign: "center",
+         headerTitleStyle: {
+          fontSize: 16
+         }
+  }}/>
+  <Stack.Screen name="Alimentazione" component={Alimentazione}  options={{
+         headerShadowVisible: false,
+         headerTitleAlign: "center",
+         headerTitleStyle: {
+          fontSize: 16
+         }
+  }}/>
+    <Stack.Screen name="Alimenti" component={InserisciAlimento}  options={{
          headerShadowVisible: false,
          headerTitleAlign: "center",
          headerTitleStyle: {

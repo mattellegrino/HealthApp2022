@@ -73,7 +73,7 @@ export default function Attivitàfisica({route}) {
       </View> 
       <View style={{flex:0,justifyContent:"center",alignItems:"center",flexDirection:"row"}}>
       <Ionicons name="chevron-back-outline" size={24} color="black"></Ionicons>
-      <Text> {range_time} </Text>
+      <Text style={s.body("medium")}> {range_time} </Text>
       <Ionicons name="chevron-forward-outline" size={24} color="black"></Ionicons>
       </View>
       <View style={{flex:1, flexDirection: "row",justifyContent:"center",alignItems: "center"}}>

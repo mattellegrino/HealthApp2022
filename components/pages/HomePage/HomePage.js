@@ -8,7 +8,8 @@ import {
   Pressable,
   TouchableOpacity,
   BackHandler,
-  Alert
+  Alert,
+  Dimensions
 } from "react-native";
 import {
   LineChart,
@@ -20,8 +21,10 @@ import {
 } from "react-native-chart-kit";
 import { Card } from "react-native-shadow-cards";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import CustomButton from "../../CustomButton/CustomButton"
+import AlimentazioneRow from "../Alimentazione/AlimentazioneRow"
 
 const s = require("../../../core/styles");
 const HomePage = ({ navigation, route }) => {
@@ -64,12 +67,13 @@ const HomePage = ({ navigation, route }) => {
         justifyContent="space-between"
         style={{
           flex: 1,
+          height: "100%",
           flexDirection: "row",
           paddingTop: 15,
           paddingBottom: 15,
         }}
       >
-        <View>
+        <View style={{flex:1,paddingTop: 10}}>
           <Text>
             <Text style={s.header(1,"regular")}>Ciao </Text>
             <Text style={s.header(1,"medium")}>Mario!</Text>
@@ -79,14 +83,17 @@ const HomePage = ({ navigation, route }) => {
 
         <View
           styles={{
-            height: 100,
-            width: 200,
+            flex:1,
+            alignItems: "center",
             backgroundColor: "green",
           }}
         >
-          <Text> </Text>
-          <Pressable onPress={() => navigation.navigate("Impostazioni")}>
-            <Ionicons name="settings-outline" size={32} />
+         
+          <Pressable style={{paddingTop:20}} onPress={() => navigation.navigate("Impostazioni")}>
+            <Ionicons name="settings-outline" size={24} />
+          </Pressable>
+          <Pressable style={{paddingTop:10}} onPress={() => navigation.navigate("Questionari")}>
+          <MaterialCommunityIcons name="file-document-edit-outline" size={24} color="black" />
           </Pressable>
         </View>
       </View>
@@ -139,9 +146,10 @@ const HomePage = ({ navigation, route }) => {
                <View style={{paddingTop:10,paddingBottom:50, alignItems: "center"}}>
                 <ProgressChart
                   data={[0.8]}
-                  width={100}
-                  height={80}
-                  strokeWidth={10}
+                  width={Dimensions.get("screen").width/3}
+                  height={Dimensions.get("screen").height/7}
+                  strokeWidth={8}
+                  radius={50}
                   hideLegend={true}
                   chartConfig={{
                     backgroundColor: "#c6f68d",
@@ -154,7 +162,7 @@ const HomePage = ({ navigation, route }) => {
                     },
                   }}
                 />
-                 <Text style={[s.body("bold"),{position:"absolute", top:"35%", color:"#008b00"}]}> 7898 </Text>
+                 <Text style={[s.header(4,"bold"),{position:"absolute", top:"38%", color:"#008b00"}]}> 7898 </Text>
                  <FontAwesome5 name="running" size={32} color="#008b00" />
                 </View>
                 <View style={{padding: 20, alignItems: "center", width:300 }}>
@@ -168,33 +176,66 @@ const HomePage = ({ navigation, route }) => {
           </View>
          </Pressable> 
         </View>
+
+
         <View style={{flex: 1, flexDirection: "column"}}>
+         <Pressable style={{flex:4}} onPress={()=>navigation.navigate("Alimentazione",{
+          data: new Date()
+        })}>
           <Card
             cornerRadius={10}
             style={{
               backgroundColor: "#FFF9C4",
-              flex: 5,
+              flex: 4,
               width: "95%",
               marginBottom: 15,
               marginLeft: 5,
               alignItems: "center"
             }}
           >
-            <Text style={[s.header(4,"medium","#F9A825"),{ paddingTop: 15, width: "100%", textAlign: "center" }]}>Questionari</Text>
-            <View style={{alignItems:"center", paddingTop: 30}}> 
-              <Ionicons name="thumbs-up-outline" size={32}></Ionicons>
-              <Text style = {[s.smalltext("regular"), {textAlign: "center"}]}>Compila almeno un questionario per vedere i Consigli della Settimana </Text>
-            </View>
-            <View style={{alignItems:"center",paddingTop: 30}}>
-              <Text style = {s.body("medium")}> Hai ancora </Text>
-              <Text style = {s.header(3,"medium")}> 3 </Text>
-              <Text style = {[s.body("medium"), {textAlign: "center"}]}> questionari da {'\n'} compilare </Text>
-            </View>
-            <View style={{paddingTop: 30}}>
-             <CustomButton onPress={()=> navigation.navigate("Questionari")} text="Compila" fontSize="medium"></CustomButton>
-            </View>  
+            <Text style={[s.header(4,"medium","#BB530B"),{ paddingTop: 15, width: "100%", textAlign: "center" }]}>Alimentazione</Text>  
+              <View style={{flex: 2, justifyContent:"space-around", flexDirection: "column"}}>   
+               <View style={{alignItems: "center"}}>
+                 <View style={{position:"relative",alignItems: "center"}}> 
+                  <ProgressChart
+                      data={[0.8]}
+                      width={Dimensions.get("screen").width/3}
+                      height={Dimensions.get("screen").height/6}
+                      strokeWidth={8}
+                      radius={60}
+                      hideLegend={true}
+                      chartConfig={{
+                        backgroundColor: "#FFF9C4",
+                        backgroundGradientFrom: "#FFF9C4",
+                        backgroundGradientTo: "#FFF9C4",
+                        decimalPlaces: 2,
+                        color: (opacity = 1) => `rgba(187, 83, 11, ${opacity})`,
+                        style: {
+                          
+                          borderRadius: 16,
+                          position: "relative",
+                        },
+                      }}
+                    />
+                  </View>
+                  <Text style={[s.header(4,"bold"),{position:"absolute", top:"35%", color:"#BB530B"}]}> 
+                      <Text>1234 </Text>
+                      <Text>cal</Text>  
+                  </Text>
+                  <Text style={[s.body("bold"),{color:"#BB530B"}]}> 290 calorie rimaste </Text>
+              </View> 
+              </View>
+            
+            <View style={{flex:1, width:"100%",justifyContent: "space-around",marginBottom: 10}}>
+              <AlimentazioneRow titolo="Colazione"></AlimentazioneRow>
+              <AlimentazioneRow titolo="Pranzo"></AlimentazioneRow>
+              <AlimentazioneRow titolo="Cena"></AlimentazioneRow>
+            </View>            
           </Card>
-         <Pressable style={{flex:3}} onPress={()=>navigation.navigate("Progressi")}> 
+        </Pressable>  
+
+
+         <Pressable style={{flex:3}} onPress={()=>navigation.navigate("Recommendation")}> 
           <Card
             cornerRadius={10}
             style={{
@@ -205,7 +246,12 @@ const HomePage = ({ navigation, route }) => {
               alignItems: "center",
             }}
           >
-            <Text style={[s.header(4,"medium"),{ paddingTop: 10, width: "100%", textAlign: "center" }]}>Progressi</Text>
+          <Text style={[s.header(4,"medium"),{ paddingTop: 10, width: "100%", textAlign: "center" }]}>Consigli</Text>
+        <View style={{flex: 1, justifyContent:"center", flexDirection: "column"}}>   
+            <Ionicons style={{alignSelf:"center"}} name="thumbs-up-outline" size={32}></Ionicons>
+            <Text style = {[s.body("regular"), {textAlign: "center"}]}>Compila almeno un questionario per vedere i Consigli della Settimana </Text>
+        </View>    
+
           </Card>
          </Pressable> 
         </View>
