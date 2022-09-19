@@ -80,9 +80,10 @@ export default function Attivitàfisica({route}) {
         <View style={{flex:0,alignItems: "center"}}>
         <ProgressChart
                   data={[0.8]}
-                  width={100}
-                  height={80}
-                  strokeWidth={10}
+                  width={Dimensions.get("screen").width/3}
+                  height={Dimensions.get("screen").height/7}
+                  strokeWidth={8}
+                  radius={50}
                   hideLegend={true}
                   chartConfig={{
                     backgroundColor: "#fff",
@@ -95,7 +96,7 @@ export default function Attivitàfisica({route}) {
                     },
                   }}
                 />
-          <Text style={[s.body("bold"),{position:"absolute", top:"18%", color:"#008b00"}]}> 7898 </Text>
+          <Text style={[s.header(3,"bold"),{position:"absolute", top:"22%", color:"#008b00"}]}> 7898 </Text>
          </View>
          <View style={{flex:0}}>
           <Text style={s.header(4,"regular")}>Passi/giorno</Text>

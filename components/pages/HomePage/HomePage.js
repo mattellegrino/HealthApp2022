@@ -162,7 +162,7 @@ const HomePage = ({ navigation, route }) => {
                     },
                   }}
                 />
-                 <Text style={[s.header(4,"bold"),{position:"absolute", top:"38%", color:"#008b00"}]}> 7898 </Text>
+                 <Text style={[s.header(3,"bold"),{position:"absolute", top:"35%", color:"#008b00"}]}> 7898 </Text>
                  <FontAwesome5 name="running" size={32} color="#008b00" />
                 </View>
                 <View style={{padding: 20, alignItems: "center", width:300 }}>
