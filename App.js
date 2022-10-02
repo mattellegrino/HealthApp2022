@@ -14,6 +14,7 @@ import Recommendation from "./components/pages/Recommendation";
 import Alimentazione from "./components/pages/Alimentazione/Alimentazione";
 import InserisciAlimento from "./components/pages/Alimentazione/InserisciAlimento";
 import HomePage_s from "./components/pages/HomePage/HomePage_s";
+import HomePage_c from "./components/pages/HomePage/HomePage_c";
 import Sonno_c from "./components/pages/Sonno/Sonno_c";
 import Sonno_s from "./components/pages/Sonno/Sonno_s";
 import Attività_fisica_s from "./components/pages/Attività fisica/Attività_fisica_s";
@@ -34,6 +35,16 @@ const App = () => (
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="HomePage_c"
+        component={HomePage_c}
+        options={{
+          title: "Benvenuto",
+          headerBackTitleVisible: false,
+          headerShown: false,
+        }}
+      />
+
       <Stack.Screen
         name="Home"
         component={SignInPage}

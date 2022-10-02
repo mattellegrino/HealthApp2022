@@ -46,7 +46,7 @@ export default function Attività_fisica_s({route}) {
       
       case "Settimana": 
         var curr = new Date; // get current date
-        var first = curr.getDate() - curr.getDay() +1; // First day is the day of the month - the day of the week
+        var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
         var last = first + 6; // last day is the first day + 6
         
         let firstday = new Date(curr.setDate(first));
@@ -58,7 +58,7 @@ export default function Attività_fisica_s({route}) {
       break;
 
       case "Mese":
-        setRangeTime(data.getMonth() + "/" + data.getFullYear());
+        setRangeTime(parseInt(data.getMonth()+ Number(1)) + "/" + data.getFullYear());
         break;
        default: 
 
@@ -79,9 +79,9 @@ export default function Attività_fisica_s({route}) {
       ></CustomNavbar>
       </View> 
       <View style={{flex:0,justifyContent:"center",alignItems:"center",flexDirection:"row"}}>
-      <Ionicons name="chevron-back-outline" size={24} color="black"></Ionicons>
-      <Text style={s.body("medium")}> {range_time} </Text>
-      <Ionicons name="chevron-forward-outline" size={24} color="black"></Ionicons>
+        <Ionicons name="chevron-back-outline" size={24} color="black"></Ionicons>
+          <Text style={s.body("medium")}> {range_time} </Text>
+        <Ionicons name="chevron-forward-outline" size={24} color="black"></Ionicons>
       </View>
       <View style={{flex:1, flexDirection: "row",justifyContent:"center",alignItems: "center"}}>
         <View style={{flex:0,alignItems: "center"}}>

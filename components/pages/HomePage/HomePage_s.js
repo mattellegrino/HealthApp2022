@@ -105,7 +105,9 @@ const HomePage_s = ({ navigation, route }) => {
         }}
       >
         <View style={{ flex: 1, flexDirection: "column" }}>
-          <Pressable style={{ flex: 2 }} onPress={() => navigation.navigate("Sonno_s")}>
+          <Pressable style={{ flex: 2 }} onPress={() => navigation.navigate("Sonno_s",{
+          data: new Date()
+        })}>
             <View style={{ flex: 2}}>
               <Card cornerRadius={10}
                style={{
