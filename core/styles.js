@@ -27,10 +27,10 @@ module.exports = StyleSheet.create({
 
   }),
  
-  body: weight => ({
+  body: (weight,fontColor)=> ({
 
     fontSize: 14,
-    color: theme.colors.text,
+    color: fontColor ? fontColor : theme.colors.text,
     fontWeight: weight == "bold" ? "700" : weight == "medium" ? "500" : "300" 
 
   }),
@@ -43,10 +43,10 @@ module.exports = StyleSheet.create({
 
   }),
 
-  smalltext: weight => ({
+  smalltext: (weight,fontColor) => ({
 
     fontSize: 12,
-    color: theme.colors.text,
+    color: fontColor ? fontColor : theme.colors.text,
     fontWeight: weight == "bold" ? "700" : weight == "medium" ? "500" : "300" 
 
   }),

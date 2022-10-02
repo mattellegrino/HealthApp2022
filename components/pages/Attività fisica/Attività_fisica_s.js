@@ -12,7 +12,7 @@ import {
   StackedBarChart
 } from "react-native-chart-kit";
 
-export default function Attivitàfisica({route}) {
+export default function Attività_fisica_s({route}) {
   var selezioni = ["Giorno", "Settimana", "Mese"];
   var labels_per_day = ["00:00","6:00","12:00","18:00","22:59"];
   var labels_per_week = ["lun","mar","mer","gio","ven","sab","dom"];
@@ -28,12 +28,19 @@ export default function Attivitàfisica({route}) {
     setIsSelected(selected);
   };
 
+  const getday = (data) => {
+    let day = data.getDate() + "/" + parseInt(data.getMonth()+ Number(1)) + "/" + data.getFullYear();
+
+    return day;
+  }
+
   useEffect(() => {
 
+    
     switch (isSelected) {
 
       case "Giorno": 
-      let range_giorno = data.getDate() + "/" + data.getMonth() + "/" + data.getFullYear();
+      let range_giorno = getday(data);
       setRangeTime(range_giorno);
       break;
       
@@ -45,8 +52,8 @@ export default function Attivitàfisica({route}) {
         let firstday = new Date(curr.setDate(first));
         let lastday = new Date(curr.setDate(last));
         
-        let firstday_string = (firstday.getDate() + "/" + firstday.getMonth() + "/" + firstday.getFullYear());
-        let lastday_string = (lastday.getDate() + "/" + lastday.getMonth() + "/" + lastday.getFullYear());
+        let firstday_string = getday(firstday);
+        let lastday_string = getday(lastday);
         setRangeTime(firstday_string + " - " + lastday_string);
       break;
 

@@ -2,13 +2,10 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignInPage from "./components/pages/SignInPage/SignInPage";
-import HomePage from "./components/pages/HomePage/HomePage";
 import SleepChart from "./components/graphs/SleepChart";
 import ServerData from "./components/pages/SignInPage/ServerData";
 import Impostazioni from "./components/pages/Impostazioni/Impostazioni";
 import Questionari from "./components/pages/Questionari/Questionari";
-import Sonno from "./components/pages/Sonno/Sonno";
-import Attivitàfisica from "./components/pages/Attività fisica/Attività fisica";
 import Progressi from "./components/pages/Progressi/Progressi";
 import Peso from "./components/pages/Peso/Peso";
 import Questionario from "./components/pages/Questionari/Questionario";
@@ -16,6 +13,11 @@ import Profilo from "./components/pages/Profilo/Profilo";
 import Recommendation from "./components/pages/Recommendation";
 import Alimentazione from "./components/pages/Alimentazione/Alimentazione";
 import InserisciAlimento from "./components/pages/Alimentazione/InserisciAlimento";
+import HomePage_s from "./components/pages/HomePage/HomePage_s";
+import Sonno_c from "./components/pages/Sonno/Sonno_c";
+import Sonno_s from "./components/pages/Sonno/Sonno_s";
+import Attività_fisica_s from "./components/pages/Attività fisica/Attività_fisica_s";
+import Attività_fisica_c from "./components/pages/Attività fisica/Attività_fisica_c";
 
 const Stack = createNativeStackNavigator();
 global.matteo = "192.168.1.127";
@@ -24,8 +26,8 @@ const App = () => (
   <NavigationContainer>
     <Stack.Navigator>
       <Stack.Screen
-        name="HomePage"
-        component={HomePage}
+        name="HomePage_s"
+        component={HomePage_s}
         options={{
           title: "Benvenuto",
           headerBackTitleVisible: false,
@@ -73,7 +75,15 @@ const App = () => (
           fontSize: 16
          }
   }} />
-      <Stack.Screen name="Sonno" component={Sonno} options={{
+      <Stack.Screen name="Sonno_c" component={Sonno_c} options={{
+         headerShadowVisible: false,
+         headerTitleAlign: "center",
+         headerTitleStyle: {
+          fontSize: 16
+         }
+  }} />
+
+<Stack.Screen name="Sonno_s" component={Sonno_s} options={{
          headerShadowVisible: false,
          headerTitleAlign: "center",
          headerTitleStyle: {
@@ -87,7 +97,14 @@ const App = () => (
           fontSize: 16
          }
   }} />
-      <Stack.Screen name="Attività fisica" component={Attivitàfisica} options={{
+      <Stack.Screen name="Attività_fisica_s" component={Attività_fisica_s} options={{
+         headerShadowVisible: false,
+         headerTitleAlign: "center",
+         headerTitleStyle: {
+          fontSize: 16
+         }
+  }} />
+   <Stack.Screen name="Attività_fisica_c" component={Attività_fisica_c} options={{
          headerShadowVisible: false,
          headerTitleAlign: "center",
          headerTitleStyle: {

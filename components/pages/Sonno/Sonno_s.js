@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import React,{useState} from "react";
 import CustomNavbar from "../../CustomNavbar/CustomNavbar";
 
-export default function Sonno() {
+export default function Sonno_s() {
 
   var selezioni = ["Giorno","Settimana","Mese"];
 

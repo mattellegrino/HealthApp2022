@@ -27,7 +27,7 @@ import CustomButton from "../../CustomButton/CustomButton"
 import AlimentazioneRow from "../Alimentazione/AlimentazioneRow"
 
 const s = require("../../../core/styles");
-const HomePage = ({ navigation, route }) => {
+const HomePage_s = ({ navigation, route }) => {
 
     const [giorno_dell_anno,setGiorno] = useState("");
 
@@ -105,7 +105,7 @@ const HomePage = ({ navigation, route }) => {
         }}
       >
         <View style={{ flex: 1, flexDirection: "column" }}>
-          <Pressable style={{ flex: 2 }} onPress={() => navigation.navigate("Sonno")}>
+          <Pressable style={{ flex: 2 }} onPress={() => navigation.navigate("Sonno_s")}>
             <View style={{ flex: 2}}>
               <Card cornerRadius={10}
                style={{
@@ -126,7 +126,7 @@ const HomePage = ({ navigation, route }) => {
               </Card>
             </View>
           </Pressable>
-        <Pressable style={{ flex: 3 }} onPress={() => navigation.navigate("Attività fisica", {
+        <Pressable style={{ flex: 3 }} onPress={() => navigation.navigate("Attività_fisica_s", {
           data: new Date()
         })}>
          <View style={{ flex:3}}>
@@ -277,4 +277,4 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
   },
 });
-export default HomePage;
+export default HomePage_s;

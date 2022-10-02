@@ -1,16 +1,16 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, StatusBar, Pressable} from 'react-native'
 import React from 'react'
+import { Card } from "react-native-shadow-cards";
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
+const s = require("../../../core/styles");
 
-export default function CiboCard() {
+export default function CiboCard(props) {
   return (
     <Card cornerRadius={10}
     style={styles.card}>
-        <Text style={s.header(3,"medium","#BB530B")}>{props.title}</Text>
-        <Pressable onPress={()=>navigation.navigate("Alimenti",{
-           data: new Date()
-         })}>
-         <Ionicons name="add-circle-outline" size={32} color="black" />
-        </Pressable> 
+        <Text style={s.header(3,"medium")}>{props.title}</Text>
+         <Ionicons name="add-circle-outline" size={32} color="black"></Ionicons>
     </Card>  
   )
 }
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
         flex:1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        backgroundColor: "#FFF9C4",
+        backgroundColor: "#fff",
         padding: 20,
         borderRadius:20,
         marginVertical: 8,
