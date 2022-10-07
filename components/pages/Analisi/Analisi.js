@@ -16,7 +16,7 @@ export default function Analisi({navigation}) {
         ,piastrine = { name: "Piastrine", value: null}
         ,glicemia= { name: "Glicemia", value: null}
         ,urea = { name: "Urea", value: null}
-        ,na= { name: "Cloruro", value: null}
+        ,na= { name: "Sodio", value: null}
         ,k= { name: "Potassio", value: null}
         ,creatinina= { name: "Creatinina", value: null}
         ,colesterolo_totale= { name: "Colesterolo Totale", value: null}
