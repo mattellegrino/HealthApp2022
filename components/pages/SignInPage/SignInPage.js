@@ -11,8 +11,6 @@ import {
 import CustomInput from  '../../CustomInput'
 import CustomButton from "../../CustomButton";
 import Header from "../../Headers/Header";
-import * as Network from "expo-network";
-import publicIP from 'react-native-public-ip';
 import User from "../../../classes/User";
 import Doctor from "../../../classes/Doctor";
 import Patient from "../../../classes/Patient";
@@ -28,28 +26,19 @@ const SignInPage = ({ navigation }) =>  {
 
     const doLogin = async () => {
         try{
-            /*
-            try {
-                ip_add = await Network.getIpAddressAsync();
-                console.log(ip_add)
-            }
-            catch ( err)
-            {
-                setAuthenticationError(true)
-            }
-             */
 
             //indirizzo ip locale, da capire meglio quale ip usare quando i docker del backend saranno pronti.
 
                 ip_add = global.enrico
                 //ip_add = global.matteo
 
-                loggedUser = await login(username, password,ip_add);
+                loggedUser = await login(username,password,ip_add);
                 console.log(loggedUser);
                 role = loggedUser.roles[0].authority.split("_")[1]
                 console.log(role)
                 user = await getUser(username, role);
                 console.log(user);
+                global.id = user.id;
                 setLoggedUser(loggedUser);
                 logged=true
                 localStorage.setItem("loggedUser", JSON.stringify(loggedUser));
@@ -59,9 +48,7 @@ const SignInPage = ({ navigation }) =>  {
     }
 
     async function getUser(username, type) {
-        if (type === "ADMIN"){
-            return undefined
-        }
+
         const response = await fetch(`http://${ip_add}:8080/api/users/${username}?userType=${type}`);
         const userJson = await response.json();
         if (response.ok){
@@ -105,9 +92,10 @@ const SignInPage = ({ navigation }) =>  {
                         logged = false
                     }
                 }
-                }  button={"first"} text={isLoading ? "Accedi" :
+                } button={"first"} text={isLoading ? "Accedi" :
                     (loggedUser?"Loggato":<ActivityIndicator/>)
-                }/>
+                }
+                />
             </View>
 
         </SafeAreaView>
@@ -136,7 +124,5 @@ const SignInPage = ({ navigation }) =>  {
             .catch(err => { reject ({'error': 'Cannot communicate with the server'})})
     })
 }
-
-
 
 export default SignInPage

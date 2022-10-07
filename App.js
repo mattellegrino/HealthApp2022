@@ -19,9 +19,10 @@ import Sonno_c from "./components/pages/Sonno/Sonno_c";
 import Sonno_s from "./components/pages/Sonno/Sonno_s";
 import Attività_fisica_s from "./components/pages/Attività fisica/Attività_fisica_s";
 import Attività_fisica_c from "./components/pages/Attività fisica/Attività_fisica_c";
+import Analisi from "./components/pages/Analisi/Analisi";
 
 global.matteo = "192.168.1.127";
-global.enrico = "192.168.1.51";
+global.enrico = "192.168.1.53";
 
 const Stack = createNativeStackNavigator();
 const App = () => (
@@ -147,6 +148,13 @@ const App = () => (
           fontSize: 16
          }
   }}/>
+        <Stack.Screen name="Analisi" component={Analisi}  options={{
+            headerShadowVisible: false,
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+                fontSize: 16
+            }
+        }}/>
       <Stack.Screen name="ServerData" component={ServerData} />
       <Stack.Screen name="SleepChart" component={SleepChart} />
     </Stack.Navigator>

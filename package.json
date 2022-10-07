@@ -12,6 +12,7 @@
     "android-dev": "adb reverse tcp:8080 tcp:8080 && react-native run- android"
   },
   "dependencies": {
+    "@expo/vector-icons": "^13.0.0",
     "@react-navigation/native": "^6.0.12",
     "@react-navigation/native-stack": "^6.8.0",
     "expo": "~46.0.9",
