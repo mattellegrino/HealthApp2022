@@ -24,7 +24,7 @@ export default function CustomNavbar(props) {
 const styles = StyleSheet.create({
 
   container: {
-    flex:0.5,
+    flex:1,
     paddingRight:20,
     paddingLeft:20,
     justifyContent:"center",
