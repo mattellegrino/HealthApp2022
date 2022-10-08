@@ -1,14 +1,65 @@
-import { View, SafeAreaView, Text, StyleSheet, FlatList, StatusBar } from 'react-native'
+import { View, SafeAreaView, Text, StyleSheet,Dimensions, FlatList, StatusBar,ScrollView } from 'react-native'
 import React, { useState, useEffect } from "react";
 import CustomNavbar from "../../CustomNavbar/CustomNavbar";
 import Ionicons from "@expo/vector-icons/Ionicons";
 const s = require("../../../core/styles");
+import { BarChart } from "react-native-gifted-charts";
 
 export default function Sonno_s({route}) {
 
+  const bardata = [
+           {value: 250, label: 'M'},
+            {value: 500, label: 'T', frontColor:'#177AD5'},
+            {value: 745, label: 'W', frontColor: '#177AD5'},
+            {value: 320, label: 'T'},
+            {value: 600, label: 'F', frontColor: '#177AD5'},
+            {value: 256, label: 'S'},
+            {value: 300, label: 'S'},
+        ];
 
+  const bardataweek = [
+          {value: 250, label: 'Lun'},
+           {value: 500, label: 'Mar', frontColor:'#177AD5'},
+           {value: 745, label: 'Mer', frontColor: '#177AD5'},
+           {value: 320, label: 'Gio'},
+           {value: 600, label: 'Ven', frontColor: '#177AD5'},
+           {value: 256, label: 'Sab'},
+           {value: 300, label: 'Dom'},
+       ];
+
+  const bardatamonth = [
+          {value: 250, label: '1'},
+           {value: 500, label: '2', frontColor:'#177AD5'},
+           {value: 745, label: '3', frontColor: '#177AD5'},
+           {value: 320, label: '4'},
+           {value: 600, label: '5', frontColor: '#177AD5'},
+           {value: 256, label: '6'},
+           {value: 300, label: '7'},
+           {value: 250, label: '8'},
+           {value: 500, label: '9', frontColor:'#177AD5'},
+           {value: 745, label: '10', frontColor: '#177AD5'},
+           {value: 320, label: '11'},
+           {value: 600, label: '12', frontColor: '#177AD5'},
+           {value: 256, label: '13'},
+           {value: 300, label: '14'},
+           {value: 250, label: '15'},
+           {value: 500, label: '16', frontColor:'#177AD5'},
+           {value: 745, label: '17', frontColor: '#177AD5'},
+           {value: 320, label: '18'},
+           {value: 600, label: '19', frontColor: '#177AD5'},
+           {value: 256, label: '20'},
+           {value: 300, label: '21'},
+           {value: 250, label: '22'},
+           {value: 500, label: '23', frontColor:'#177AD5'},
+           {value: 745, label: '24', frontColor: '#177AD5'},
+           {value: 320, label: '25'},
+           {value: 600, label: '26', frontColor: '#177AD5'},
+           {value: 256, label: '27'},
+           {value: 300, label: '28'},
+       ];     
+    
   var selezioni = ["Giorno","Settimana","Mese"];
-
+  
   const [isSelected, setIsSelected] = useState("Giorno");
   const [range_time,setRangeTime] = useState("");
   const [date,setDate] = useState(new Date);
@@ -179,20 +230,36 @@ export default function Sonno_s({route}) {
 
 
   return (
-    <View style={styles.container_main}>
+   <View style={styles.container_main}>
+     <ScrollView style={{flex:1}}>
       <CustomNavbar type={"sonno"} isSelected={isSelected} selezioni={selezioni} handleselection={handleselection}></CustomNavbar>
-        <View style={{flex:0,justifyContent:"center",alignItems:"center",flexDirection:"row"}}>
+        <View style={styles.container_rangetime}>
             <Ionicons name="chevron-back-outline" size={28} color="black" onPress={()=> minus()}></Ionicons>
-                <Text style={s.header(4,"regular")}> {range_time} </Text>
+                <Text style={s.body("medium")}> {range_time} </Text>
             <Ionicons name="chevron-forward-outline" size={28} color="black" onPress={()=> plus()}></Ionicons>
         </View>
 
         <View style={styles.container_sleep}>
             <Text style={[s.header(4,"medium"),{textAlign:"center"}]}>Durata del sonno</Text>
-            <Text style={s.header(1,"medium",color_num_hours_sleeped)}> {num_hours_sleeped} 
-              <Text>h</Text>
-            </Text>
+           <View style={{flex: 0, flexDirection: "row",alignItems: "baseline"}}>
+            <Text style={[s.header(1,"medium",color_num_hours_sleeped),{marginRight:"2%"}]}> {num_hours_sleeped}</Text>
+             <Text style={s.body("medium")}>h{isSelected != "Giorno" && <Text>/giorno</Text>}</Text>
+           </View>  
         </View> 
+
+        {isSelected != "Giorno" && 
+        (<View style={{height:"40%"}}>
+          <Text>Ore sonno</Text>
+         <BarChart 
+            data={isSelected == "Settimana" ? bardataweek : bardatamonth}
+            spacing={isSelected == "Settimana" ? 30 : 10}
+            roundedTop
+            initialSpacing = {5}
+            noOfSections={3}
+            barWidth={isSelected == "Settimana" ? 20 : 12}
+            />
+        </View>)}
+        
 
         <View style={styles.container_sleep_details}>
             <View style={styles.container_suspensions}>
@@ -223,33 +290,39 @@ export default function Sonno_s({route}) {
                  <Text style={s.header(3,"regular")}> {num_ciclicompletati} </Text>
                 </View>       
             </View>
-        </View> 
-
-        <View style={styles.container_empty}></View>        
-    </View>
+        </View>      
+    </ScrollView>
+  </View>  
   );
 }
 
+
 const styles = StyleSheet.create({
 
+  
     container_main: {
-        flex:2,  
+        flex: 1,
         backgroundColor:"white"
     },
 
     container_sleep: {
-        flex:0.5,
+        flex: 0.5,
         justifyContent:"center",
         alignItems: "center",
-        borderRadius:20,
-        borderWidth:1,
+        backgroundColor:"#fff",
+        borderRadius:15,
+        borderWidth:2,
         borderColor:"lightgrey",
-        margin:20,
-        padding:20
+        margin:10,
+        padding:10
     },
+
     container_sleep_details: {
-        flex:1.5,
+        flex: 1,
+        backgroundColor: "#fff",
+        height:230,
         padding:20,
+        marginTop:10,
         flexDirection: "row",
         justifyContent:"space-evenly"
     },
@@ -281,12 +354,17 @@ const styles = StyleSheet.create({
       
     }, 
 
-    text_sleep: {
-      marginTop:"50%",
+    container_rangetime: {
+      flex:0.5,
+      margin:10,
+      justifyContent:"center",
+      alignItems:"center",
+      flexDirection:"row"
     },
 
-    container_empty: {
-        flex:1.5
-    },
+
+    text_sleep: {
+      marginTop:"50%",
+    }
 
 })
