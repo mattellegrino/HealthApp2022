@@ -7,15 +7,11 @@ import { BarChart } from "react-native-gifted-charts";
 
 export default function Sonno_s({route}) {
 
-  const mockbardata = [
-           {value: 250, label: 'M'},
-            {value: 500, label: 'T', frontColor:'#177AD5'},
-            {value: 745, label: 'W', frontColor: '#177AD5'},
-            {value: 320, label: 'T'},
-            {value: 600, label: 'F', frontColor: '#177AD5'},
-            {value: 256, label: 'S'},
-            {value: 300, label: 'S'},
-        ];
+  const mockbardataday = {
+    date: "2022-06-21",
+    time_ms: 22300000
+}
+
 
   const mockbardataweek = [
           {value: 22300000, label: 'LUN'},
@@ -75,6 +71,7 @@ export default function Sonno_s({route}) {
   const [lastVariableMonthDay,setVariableLastMonthDay] = useState("");
   const [monthdate,setMonthDate] = useState("");
   const [sleepdata,setSleepData] = useState([]);
+  const [bardataday,setBarDataDay] = useState("");
   const [bardataweek,setBarDataWeek] = useState([]);
   const [bardatamonth,setBarDataMonth] = useState([]);
   const [redthreshold,setRedThreshold] = useState(5);
@@ -303,7 +300,26 @@ export default function Sonno_s({route}) {
    })
     
    setBarDataMonth(_bardatamonth);
+
+
     //Inserire API per sonno giornaliero: /api/patients/{patientID}/sleep/duration (startDate=dateforapi, endDate=dateforapi)
+    // setBarDataDay con il valore proveniente dall'API
+   let dayformattedtime = formatTime(mockbardataday.time_ms);
+   setBarDataDay(dayformattedtime);
+   setNumHoursSleeped(dayformattedtime);
+
+   if(dayformattedtime < redthreshold)
+   setColorNumHoursSleeped("red");
+
+  else if(dayformattedtime >= redthreshold && dayformattedtime < orangethreshold)
+   setColorNumHoursSleeped("orange");
+
+  else if(dayformattedtime >= orangethreshold && dayformattedtime < yellowthreshold)
+   setColorNumHoursSleeped("yellow");
+
+  else if (dayformattedtime >= yellowthreshold)
+   setColorNumHoursSleeped("green");
+
 
   },[])
 
@@ -315,6 +331,20 @@ export default function Sonno_s({route}) {
       case "Giorno": 
       let range_giorno = getday(currentdate);
       setRangeTime(range_giorno);
+      setNumHoursSleeped(bardataday);
+
+      if(bardataday < redthreshold)
+      setColorNumHoursSleeped("red");
+
+     else if(bardataday >= redthreshold && bardataday < orangethreshold)
+      setColorNumHoursSleeped("orange");
+
+     else if(bardataday >= orangethreshold && bardataday < yellowthreshold)
+      setColorNumHoursSleeped("yellow");
+
+     else if (bardataday >= yellowthreshold)
+      setColorNumHoursSleeped("green");
+
       break;
       
       case "Settimana": 
@@ -396,7 +426,7 @@ export default function Sonno_s({route}) {
 
         <View style={styles.container_sleep}>
             <Text style={[s.header(4,"medium"),{textAlign:"center"}]}>Durata del sonno</Text>
-           <View style={{flex: 0, flexDirection: "row",alignItems: "baseline"}}>
+           <View style={{flexDirection: "row",alignItems: "baseline"}}>
             <Text style={[s.header(1,"medium",color_num_hours_sleeped),{marginRight:"2%"}]}> {num_hours_sleeped}</Text>
              <Text style={s.body("medium")}>h{isSelected != "Giorno" && <Text>/giorno</Text>}</Text>
            </View>  
@@ -408,7 +438,7 @@ export default function Sonno_s({route}) {
             <Text style={s.body("medium")}>Ore sonno</Text>
           </View>
          <BarChart 
-            data={isSelected == "Settimana" ? bardataweek : bardatamonth}
+            data={isSelected == "Settimana" ? bardataweek : isSelected =="Giorno" ? bardataday : bardatamonth}
             spacing={isSelected == "Settimana" ? 30 : 10}
             barBorderRadius={4}
             initialSpacing = {5}
@@ -466,8 +496,8 @@ const styles = StyleSheet.create({
     },
 
     container_sleep: {
-        flex: 0.5,
         justifyContent:"center",
+        backgroundColor: "grey",
         alignItems: "center",
         backgroundColor:"#fff",
         borderRadius:15,
