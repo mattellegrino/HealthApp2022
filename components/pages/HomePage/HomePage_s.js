@@ -10,22 +10,18 @@ import {
   BackHandler,
   Alert,
   Dimensions,
+  ImageBackground
 } from "react-native";
 import {
-  LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart,
+  ProgressChart
 } from "react-native-chart-kit";
+import { BarChart, PieChart } from "react-native-gifted-charts";
 import { Card } from "react-native-shadow-cards";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import CustomButton from "../../CustomButton/CustomButton";
 import AlimentazioneRow from "../Alimentazione/AlimentazioneRow";
-
 const s = require("../../../core/styles");
 
 
@@ -53,17 +49,50 @@ const HomePage_s = ({ navigation, route }) => {
   const dayformattedtime = formatTime(mockbardataday.time_ms).toPrecision(3);
 
   const [num_hours_sleeped, setNumHoursSleeped] = useState("0:00");
- 
+  const [pieData,setPieData] = useState([]);
+  const [colorNumStepsDone,setColorNumStepsDone] = useState("grey");
+  const [redthreshold,setRedThreshold] = useState(1000);
+  const [orangethreshold,setOrangeThreshold] = useState(4000);
+  const [yellowthreshold,setYellowThreshold] = useState(8000);
+  
   /* se vuoi far chiudere l'app con il tasto indietro questo è il codice */
 
   useEffect(() => {
+    let arr = new Array();
     var currentDate = new Date();
     setGiorno(currentDate);
+    let steps_day = mockbardatadaysteps.steps;
 
+    if(steps_day < redthreshold){
+      setColorNumStepsDone("red");
+      arr.push({value: steps_day, color:"red"});
+      arr.push({value: yellowthreshold - steps_day, color:"white"});
+      setPieData(arr);
+      }
+     else if(steps_day >= redthreshold && steps_day < orangethreshold){
+      arr.push({value: steps_day, color:"orange"});
+      arr.push({value: yellowthreshold - steps_day, color:"white"});
+      setPieData(arr);
+      setColorNumStepsDone("orange");
+     }
+    
+     else if(steps_day >= orangethreshold && steps_day < yellowthreshold){
+      arr.push({value: steps_day, color:"yellow"});
+      arr.push({value: yellowthreshold - steps_day, color:"white"});
+      setPieData(arr);
+      setColorNumStepsDone("yellow");
+     }
+    
+     else if (steps_day >= yellowthreshold){
+      arr.push({value: steps_day, color:"green"});
+      arr.push({value: yellowthreshold - steps_day, color:"whit"});
+      setPieData(arr);
+      setColorNumStepsDone("green");
+     }
 
     setNumHoursSleeped(dayformattedtime);
 
-    const backAction = () => {
+    /*const backAction = () => {
       Alert.alert("Arrivederci", "Sei sicuro di voler chiudere l'app?", [
         {
           text: "Annulla",
@@ -79,16 +108,20 @@ const HomePage_s = ({ navigation, route }) => {
         },
       ]);
       return true;
-    };
-    const backHandler = BackHandler.addEventListener(
+    };*/
+    /*const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       backAction
     );
-    return () => backHandler.remove();
+    return () => backHandler.remove();*/
   }, []);
 
+  const image = "../Homepage/background.png";
+
   return (
-    <View style={{ flex: 1, padding: 20, backgroundColor: "#fff" }}>
+    <View style={{ flex: 1 }}>
+      <ImageBackground source={require('../HomePage/background.png')} resizeMode="cover" style={{flex:1,width:"100%"}}>
+        <View style={{flex:1,padding:20}}>
       <View
         justifyContent="space-between"
         style={{
@@ -202,7 +235,7 @@ const HomePage_s = ({ navigation, route }) => {
               <Card
                 cornerRadius={30}
                 style={{
-                  backgroundColor: "#c6f68d",
+                  backgroundColor: "#fff",
                   flex: 3,
                   width: "95%",
                   margin:5,
@@ -237,33 +270,16 @@ const HomePage_s = ({ navigation, route }) => {
                       alignItems: "center",
                     }}
                   >
-                    <ProgressChart
-                      data={[0.8]}
-                      width={Dimensions.get("screen").width / 3}
-                      height={Dimensions.get("screen").height / 7}
-                      strokeWidth={8}
-                      radius={50}
-                      hideLegend={true}
-                      chartConfig={{
-                        backgroundColor: "#c6f68d",
-                        backgroundGradientFrom: "#c6f68d",
-                        backgroundGradientTo: "#c6f68d",
-                        decimalPlaces: 2,
-                        color: (opacity = 1) => `rgba(0, 139, 0, ${opacity})`,
-                        style: {
-                          borderRadius: 16,
-                        },
-                      }}
-                    />
-                    <Text
-                      style={[
-                        s.header(3, "bold"),
-                        { position: "absolute", top: "45%", color: "#008b00" },
-                      ]}
-                    >
-                      {" "}
-                      7898{" "}
-                    </Text>
+                   <PieChart
+                    donut
+                    radius={55}
+                    innerRadius={45}
+                    textSize={10}
+                    data={pieData}
+                    centerLabelComponent={() => {
+                    return <Text style={{fontSize: 25}}>{mockbardatadaysteps.steps}</Text>;
+                  }}
+            />
                   </View>
                   <View
                     style={{ padding: 20, alignItems: "center", width: 300 }}
@@ -415,6 +431,8 @@ const HomePage_s = ({ navigation, route }) => {
           </Pressable>
         </View>
       </View>
+     </View> 
+     </ImageBackground>
     </View>
   );
 };
