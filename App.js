@@ -89,6 +89,7 @@ const App = () => (
       <Stack.Screen name="Sonno_c" component={Sonno_c} options={{
          headerShadowVisible: false,
          headerTitleAlign: "center",
+         title:"Sonno",
          headerTitleStyle: {
           fontSize: 16
          }
@@ -97,6 +98,7 @@ const App = () => (
 <Stack.Screen name="Sonno_s" component={Sonno_s} options={{
          headerShadowVisible: false,
          headerTitleAlign: "center",
+         title:"Sonno",
          headerTitleStyle: {
           fontSize: 16
          }

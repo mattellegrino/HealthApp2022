@@ -23,7 +23,7 @@ module.exports = StyleSheet.create({
 
     fontSize: type==1 ? 34 : type==2 ? 28 : type==3? 22: 18,
     color: fontColor? fontColor : theme.colors.text,
-    fontWeight: weight == "bold" ? "700" : weight == "medium" ? "500" : "300" 
+    fontWeight: weight == "bold" ? "700" : weight == "medium" ? "500" : weight == "regular" ? "400" : "300" 
 
   }),
  
@@ -31,7 +31,7 @@ module.exports = StyleSheet.create({
 
     fontSize: 14,
     color: fontColor ? fontColor : theme.colors.text,
-    fontWeight: weight == "bold" ? "700" : weight == "medium" ? "500" : "300" 
+    fontWeight: weight == "bold" ? "700" : weight == "medium" ? "500" : weight == "regular" ? "400" : "300" 
 
   }),
 
@@ -39,7 +39,7 @@ module.exports = StyleSheet.create({
 
     fontSize: 13,
     color: fontColor ? fontColor : theme.colors.text,
-    fontWeight: weight == "bold" ? "700" : weight == "medium" ? "500" : "300" 
+    fontWeight: weight == "bold" ? "700" : weight == "medium" ? "500" : weight == "regular" ? "400" : "300" 
 
   }),
 
@@ -47,7 +47,7 @@ module.exports = StyleSheet.create({
 
     fontSize: 12,
     color: fontColor ? fontColor : theme.colors.text,
-    fontWeight: weight == "bold" ? "700" : weight == "medium" ? "500" : "300" 
+    fontWeight: weight == "bold" ? "700" : weight == "medium" ? "500" : weight == "regular" ? "400" : "300" 
 
   }),
 
@@ -56,7 +56,7 @@ module.exports = StyleSheet.create({
     fontSize: 13,
     textDecorationLine: "underline",
     color: fontColor ? fontColor : theme.colors.text,
-    fontWeight: weight == "bold" ? "700" : weight == "medium" ? "500" : "300" 
+    fontWeight: weight == "bold" ? "700" : weight == "medium" ? "500" : weight == "regular" ? "400" : "300" 
 
   }),
   
@@ -101,7 +101,7 @@ module.exports = StyleSheet.create({
   },
 
   multichoicebutton_selected : type => ({
-   backgroundColor: type == "questionari" ? "#FFF9C4" : type == "attività" ? "#c6f68d" : "#E3F2FD",
+   backgroundColor: type == "questionari" ? "#FFF9C4" : type == "attività" ? "#c6f68d" : "#1565C0",
    borderRadius:20, 
    padding:10,
    paddingLeft:20,
@@ -116,8 +116,8 @@ module.exports = StyleSheet.create({
   },
 
   text_selected : type =>  ({
-    
-    color: type == "questionari" ? "#BB530B" : type == "attività" ? "#008b00" : "#1565C0",
+    fontWeight: "500",
+    color: type == "questionari" ? "#BB530B" : type == "attività" ? "#008b00" : "#fff",
   }),
 
   primary_button_text : size => ({

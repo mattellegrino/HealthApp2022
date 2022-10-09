@@ -5,7 +5,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 const s = require("../../../core/styles");
 import { BarChart } from "react-native-gifted-charts";
 
-export default function Sonno_s({route}) {
+export default function Sonno_s({navigation,route}) {
 
   const mockbardataday = {
     date: "2022-06-21",
@@ -14,13 +14,13 @@ export default function Sonno_s({route}) {
 
 
   const mockbardataweek = [
-          {value: 22300000, label: 'LUN'},
-           {value: 42300000, label: 'MAR', frontColor:'#177AD5'},
-           {value: 32300000, label: 'MER', frontColor: '#177AD5'},
-           {value: 12300000, label: 'GIO'},
-           {value: 32300000, label: 'VEN', frontColor: '#177AD5'},
-           {value: 36300000, label: 'SAB'},
-           {value: 22300000, label: 'DOM'},
+          {time_ms: 22300000, label: 'LUN'},
+           {time_ms: 42300000, label: 'MAR', frontColor:'#177AD5'},
+           {time_ms: 32300000, label: 'MER', frontColor: '#177AD5'},
+           {time_ms: 12300000, label: 'GIO'},
+           {time_ms: 32300000, label: 'VEN', frontColor: '#177AD5'},
+           {time_ms: 36300000, label: 'SAB'},
+           {time_ms: 22300000, label: 'DOM'},
        ];
 
   const mockbardatamonth = [
@@ -56,9 +56,10 @@ export default function Sonno_s({route}) {
     
   var selezioni = ["Giorno","Settimana","Mese"];
   
+  const date = new Date();
   const [isSelected, setIsSelected] = useState("Giorno");
+  const [firstTime,setFirstTime] = useState(false);
   const [range_time,setRangeTime] = useState("");
-  const [currentdate,setCurrentDate] = useState("");
   const [variableGiornoDate,setVariableGiornoDate] = useState("");
   const [variableFirstWeekDay,setVariableFirstWeekDay] = useState("");
   const [variableLastWeekDay,setVariableLastWeekDay] = useState("");
@@ -78,12 +79,12 @@ export default function Sonno_s({route}) {
   const [orangethreshold,setOrangeThreshold] = useState(6);
   const [yellowthreshold,setYellowThreshold] = useState(7.30);
   //Ore dormite
-  const [num_hours_sleeped, setNumHoursSleeped] = useState("0:00");
+  const [num_hours_sleeped, setNumHoursSleeped] = useState(route.params.hours_sleeped);
   const [color_num_hours_sleeped, setColorNumHoursSleeped] = useState("red");
   //Numero sospensioni
   const [num_sospensions,setNumSospensions] = useState(0);
   //Ore sonno profondo
-  const [num_hours_deepsleep,setNumHoursDeepsleep] = useState("0:00");
+  const [num_hours_deepsleep,setNumHoursDeepsleep] = useState(0);
   //Cicli 
   const [num_ciclicompletati,setNumCicliCompletati] = useState(0);
 
@@ -128,7 +129,6 @@ export default function Sonno_s({route}) {
         dayafter.setDate(variableGiornoDate.getDate() + 1);
         let dayafterforapi = formatDate(dayafter);
         //Inserire API per sonno giornaliero: /api/patients/{patientID}/sleep/duration (startDate=dayafterforapi, endDate=dayafterforapi)
-
         setRangeTime (getday(dayafter));
         setVariableGiornoDate(dayafter);
         break;
@@ -227,40 +227,63 @@ export default function Sonno_s({route}) {
     let total = parseInt(hours) + parseInt(minutes);
     return total;
 }
-  
-  useEffect(() => {
-    let tmpdate = new Date;
-    let dateforapi = formatDate(tmpdate); //variabile da inserire nell'API per ricavare il sonno giornaliero
-    // data odierna, non va MAI cambiata
-    setCurrentDate(tmpdate);
-    // inizializzo date che poi vengono cambiate quando si va avanti/indietro con le frecce
-    setVariableGiornoDate(tmpdate);
-    setVariableMonthDate(tmpdate);
-    setMonthDate(tmpdate);
 
-    let range_giorno = getday(tmpdate);
+
+  useEffect(() => {
+
+  },[variableGiornoDate])
+
+ 
+  useEffect(() => {
+
+    let dateforapi = formatDate(date); //variabile da inserire nell'API per ricavare il sonno giornaliero
+    // data odierna, non va MAI cambiata
+    // inizializzo date che poi vengono cambiate quando si va avanti/indietro con le frecce
+    setVariableGiornoDate(date);
+    setVariableMonthDate(date);
+    setMonthDate(date);
+    
+
+    let range_giorno = getday(date);
     setRangeTime(range_giorno);
+    let dayformattedtime = formatTime(mockbardataday.time_ms).toPrecision(3);
+    //setNumHoursSleeped(dayformattedtime);
+    setBarDataDay(dayformattedtime);
+    setFirstTime(true);
+
+    if(dayformattedtime < redthreshold)
+    setColorNumHoursSleeped("red");
+ 
+   else if(dayformattedtime >= redthreshold && dayformattedtime < orangethreshold)
+    setColorNumHoursSleeped("orange");
+ 
+   else if(dayformattedtime >= orangethreshold && dayformattedtime < yellowthreshold)
+    setColorNumHoursSleeped("yellow");
+ 
+   else if (dayformattedtime >= yellowthreshold)
+    setColorNumHoursSleeped("green");
     
     //inizializzo primo e ultimo giorno della settimana 
-    var first = tmpdate.getDate() - tmpdate.getDay(); 
+    let currdate = new Date ();
+    var first = currdate.getDate() - currdate.getDay(); 
     var last = first + 6; 
-    let firstweekday = new Date(tmpdate.setDate(first));
+    let firstweekday = new Date(currdate.setDate(first));
     setFirstWeekDay(firstweekday);
     setVariableFirstWeekDay(firstweekday);
-    let lastweekday = new Date(tmpdate.setDate(last));
+    let lastweekday = new Date(currdate.setDate(last));
     setLastWeekDay(lastweekday);
     setVariableLastWeekDay(lastweekday);
 
-    let firstmonthday = new Date(tmpdate.getFullYear(), tmpdate.getMonth(), 1);
+    let firstmonthday = new Date(date.getFullYear(), date.getMonth(), 1);
     setFirstMonthDay(firstmonthday);
     setVariableFirstMonthDay(firstmonthday);
-    let lastmonthday = new Date(tmpdate.getFullYear(), tmpdate.getMonth() + 1, 0);
+    let lastmonthday = new Date(date.getFullYear(), date.getMonth() + 1, 0);
     setLastMonthDay(lastmonthday);
     setVariableLastMonthDay(lastmonthday);
 
     let _bardataweek = mockbardataweek.map((el) => {
       
-       el.value = formatTime(el.value);
+       el.value = formatTime(el.time_ms);
        if(el.value < redthreshold)
         el.frontColor = "red";
   
@@ -304,33 +327,20 @@ export default function Sonno_s({route}) {
 
     //Inserire API per sonno giornaliero: /api/patients/{patientID}/sleep/duration (startDate=dateforapi, endDate=dateforapi)
     // setBarDataDay con il valore proveniente dall'API
-   let dayformattedtime = formatTime(mockbardataday.time_ms);
-   setBarDataDay(dayformattedtime);
-   setNumHoursSleeped(dayformattedtime);
 
-   if(dayformattedtime < redthreshold)
-   setColorNumHoursSleeped("red");
-
-  else if(dayformattedtime >= redthreshold && dayformattedtime < orangethreshold)
-   setColorNumHoursSleeped("orange");
-
-  else if(dayformattedtime >= orangethreshold && dayformattedtime < yellowthreshold)
-   setColorNumHoursSleeped("yellow");
-
-  else if (dayformattedtime >= yellowthreshold)
-   setColorNumHoursSleeped("green");
 
 
   },[])
 
   useEffect(() => {
 
-    if(currentdate != ""){
     switch (isSelected) {
-
       case "Giorno": 
-      let range_giorno = getday(currentdate);
+  
+      let range_giorno = getday(date);
       setRangeTime(range_giorno);
+
+      if(bardataday)
       setNumHoursSleeped(bardataday);
 
       if(bardataday < redthreshold)
@@ -344,7 +354,6 @@ export default function Sonno_s({route}) {
 
      else if (bardataday >= yellowthreshold)
       setColorNumHoursSleeped("green");
-
       break;
       
       case "Settimana": 
@@ -377,11 +386,10 @@ export default function Sonno_s({route}) {
           setColorNumHoursSleeped("green");
         
         //Inserire API per sonno settimanale: /api/patients/{patientID}/sleep/duration (startDate=firstdayforapi, endDate=lastdayforapi)
-
        break;
 
       case "Mese":
-        setRangeTime(padTo2Digits(parseInt(currentdate.getMonth()+ Number(1))) + "/" + currentdate.getFullYear());
+        setRangeTime(padTo2Digits(parseInt(date.getMonth()+ Number(1))) + "/" + date.getFullYear());
 
         let summonth = 0;
         bardatamonth.forEach((el) => {
@@ -403,15 +411,10 @@ export default function Sonno_s({route}) {
          else if (average_month_sleep_hours >= yellowthreshold)
           setColorNumHoursSleeped("green");
         
-
         break;
     
-    }
-  }
-
-
-   
-  },[isSelected])
+    
+  }},[isSelected])
 
 
   return (
@@ -425,10 +428,20 @@ export default function Sonno_s({route}) {
         </View>
 
         <View style={styles.container_sleep}>
-            <Text style={[s.header(4,"medium"),{textAlign:"center"}]}>Durata del sonno</Text>
-           <View style={{flexDirection: "row",alignItems: "baseline"}}>
-            <Text style={[s.header(1,"medium",color_num_hours_sleeped),{marginRight:"2%"}]}> {num_hours_sleeped}</Text>
-             <Text style={s.body("medium")}>h{isSelected != "Giorno" && <Text>/giorno</Text>}</Text>
+          <Text style={[s.body("regular","black")]}>Durata del sonno</Text>
+            <View style={styles.details_sleep}>
+            
+              <View style={styles.hours_sleep}>
+                <Text style={[s.header(1,"bold","black"),{marginRight:"2%"}]}> {num_hours_sleeped}</Text>
+                <Text style={s.body("medium","black")}>h{isSelected != "Giorno" && <Text>/giorno</Text>}</Text>
+              </View>
+            
+              <View style={styles.threshold_sleep_container}>
+                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "red" ? "red" : "transparent")}></View>{color_num_hours_sleeped == "red" && <Text style={[s.smalltext(color_num_hours_sleeped == "red" ? "medium" :"regular",color_num_hours_sleeped == "red" ? "red" : "black"),{textAlign: "center"}]}>Scarso</Text>}</View>
+                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "orange" ? "orange" : "transparent")}></View>{color_num_hours_sleeped == "orange" && <Text style={[s.smalltext(color_num_hours_sleeped == "orange" ? "medium" :"regular",color_num_hours_sleeped == "orange" ? "orange" : "black"),{textAlign: "center"}]}>Discreto</Text>}</View>
+                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "yellow" ? "yellow" : "transparent")}></View>{color_num_hours_sleeped == "yellow" && <Text style={[s.smalltext(color_num_hours_sleeped == "yellow" ? "medium" :"regular",color_num_hours_sleeped == "yellow" ? "yellow" : "black"),{textAlign: "center"}]}>Buono</Text>}</View>
+                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "green" ? "green" : "transparent")}></View>{color_num_hours_sleeped == "green" && <Text style={[s.smalltext(color_num_hours_sleeped == "green" ? "medium" :"regular",color_num_hours_sleeped == "green" ? "green" : "black"),{textAlign: "center"}]}>Ottimo</Text>}</View>
+              </View>  
            </View>  
         </View> 
 
@@ -496,13 +509,9 @@ const styles = StyleSheet.create({
     },
 
     container_sleep: {
-        justifyContent:"center",
-        backgroundColor: "grey",
-        alignItems: "center",
-        backgroundColor:"#fff",
-        borderRadius:15,
-        borderWidth:2,
-        borderColor:"lightgrey",
+        borderRadius:20,
+        backgroundColor:"#ACC8E5",
+        borderColor:"#1565C0",
         margin:10,
         padding:10
     },
@@ -534,7 +543,7 @@ const styles = StyleSheet.create({
 
     container_deepsleep: {
         flex:0,
-        backgroundColor: "#E3F2FD",
+        backgroundColor: "#ACC8E5",
         width:"30%",
         alignItems: "center",
         borderRadius: 20,
@@ -555,6 +564,39 @@ const styles = StyleSheet.create({
 
     text_sleep: {
       marginTop:"50%",
-    }
+    },
+
+    details_sleep: {
+      flexDirection: "row",
+      justifyContent:"space-between",
+      alignItems: "baseline"
+    },
+
+    hours_sleep: {
+      flexDirection: "row",
+      alignItems: "baseline"
+    },
+
+    threshold_sleep_container: {
+      flex:0, 
+      flexDirection: "row",
+      alignItems: "baseline"
+    },
+
+    container_segnalatori: {
+      flex:0, 
+      alignItems: "center",
+      justifyContent:"center",
+      marginLeft:15,
+    },
+
+    circle: color => ({
+      height: color != "transparent" ? 30 : 20, 
+      width: color != "transparent" ? 30 : 20, 
+      backgroundColor : color,
+      borderRadius: 50,
+      borderColor: color != "transparent" ? color : "black",
+      borderWidth: 1
+    })
 
 })
