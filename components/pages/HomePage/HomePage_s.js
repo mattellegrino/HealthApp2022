@@ -35,6 +35,11 @@ const HomePage_s = ({ navigation, route }) => {
     date: "2022-06-21",
     time_ms: 22300000
   }
+
+  const mockbardatadaysteps = {
+    date: "2022-06-21",
+    steps: 2200
+  }
   const formatTime = milliseconds => {
     const seconds = Math.floor((milliseconds / 1000) % 60);
     let minutes = Math.floor((milliseconds / 1000 / 60) % 60);
@@ -189,7 +194,7 @@ const HomePage_s = ({ navigation, route }) => {
             style={{ flex: 3.5 }}
             onPress={() =>
               navigation.navigate("Attività_fisica_s", {
-                data: new Date(),
+                steps_done: mockbardatadaysteps.steps
               })
             }
           >
@@ -205,15 +210,19 @@ const HomePage_s = ({ navigation, route }) => {
                   alignItems: "center",
                 }}
               >
+               <View style={styles.title}>
+                 <View style={styles.moon}>
+                  <FontAwesome5 name="running" size={20} color="#008b00" />
+                 </View>    
                 <Text
                   style={[
-                    s.header(4, "medium", "#008b00"),
-                    { paddingTop: 10, width: "100%", textAlign: "center" },
+                    s.header(4, "medium", "#008b00")
                   ]}
                 >
                   {" "}
                   Attività fisica{" "}
                 </Text>
+              </View>  
                 <View
                   style={{
                     width: "100%",
@@ -249,13 +258,12 @@ const HomePage_s = ({ navigation, route }) => {
                     <Text
                       style={[
                         s.header(3, "bold"),
-                        { position: "absolute", top: "35%", color: "#008b00" },
+                        { position: "absolute", top: "45%", color: "#008b00" },
                       ]}
                     >
                       {" "}
                       7898{" "}
                     </Text>
-                    <FontAwesome5 name="running" size={32} color="#008b00" />
                   </View>
                   <View
                     style={{ padding: 20, alignItems: "center", width: 300 }}

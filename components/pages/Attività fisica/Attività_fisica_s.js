@@ -174,8 +174,8 @@ return date;
         let firstdaymonthafterapi = formatDate(new Date(monthafter.getFullYear(), monthafter.getMonth(), 1)); 
         let lastdaymonthafterapi = formatDate (new Date(monthafter.getFullYear(), monthafter.getMonth() + 1, 0));
 
-
         //Inserire API per passi mensili: /api/patients/{patientID}/activities/steps (startDate=firstdaymonthafterforapi, endDate=lastdaymonthafterforapi)
+
         setRangeTime(padTo2Digits(parseInt(monthafter.getMonth()+ Number(1))) + "/" + monthafter.getFullYear());
         setVariableMonthDate(monthafter);
         break;
@@ -394,7 +394,7 @@ useEffect(() => {
     let range_giorno = getday(date);
     setRangeTime(range_giorno);
 
-    if(bardataday)
+    if(bardataday) {
     setNumStepsDone(bardataday);
 
     if(bardataday < redthreshold){
@@ -416,6 +416,7 @@ useEffect(() => {
 
    else if (bardataday >= yellowthreshold)
     setColorNumStepsDone("green");
+  }
     break;
     
     case "Settimana": 

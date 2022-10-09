@@ -14,44 +14,44 @@ export default function Sonno_s({navigation,route}) {
 
 
   const mockbardataweek = [
-          {time_ms: 22300000, label: 'LUN'},
-           {time_ms: 42300000, label: 'MAR', frontColor:'#177AD5'},
-           {time_ms: 32300000, label: 'MER', frontColor: '#177AD5'},
-           {time_ms: 12300000, label: 'GIO'},
-           {time_ms: 32300000, label: 'VEN', frontColor: '#177AD5'},
-           {time_ms: 36300000, label: 'SAB'},
-           {time_ms: 22300000, label: 'DOM'},
+           {time_ms: 22300000, date: '2022-06-20'},
+           {time_ms: 32300000, date: '2022-06-21'},
+           {time_ms: 35300000, date: '2022-06-22'},
+           {time_ms: 27300000, date: '2022-06-23'},
+           {time_ms: 32300000, date: '2022-06-24'},
+           {time_ms: 36300000, date: '2022-06-25'},
+           {time_ms: 22300000, date: '2022-06-26'},
        ];
 
   const mockbardatamonth = [
-           {value: 22300000, label: '1'},
-           {value: 22300000, label: '2', frontColor:'#177AD5'},
-           {value: 12300000, label: '3', frontColor: '#177AD5'},
-           {value: 12300000, label: '4'},
-           {value: 12300000, label: '5', frontColor: '#177AD5'},
-           {value: 42300000, label: '6'},
-           {value: 12300000, label: '7'},
-           {value: 32300000, label: '8'},
-           {value: 12300000, label: '9', frontColor:'#177AD5'},
-           {value: 12300000, label: '10', frontColor: '#177AD5'},
-           {value: 22300000, label: '11'},
-           {value: 12300000, label: '12', frontColor: '#177AD5'},
-           {value: 12300000,label: '13'},
-           {value: 12300000, label: '14'},
-           {value: 32300000, label: '15'},
-           {value: 12300000, label: '16', frontColor:'#177AD5'},
-           {value: 17300000, label: '17', frontColor: '#177AD5'},
-           {value: 22300000,label: '18'},
-           {value: 12300000, label: '19', frontColor: '#177AD5'},
-           {value: 12300000, label: '20'},
-           {value: 19300000,label: '21'},
-           {value: 12300000, label: '22'},
-           {value: 12300000, label: '23', frontColor:'#177AD5'},
-           {value: 41230000,label: '24', frontColor: '#177AD5'},
-           {value: 12300000, label: '25'},
-           {value: 32300000, label: '26', frontColor: '#177AD5'},
-           {value: 27300000, label: '27'},
-           {value: 12300000, label: '28'},
+           {time_ms: 22300000, date: '2022-06-1'},
+           {time_ms: 22300000, date: '2022-06-2'},
+           {time_ms: 12300000, date: '2022-06-3'},
+           {time_ms: 12300000, date: '2022-06-4'},
+           {time_ms: 12300000, date: '2022-06-5'},
+           {time_ms: 32300000, date: '2022-06-6'},
+           {time_ms: 12300000, date: '2022-06-7'},
+           {time_ms: 32300000, date: '2022-06-8'},
+           {time_ms: 12300000, date: '2022-06-9'},
+           {time_ms: 12300000, date: '2022-06-10'},
+           {time_ms: 22300000, date: '2022-06-11'},
+           {time_ms: 12300000, date: '2022-06-12'},
+           {time_ms: 12300000, date: '2022-06-13'},
+           {time_ms: 12300000, date: '2022-06-14'},
+           {time_ms: 32300000, date: '2022-06-15'},
+           {time_ms: 12300000, date: '2022-06-16'},
+           {time_ms: 17300000, date: '2022-06-17'},
+           {time_ms: 22300000, date: '2022-06-18'},
+           {time_ms: 32300000, date: '2022-06-19'},
+           {time_ms: 32300000, date: '2022-06-20'},
+           {time_ms: 19300000, date: '2022-06-21'},
+           {time_ms: 12300000, date: '2022-06-22'},
+           {time_ms: 12300000, date: '2022-06-23'},
+           {time_ms: 31230000, date: '2022-06-24'},
+           {time_ms: 12300000, date: '2022-06-25'},
+           {time_ms: 32300000, date: '2022-06-26'},
+           {time_ms: 27300000, date: '2022-06-27'},
+           {time_ms: 12300000, date: '2022-06-28'},
        ];     
     
   var selezioni = ["Giorno","Settimana","Mese"];
@@ -80,7 +80,7 @@ export default function Sonno_s({navigation,route}) {
   const [yellowthreshold,setYellowThreshold] = useState(7.30);
   //Ore dormite
   const [num_hours_sleeped, setNumHoursSleeped] = useState(route.params.hours_sleeped);
-  const [color_num_hours_sleeped, setColorNumHoursSleeped] = useState("red");
+  const [color_num_hours_sleeped, setColorNumHoursSleeped] = useState("grey");
   //Numero sospensioni
   const [num_sospensions,setNumSospensions] = useState(0);
   //Ore sonno profondo
@@ -118,6 +118,17 @@ export default function Sonno_s({navigation,route}) {
         day = '0' + day;
     return [year, month, day].join('-');
 }
+
+function formatDate2 (data) {
+  const year = +data.substring(0, 4);
+  const month = +data.substring(5, 7);
+  const day = +data.substring(8, 10);
+
+  console.log(year + " " + month + " " + day)
+  
+  const date = new Date(year, month - 1, day);
+  return date;
+  }
 
   const plus = () => {
 
@@ -223,9 +234,43 @@ export default function Sonno_s({navigation,route}) {
     const hours = Math.floor((milliseconds / 1000 / 60 / 60) % 24);
 
     minutes = minutes / 100;
-
-    let total = parseInt(hours) + parseInt(minutes);
+    console.log(hours + ":Ore");
+    console.log(minutes + ":minuti");
+    let total = parseInt(hours) + parseFloat(minutes);
+    console.log(total + ":totale");
     return total;
+}
+
+
+const convertDateintoDayoftheWeek = (date) => {
+
+  let fordate = formatDate2(date);
+  let dayoftheweek = fordate.getDay();
+
+  switch (dayoftheweek) {
+    case 1:
+      return "LUN";
+    case 2:
+      return "MAR";
+    case 3:
+      return "MER";
+    case 4:
+      return "GIO";
+    case 5:
+      return "VEN";
+    case 6:
+      return "SAB";
+    case 0:
+      return "DOM";
+  }
+}
+
+const convertDateintoNumberDay = (data) => {
+
+  let fordate = formatDate2(data);
+  let date = fordate.getDate();
+
+  return parseInt(date,10);
 }
 
 
@@ -236,6 +281,7 @@ export default function Sonno_s({navigation,route}) {
  
   useEffect(() => {
 
+      formatTime (22300000);
     let dateforapi = formatDate(date); //variabile da inserire nell'API per ricavare il sonno giornaliero
     // data odierna, non va MAI cambiata
     // inizializzo date che poi vengono cambiate quando si va avanti/indietro con le frecce
@@ -296,6 +342,9 @@ export default function Sonno_s({navigation,route}) {
        else if (el.value >= yellowthreshold)
         el.frontColor = "green";
 
+
+      el.label = convertDateintoDayoftheWeek(el.date);
+
       return el;
     
     })
@@ -304,7 +353,7 @@ export default function Sonno_s({navigation,route}) {
 
     let _bardatamonth = mockbardatamonth.map((el) => {
       
-      el.value = formatTime(el.value);
+      el.value = formatTime(el.time_ms);
 
       if(el.value < redthreshold)
        el.frontColor = "red";
@@ -317,6 +366,8 @@ export default function Sonno_s({navigation,route}) {
 
       else if (el.value >= yellowthreshold)
        el.frontColor = "green";
+
+      el.label = convertDateintoNumberDay(el.date);
 
      return el;
    
@@ -437,10 +488,10 @@ export default function Sonno_s({navigation,route}) {
               </View>
             
               <View style={styles.threshold_sleep_container}>
-                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "red" ? "red" : "transparent")}></View>{color_num_hours_sleeped == "red" && <Text style={[s.smalltext(color_num_hours_sleeped == "red" ? "medium" :"regular",color_num_hours_sleeped == "red" ? "red" : "black"),{textAlign: "center"}]}>Scarso</Text>}</View>
-                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "orange" ? "orange" : "transparent")}></View>{color_num_hours_sleeped == "orange" && <Text style={[s.smalltext(color_num_hours_sleeped == "orange" ? "medium" :"regular",color_num_hours_sleeped == "orange" ? "orange" : "black"),{textAlign: "center"}]}>Discreto</Text>}</View>
-                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "yellow" ? "yellow" : "transparent")}></View>{color_num_hours_sleeped == "yellow" && <Text style={[s.smalltext(color_num_hours_sleeped == "yellow" ? "medium" :"regular",color_num_hours_sleeped == "yellow" ? "yellow" : "black"),{textAlign: "center"}]}>Buono</Text>}</View>
-                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "green" ? "green" : "transparent")}></View>{color_num_hours_sleeped == "green" && <Text style={[s.smalltext(color_num_hours_sleeped == "green" ? "medium" :"regular",color_num_hours_sleeped == "green" ? "green" : "black"),{textAlign: "center"}]}>Ottimo</Text>}</View>
+                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "red" ? "red" : "transparent")}></View>{color_num_hours_sleeped == "red" && <Text style={[s.smalltext(color_num_hours_sleeped == "red" ? "medium" :"regular","black"),{textAlign: "center"}]}>Scarso</Text>}</View>
+                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "orange" ? "orange" : "transparent")}></View>{color_num_hours_sleeped == "orange" && <Text style={[s.smalltext(color_num_hours_sleeped == "orange" ? "medium" :"regular","black"),{textAlign: "center"}]}>Discreto</Text>}</View>
+                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "yellow" ? "yellow" : "transparent")}></View>{color_num_hours_sleeped == "yellow" && <Text style={[s.smalltext(color_num_hours_sleeped == "yellow" ? "medium" :"regular","black"),{textAlign: "center"}]}>Buono</Text>}</View>
+                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "green" ? "green" : "transparent")}></View>{color_num_hours_sleeped == "green" && <Text style={[s.smalltext(color_num_hours_sleeped == "green" ? "medium" :"regular","black"),{textAlign: "center"}]}>Ottimo</Text>}</View>
               </View>  
            </View>  
         </View> 
@@ -456,7 +507,7 @@ export default function Sonno_s({navigation,route}) {
             barBorderRadius={4}
             initialSpacing = {5}
             noOfSections={3}
-            maxValue={10}
+            maxValue={9}
             yAxisThickness={0}
             xAxisThickness={0}
             barWidth={isSelected == "Settimana" ? 20 : 11}

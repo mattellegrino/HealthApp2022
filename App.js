@@ -113,6 +113,7 @@ const App = () => (
       <Stack.Screen name="Attività_fisica_s" component={Attività_fisica_s} options={{
          headerShadowVisible: false,
          headerTitleAlign: "center",
+         title: "Attività fisica",
          headerTitleStyle: {
           fontSize: 16
          }
