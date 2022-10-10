@@ -7,6 +7,7 @@ export default function Impostazioni() {
     <View style={{flex:1, padding:20, backgroundColor:"#fff"}}>
       <Impostazione nome="Profilo" freccia={true} icon_name="person-outline"></Impostazione>
         <Impostazione nome="Analisi" freccia={true} icon_name="analytics-outline"></Impostazione>
+        <Impostazione nome="AnalisiOutput" freccia={true} icon_name="analytics-outline"></Impostazione>
       <Impostazione nome="Logout" freccia={false} icon_name="log-out-outline" color="red" last={true}></Impostazione>
     </View>
   );

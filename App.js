@@ -20,6 +20,8 @@ import Sonno_s from "./components/pages/Sonno/Sonno_s";
 import Attività_fisica_s from "./components/pages/Attività fisica/Attività_fisica_s";
 import Attività_fisica_c from "./components/pages/Attività fisica/Attività_fisica_c";
 import Analisi from "./components/pages/Analisi/Analisi";
+import FitbitForm from "./components/pages/SignInPage/FitbitForm";
+import AnalisiOutput from "./components/pages/Analisi/AnalisiOutput";
 
 global.matteo = "192.168.1.127";
 global.enrico = "192.168.1.53";
@@ -155,6 +157,24 @@ const App = () => (
                 fontSize: 16
             }
         }}/>
+
+        <Stack.Screen name="AnalisiOutput" component={AnalisiOutput}  options={{
+            headerShadowVisible: false,
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+                fontSize: 16
+            }
+        }}/>
+
+
+        <Stack.Screen name="FitbitForm" component={FitbitForm}  options={{
+            headerShadowVisible: false,
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+                fontSize: 16
+            }
+        }}/>
+
       <Stack.Screen name="ServerData" component={ServerData} />
       <Stack.Screen name="SleepChart" component={SleepChart} />
     </Stack.Navigator>
