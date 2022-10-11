@@ -8,7 +8,7 @@ const s = require("../../../core/styles");
 
 export default function Questionario({route,navigation},props) {
 
-  const {nomequestionario,domande_e_risposte,username,ip_add,user} = route.params;
+  const {nomequestionario,domande_e_risposte} = route.params;
   const [n_domanda,setNumeroDomanda] = useState(0);
     const [patient, setPatient] = useState();
   let getQuestsById,getPatientById;
@@ -49,9 +49,7 @@ export default function Questionario({route,navigation},props) {
       <View style={{flex:1, flexDirection:"row", width: "80%", justifyContent: "space-around"}}>
       {n_domanda > 0 && (
         <CustomButton button="second" onPress={()=> setNumeroDomanda(n_domanda - 1)} text="Precedente" fontSize="medium"/> )}
-      {n_domanda + 1 === domande_e_risposte.length ? <CustomButton onPress={()=> navigation.navigate("Questionari",{
-          username: username, ip_add:ip_add,user:user
-          })} fontSize="medium" text="Concludi"></CustomButton> :
+      {n_domanda + 1 === domande_e_risposte.length ? <CustomButton onPress={()=> navigation.navigate("Questionari")} fontSize="medium" text="Concludi"></CustomButton> :
         <CustomButton onPress={()=> setNumeroDomanda(n_domanda + 1)} text="Prossima" fontSize="medium"/>}
       </View>
     </View>

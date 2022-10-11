@@ -1,12 +1,9 @@
-import React, {Component, useEffect, useState} from 'react'
+import React, { useEffect, useRef, useState} from 'react'
 import {
     View,
-    useWindowDimensions,
     SafeAreaView,
-    ImageBackground,
     ActivityIndicator,
-    Alert,
-    BackHandler, Keyboard
+    Alert, Keyboard
 } from 'react-native'
 
 import CustomInput from  '../../CustomInput'
@@ -14,44 +11,54 @@ import CustomButton from "../../CustomButton";
 import Header from "../../Headers/Header";
 import Patient from "../../../classes/Patient";
 const styles = require("../../../core/styles");
-import { WebView } from 'react-native-webview';
+import * as SecureStore from 'expo-secure-store';
 
 const SignInPage = ({ navigation }) =>  {
     const [username,setUsername] = useState('')
     const [password,setPassword] = useState('')
     const [isLoading, setIsLoading] = useState(true);
-    let   [loggedUser, setLoggedUser] = useState(undefined),result_login
-    const [authenticationError, setAuthenticationError] = useState(false);
     const [errors, setErrors] = React.useState({});
-    let fullUser;
-    let user,role,ip_add
-    let token_exists;
-    let fitbit_flag=false;
+    let authenticationError= useRef(false);
+    let   loggedUser = useRef(undefined)
+    let   fitbit_flag = useRef(false);
+
+
+    //indirizzo ip locale, da capire meglio quale ip usare quando i docker del backend saranno pronti.
+    let ip_add = global.enrico
+    //ip_add = global.matteo
 
 
     const doLogin = async () => {
         try{
-            //indirizzo ip locale, da capire meglio quale ip usare quando i docker del backend saranno pronti.
-                ip_add = global.enrico
-                //ip_add = global.matteo
-                const authUser = await login(username,password,ip_add);
+
+                let authUser = await login(username,password,ip_add);
                 console.log(authUser);
-                token_exists = authUser.tokenExists
-                if(!token_exists)
-                {
-                    fitbit_flag=true;
-                }
+
+                let token_exists = authUser.tokenExists
                 console.log(token_exists)
-                role = authUser.roles[0].authority.split("_")[1]
+
+                if(token_exists===false)
+                    fitbit_flag=true;
+
+                let role = authUser.roles[0].authority.split("_")[1]
                 console.log(role)
-                user = await getUser(username, role);
-                global.id = user.id;
-                console.log(user);
-                fullUser = { authUser : authUser, user : user};
-                localStorage.setItem("loggedUser", JSON.stringify(fullUser));
+
+                let _user = await getUser(username, role);
+                global.id = _user.id;
+                console.log(_user);
+
+                let fullUser = { authUser : authUser, user : _user};
+                loggedUser=fullUser
+                console.log(fullUser);
+
+                await SecureStore.setItemAsync(
+                'loggedUser',
+                JSON.stringify(fullUser)
+                );
 
         } catch (err) {
-            setAuthenticationError(true);
+            console.log(err)
+            authenticationError=true;
         }
     }
 
@@ -73,56 +80,87 @@ const SignInPage = ({ navigation }) =>  {
     }
 
 
-    /*
-    async function doLogout(){
-        console.log("Logout")
-        setLoggedUser(undefined);
-        localStorage.clear()
-        await API.logout()
+    const checkAuth = async () => {
+
+        try {
+            const value = await SecureStore.getItemAsync('cookie');
+            if (value !== null) {
+                // We have data!!
+                console.log("Data inside cookie " + value);
+
+                const user_storage = await SecureStore.getItemAsync(
+                    'loggedUser'
+                );
+                console.log("Userstorage " + user_storage);
+
+                const user_obj = JSON.parse(user_storage);
+                loggedUser=user_obj
+
+                //vai direttamente homepage
+                console.log("Attraverso il cookie direttamente homepage");
+                console.log("COOKIE :" + value)
+                ip_add = global.enrico
+                let username= user_obj.authUser.username;
+                console.log("Userobj username: " +username)
+                let _user = user_obj.user
+                console.log("Userobj user: " +_user)
+
+                global.id = _user.id;
+                navigation.navigate('HomePage', {
+                    username: username,
+                    ip_add: ip_add
+                })
+            }
+        } catch (error) {
+            // Error retrieving data
+            // user need to relogin
+            console.log("error async storage");
+            throw error;
+        }
+
     }
-     */
 
-
-    const checkAuth =  () => {
-
-    }
-
+    useEffect(  () => {
+       checkAuth().then();
+    },[]);
 
     const check_userdata_and_login = async () => {
         setIsLoading(false)
-        //checkAuth()
-        if(!loggedUser)
-        {
-            //loggati
+            //loggato
               await doLogin()
-
-            if (!authenticationError) {
-
+        console.log("Errore di autenticazione= ",authenticationError);
+            if (authenticationError.current===false) {
                 // login andato a buon fine.
                 setIsLoading(true);
-                if(!fitbit_flag)
+                console.log("Fitbit flag value= ",fitbit_flag)
+                if(fitbit_flag.current===true)
                 {
-                    navigation.navigate('FitbitForm')
+                    try {
+                        const value = await SecureStore.getItemAsync('cookie');
+                        if (value !== null) {
+                            // We have data!!
+                            console.log("Data inside cookie fitbitflag " + value);
+                            navigation.navigate('FitbitForm', { cookie: value })
+                        }
+                    }
+                    catch (err)
+                    {
+                        console.log(err);
+                    }
                 }
                 else
                 {
-                    navigation.navigate('HomePage',{ username:username,
-                        ip_add:ip_add,user:user
+                    console.log("DATA: "+ loggedUser)
+                    navigation.navigate('HomePage',{ username:loggedUser.authUser.username,
+                        ip_add:ip_add,user:loggedUser.user
                     } )
                 }
 
             } else {
                 Alert.alert("Errore di autenticazione, riprovare")
                 setIsLoading(true)
+                authenticationError=false;
             }
-        }
-        else
-        {
-            //vai direttamente homepage
-            navigation.navigate('HomePage',{ username:username,
-                ip_add:ip_add,user:user
-            } )
-        }
     };
 
     const validate = async () => {
@@ -178,16 +216,26 @@ const SignInPage = ({ navigation }) =>  {
             method: 'POST',
             body: formData
         })
-            .then((response) => {
+            .then(async (response) => {
                 const user = response.json()
-                if (response.ok){
+                if (response.ok) {
                     resolve(user);
+                    let cookie = response.headers.get('set-cookie').split(";")[0].split("=").pop(); //JSESSIONID=.... split prende il valore finale
+                    console.log(cookie)
+                    try {
+                        await SecureStore.setItemAsync(
+                            'cookie',
+                            cookie
+                        );
+                    } catch (error) {
+                        // Error saving data
+                        reject(error)
+                    }
                 } else {
                     reject(user)
                 }
             })
-            .catch(err => { reject ({'error': 'Cannot communicate with the server'})
-                                throw err;
+            .catch(error => { reject ({'error': 'Cannot communicate with the server or cookie error'})
             })
     })
 }

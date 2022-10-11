@@ -30,7 +30,7 @@ const s = require("../../../core/styles");
 const HomePage_c = ({ navigation, route }) => {
 
     const [giorno_dell_anno,setGiorno] = useState("");
-    const {username,ip_add,user}  = route.params;
+    const {username}  = route.params;
 
   /* se vuoi far chiudere l'app con il tasto indietro questo è il codice */
   

@@ -13,11 +13,10 @@ const s = require("../../../core/styles");
 
 
 
-export default function Questionari({route,navigation}) {
+export default function Questionari({navigation}) {
 
   const [isSelected,setIsSelected] = useState("Tutti");
   const [isLoadingQuests, setLoadingQuests] = useState(true);
-  const { username,ip_add,user} = route.params;
   const [quests, setQuests] = useState();
   const [quests_todo, setQuests_todo] = useState()
   let getQuestionnairesByPatientId,getQuestionnairesAvailable;
@@ -27,15 +26,6 @@ export default function Questionari({route,navigation}) {
   }
 
 
-    getQuestionnairesByPatientId  = () => {
-        fetch(`http://${global.enrico}:8080/api/patients/${user.id}/questionnaires`)
-            .then((response) => response.json())
-            .then((patientQuestionnairesJson) =>{
-                setQuests(patientQuestionnairesJson.map(json => PatientQuestionnaire.from(json)))
-            })
-            .catch((error) => { console.error(error)})
-            .finally(() => setLoadingQuests(false));
-        }
 
     getQuestionnairesAvailable  = () => {
         fetch(`http://${global.enrico}:8080/api/questionnaires/templates`)
@@ -52,54 +42,6 @@ export default function Questionari({route,navigation}) {
        getQuestionnairesAvailable()
     }, []);
 
-    /*** PATIENT-QUESTIONNAIRE-API ***/
-
-
-
-    async function getPatientQuestionnaireById(patientId, questionnaireId) {
-        const response = await fetch(`/api/patients/${patientId}/questionnaires/${questionnaireId}`);
-        const patientQuestionnaireJson = await response.json();
-        if (response.ok){
-            return PatientQuestionnaire.from(patientQuestionnaireJson);
-        } else {
-            throw patientQuestionnaireJson;
-        }
-    }
-
-    async function deletePatientQuestionnaire(patientId, questionnaireId){
-        await fetch(`/api/patients/${patientId}/questionnaires/${questionnaireId}`, {
-            method: 'DELETE'
-        })
-    }
-
-    async function modifyPatientQuestionnaire(patientId, patientQuestionnaire) {
-        return new Promise ((resolve, reject) => {
-            fetch(`/api/patients/${patientId}/questionnaires`, {
-                method: 'PATCH',
-                headers: {'Content-Type': "application/json"},
-                body: JSON.stringify({patientQuestionnaire})
-            })
-                .then((response) => {
-                    const patientQuestionnaireId = response.json()
-                    if (response.ok){
-                        resolve(patientQuestionnaireId);
-                    } else {
-                        response.json().then((obj)=> {
-                            reject(obj)
-                        });
-                    }
-                })
-                .catch(err => { reject ({'error': 'Cannot communicate with the server'})})
-        })
-    }
-
-    /*** PATIENT-API ***/
-    let domande_e_risposte =
-        [{argomento: "Cereali", testo:"",risposte:[""]},
-            {argomento: "Cereali", testo:"Quante volte a settimana consumi cereali integrali (Pasta, riso bianco, pane)?",risposte:["Meno di una","Una","Due","Tre o più"]},
-            {argomento: "Medas", testo:"Quante porzioni di verdura consumi al giorno?",risposte:["Meno di una","Una","Due","Tre o più"]},
-            {argomento: "Medas", testo:"Usi l'olio di oliva come grasso da condimento principale?",risposte:["Sì","No"]}]
-
 
   return (
     <View style={{ flex:8,padding:10, width:"100%", backgroundColor:"#FFFFFF"}}>
@@ -111,7 +53,6 @@ export default function Questionari({route,navigation}) {
               (<CopertinaQuestionario titolo={quests_todo[0].questions[3].questionSection.name.substring(0, 6)} domande_e_risposte ={[{testo: quests_todo[0].questions[3].text,risposte:[quests_todo[0].questions[3].possibleQuestionAnswer[0].text,quests_todo[0].questions[3].possibleQuestionAnswer[1].text,quests_todo[0].questions[3].possibleQuestionAnswer[2].text]},
                       {testo: quests_todo[0].questions[4].text,risposte:[quests_todo[0].questions[4].possibleQuestionAnswer[0].text,quests_todo[0].questions[4].possibleQuestionAnswer[1].text,quests_todo[0].questions[4].possibleQuestionAnswer[2].text]}
                   ]}
-                  username={username} ip_add={ip_add} user={user}
                   ></CopertinaQuestionario>
               )}
 
@@ -119,12 +60,10 @@ export default function Questionari({route,navigation}) {
               (<CopertinaQuestionario titolo={quests_todo[0].questions[6].questionSection.name.substring(0, 8)} domande_e_risposte ={[{testo: quests_todo[0].questions[6].text,risposte:[quests_todo[0].questions[6].possibleQuestionAnswer[0].text,quests_todo[0].questions[6].possibleQuestionAnswer[1].text,quests_todo[0].questions[6].possibleQuestionAnswer[2].text]},
                       {testo: quests_todo[0].questions[7].text,risposte:[quests_todo[0].questions[7].possibleQuestionAnswer[0].text,quests_todo[0].questions[7].possibleQuestionAnswer[1].text,quests_todo[0].questions[7].possibleQuestionAnswer[2].text]}
                   ]}
-                      username={username} ip_add={ip_add} user={user}
                   ></CopertinaQuestionario>
               )}
           {isLoadingQuests ? <ActivityIndicator/> :
               (<CopertinaQuestionario titolo={"SPMSQ"} domande_e_risposte ={["",""]}>
-                      username={username} ip_add={ip_add} user={user}
                   </CopertinaQuestionario>
               )}
       </View>
