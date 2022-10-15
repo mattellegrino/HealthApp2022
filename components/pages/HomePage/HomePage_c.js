@@ -227,9 +227,8 @@ const HomePage_c = ({ navigation, route }) => {
               </View>
             
             <View style={{flex:1, width:"100%",justifyContent: "space-around",marginBottom: 10}}>
-              <AlimentazioneRow titolo="Colazione"></AlimentazioneRow>
-              <AlimentazioneRow titolo="Pranzo"></AlimentazioneRow>
-              <AlimentazioneRow titolo="Cena"></AlimentazioneRow>
+              <AlimentazioneRow titolo="Medas"></AlimentazioneRow>
+              <AlimentazioneRow titolo="Cereali"></AlimentazioneRow>
             </View>            
           </Card>
         </Pressable>  

@@ -1,7 +1,10 @@
-import { View, Text, Dimensions } from "react-native";
+import { View, Text, Dimensions, StyleSheet, ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
 import CustomNavbar from "../../CustomNavbar/CustomNavbar";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { Card } from "react-native-shadow-cards";
+import Battito_Cardiaco from "./Battito_Cardiaco"
 const s = require("../../../core/styles");
 import { BarChart, PieChart } from "react-native-gifted-charts";
 import {
@@ -121,8 +124,6 @@ function formatDate2 (data) {
 const year = +data.substring(0, 4);
 const month = +data.substring(5, 7);
 const day = +data.substring(8, 10);
-
-console.log(year + " " + month + " " + day)
 
 const date = new Date(year, month - 1, day);
 return date;
@@ -515,7 +516,7 @@ useEffect(() => {
 }},[isSelected])
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+    <ScrollView style={{height:Dimensions.get('window').height,padding:10, backgroundColor: "white"}}>
      <View style={{flex:0.2}}>
       <CustomNavbar
         type={"attività"}
@@ -523,15 +524,16 @@ useEffect(() => {
         selezioni={selezioni}
         handleselection={handleselection}
       ></CustomNavbar>
-      </View> 
-      <View style={{flex:0,justifyContent:"center",alignItems:"center",flexDirection:"row"}}>
+      </View>
+      <View style={{flex:0, marginTop:10, marginBottom:10,justifyContent:"center",alignItems:"center",flexDirection:"row"}}>
         <Ionicons name="chevron-back-outline" size={24} color="black" onPress={()=> minus()}></Ionicons>
           <Text style={s.body("medium")}> {range_time} </Text>
         <Ionicons name="chevron-forward-outline" size={24} color="black" onPress={()=> plus()}></Ionicons>
       </View>
-      <View style={{flex:0.5, flexDirection: "row",justifyContent:"center",alignItems: "center"}}>
-        <View style={{flex:0,alignItems: "center"}}>
-        <View style={{flex:0}}>
+     <View style={{height:Dimensions.get('window').height}}>
+      <View style={{height:"20%"}}>
+        <Text style={[s.smalltext("medium","grey"), styles.subtitle]}>Passi</Text>
+        {/* <View style={{flex:0}}>
             <PieChart
                donut
                radius={55}
@@ -542,20 +544,34 @@ useEffect(() => {
               return <Text style={{fontSize: 25}}>{num_steps_done}</Text>;
                 }}
             />
+        </View> */}
+        <View style={{flex:0, flexDirection: "row",marginTop: 15,justifyContent: "space-between",width: "100%",alignItems: "center"}}>
+        
+        <View>
+          <Text>{isSelected != "Giorno" ? "Media" : "Totale"}</Text>
+         
+          <View>
+              <View style={{flex:0 ,flexDirection:"row",alignItems: "baseline"}}>
+                <Text style={[s.header(2,"bold"),{marginRight: 5}]} >{num_steps_done}</Text>
+                <Text style={s.smalltext("regular")}>
+                Passi
+                {isSelected != "Giorno" && <Text>/giorno</Text>}
+                </Text>
+              </View>  
+          </View>  
         </View>
-         </View>
-         <View style={{flex:0}}>
-          <Text style={s.header(4,"regular")}>
-            Passi
-            {isSelected != "Giorno" && <Text>/giorno</Text>}
-            </Text>
-         </View>
+
+          <View style={styles.threshold_sleep_container}>
+                    <View style={styles.container_segnalatori}><View style={styles.circle(color_num_steps_done == "red" ? "red" : "transparent")}></View>{color_num_steps_done == "red" && <Text style={[s.smalltext(color_num_steps_done == "red" ? "medium" :"regular","black"),{textAlign: "center"}]}>Scarso</Text>}</View>
+                    <View style={styles.container_segnalatori}><View style={styles.circle(color_num_steps_done == "orange" ? "orange" : "transparent")}></View>{color_num_steps_done == "orange" && <Text style={[s.smalltext(color_num_steps_done == "orange" ? "medium" :"regular","black"),{textAlign: "center"}]}>Discreto</Text>}</View>
+                    <View style={styles.container_segnalatori}><View style={styles.circle(color_num_steps_done == "yellow" ? "yellow" : "transparent")}></View>{color_num_steps_done == "yellow" && <Text style={[s.smalltext(color_num_steps_done == "yellow" ? "medium" :"regular","black"),{textAlign: "center"}]}>Buono</Text>}</View>
+                    <View style={styles.container_segnalatori}><View style={styles.circle(color_num_steps_done == "green" ? "green" : "transparent")}></View>{color_num_steps_done == "green" && <Text style={[s.smalltext(color_num_steps_done == "green" ? "medium" :"regular","black"),{textAlign: "center"}]}>Ottimo</Text>}</View>
+          
+          </View>  
+        </View>  
       </View>
       {isSelected != "Giorno" && 
         (<View style={{height:"40%"}}>
-          <View style={{marginLeft:15,marginBottom:10}}>
-            <Text style={s.body("medium")}>Passi</Text>
-          </View>
          <BarChart 
             data={isSelected == "Settimana" ? bardataweek : isSelected =="Giorno" ? bardataday : bardatamonth}
             spacing={isSelected == "Settimana" ? 30 : 10}
@@ -563,11 +579,85 @@ useEffect(() => {
             initialSpacing = {5}
             noOfSections={3}
             maxValue={10000}
+            height={200}
             yAxisThickness={0}
             xAxisThickness={0}
             barWidth={isSelected == "Settimana" ? 20 : 11}
             />
         </View>)}
-    </View>
+
+        <View>
+
+         <Text style={[s.smalltext("medium","grey"), styles.subtitle]}>Battito cardiaco (bpm)</Text>
+
+         {isSelected != "Giorno" ?  
+          (<View>
+            
+            <View style={{flex:0,flexDirection:"row",margin:15,alignItems:"baseline",justifyContent:"center"}}>
+             <View style={{marginRight:20, alignSelf: "center"}}>
+              <FontAwesome5 name="heartbeat" size={30} color="black" />
+            </View>
+            <Battito_Cardiaco battiti={69} type={"Media"}></Battito_Cardiaco>
+            </View>
+
+            <View style={{flex:0, flexDirection:"row", justifyContent: "space-around",alignItems:"center", margin:20}}>
+            <Battito_Cardiaco battiti={123} type={"Max"}></Battito_Cardiaco>
+          <Battito_Cardiaco battiti={60} type={"Min"}></Battito_Cardiaco>
+          <Battito_Cardiaco battiti={80} type={"A riposo"}></Battito_Cardiaco>
+            </View>  
+
+          </View>) : 
+
+         (<View style={{flex:0, flexDirection:"row", justifyContent: "space-around",alignItems:"center", margin:20}}>
+            <View style={{marginRight:20}}>
+              <FontAwesome5 name="heartbeat" size={30} color="black" />
+            </View>
+
+          <Battito_Cardiaco battiti={123} type={"Max"}></Battito_Cardiaco>
+          <Battito_Cardiaco battiti={60} type={"Min"}></Battito_Cardiaco>
+          <Battito_Cardiaco battiti={80} type={"A riposo"}></Battito_Cardiaco>
+          </View>)
+         }
+        </View>
+    </View> 
+</ScrollView>  
   );
 }
+
+const styles = StyleSheet.create({
+
+  subtitle: {
+
+   borderBottomWidth: 1,
+   borderBottomColor: "lightgrey"
+
+  },
+
+  threshold_sleep_container: {
+    flex:0, 
+    flexDirection: "row",
+    alignItems: "baseline",
+    marginTop:20
+  },
+
+  container_segnalatori: {
+    flex:0, 
+    alignItems: "center",
+    justifyContent:"center",
+    marginLeft:15,
+  },
+
+  square_container: {
+    borderRadius:30,
+    borderWidth:1
+  },
+
+  circle: color => ({
+    height: color != "transparent" ? 30 : 20, 
+    width: color != "transparent" ? 30 : 20, 
+    backgroundColor : color,
+    borderRadius: 50,
+    borderColor: color != "transparent" ? color : "black",
+    borderWidth: 1
+  })
+})

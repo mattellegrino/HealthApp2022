@@ -31,7 +31,7 @@ export default function Questionari({navigation}) {
 
       <View style={{flex: 4, flexDirection: "row", justifyContent: "space-around", alignItems: "center"}}>
         <CopertinaQuestionario titolo={"Cereali"} domande_e_risposte ={domande_e_risposte.filter((element) => element.argomento=="Cereali")}></CopertinaQuestionario>
-        <CopertinaQuestionario titolo={"Insomnia"}domande_e_risposte ={domande_e_risposte.filter((element) => element.argomento=="Insomnia")}></CopertinaQuestionario>
+        {/*<CopertinaQuestionario titolo={"Insomnia"}domande_e_risposte ={domande_e_risposte.filter((element) => element.argomento=="Insomnia")}></CopertinaQuestionario> */}
         <CopertinaQuestionario titolo={"Medas"} domande_e_risposte ={domande_e_risposte.filter((element) => element.argomento=="Medas")}></CopertinaQuestionario>
       </View>
 

@@ -80,7 +80,7 @@ export default function Sonno_s({navigation,route}) {
   const [yellowthreshold,setYellowThreshold] = useState(7.30);
   //Ore dormite
   const [num_hours_sleeped, setNumHoursSleeped] = useState(route.params.hours_sleeped);
-  const [color_num_hours_sleeped, setColorNumHoursSleeped] = useState("grey");
+  const [color_num_hours_sleeped, setColorNumHoursSleeped] = useState(route.params.color_hours_sleeped);
   //Numero sospensioni
   const [num_sospensions,setNumSospensions] = useState(0);
   //Ore sonno profondo
@@ -124,7 +124,6 @@ function formatDate2 (data) {
   const month = +data.substring(5, 7);
   const day = +data.substring(8, 10);
 
-  console.log(year + " " + month + " " + day)
   
   const date = new Date(year, month - 1, day);
   return date;
@@ -234,10 +233,7 @@ function formatDate2 (data) {
     const hours = Math.floor((milliseconds / 1000 / 60 / 60) % 24);
 
     minutes = minutes / 100;
-    console.log(hours + ":Ore");
-    console.log(minutes + ":minuti");
     let total = parseInt(hours) + parseFloat(minutes);
-    console.log(total + ":totale");
     return total;
 }
 
@@ -281,7 +277,7 @@ const convertDateintoNumberDay = (data) => {
  
   useEffect(() => {
 
-      formatTime (22300000);
+    console.log(date);
     let dateforapi = formatDate(date); //variabile da inserire nell'API per ricavare il sonno giornaliero
     // data odierna, non va MAI cambiata
     // inizializzo date che poi vengono cambiate quando si va avanti/indietro con le frecce
@@ -293,6 +289,7 @@ const convertDateintoNumberDay = (data) => {
     let range_giorno = getday(date);
     setRangeTime(range_giorno);
     let dayformattedtime = formatTime(mockbardataday.time_ms).toPrecision(3);
+    console.log("dayformattedtime: " + dayformattedtime);
     //setNumHoursSleeped(dayformattedtime);
     setBarDataDay(dayformattedtime);
     setFirstTime(true);
@@ -391,9 +388,10 @@ const convertDateintoNumberDay = (data) => {
       let range_giorno = getday(date);
       setRangeTime(range_giorno);
 
-      if(bardataday)
+      if(bardataday){
       setNumHoursSleeped(bardataday);
-
+      console.log("bardataday" + bardataday);
+    
       if(bardataday < redthreshold)
       setColorNumHoursSleeped("red");
 
@@ -405,7 +403,9 @@ const convertDateintoNumberDay = (data) => {
 
      else if (bardataday >= yellowthreshold)
       setColorNumHoursSleeped("green");
-      break;
+    
+  }
+  break;
       
       case "Settimana": 
    

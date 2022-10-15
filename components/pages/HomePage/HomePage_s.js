@@ -43,25 +43,40 @@ const HomePage_s = ({ navigation, route }) => {
   
     minutes = minutes / 100;
   
-    let total = parseInt(hours) + parseInt(minutes);
+    let total = parseInt(hours) + parseFloat(minutes);
     return total;
   }
   const dayformattedtime = formatTime(mockbardataday.time_ms).toPrecision(3);
-
+  const [num_questionari_da_compilare,setNumQuestionari_da_compilare] = useState(1);
   const [num_hours_sleeped, setNumHoursSleeped] = useState("0:00");
   const [pieData,setPieData] = useState([]);
+  const [colorNumHoursSleeped, setColorNumHoursSleeped] = useState("orange");
   const [colorNumStepsDone,setColorNumStepsDone] = useState("grey");
   const [redthreshold,setRedThreshold] = useState(1000);
   const [orangethreshold,setOrangeThreshold] = useState(4000);
   const [yellowthreshold,setYellowThreshold] = useState(8000);
+  const redthresholdsleep = 5;
+  const orangethresholdsleep = 6; 
+  const yellowthresholdsleep = 7.30;
   
-  /* se vuoi far chiudere l'app con il tasto indietro questo è il codice */
 
   useEffect(() => {
     let arr = new Array();
     var currentDate = new Date();
     setGiorno(currentDate);
     let steps_day = mockbardatadaysteps.steps;
+
+    if(dayformattedtime < redthresholdsleep){
+    setColorNumHoursSleeped("red");
+    console.log(dayformattedtime);  
+  }
+    else if (dayformattedtime >= redthresholdsleep && dayformattedtime < orangethresholdsleep)
+    setColorNumHoursSleeped("orange")
+    else if (dayformattedtime >= orangethresholdsleep && dayformattedtime < yellowthresholdsleep)
+    setColorNumHoursSleeped("yellow")
+    else if (dayformattedtime >= yellowthresholdsleep)
+    setColorNumHoursSleeped("green")
+
 
     if(steps_day < redthreshold){
       setColorNumStepsDone("red");
@@ -85,7 +100,7 @@ const HomePage_s = ({ navigation, route }) => {
     
      else if (steps_day >= yellowthreshold){
       arr.push({value: steps_day, color:"green"});
-      arr.push({value: yellowthreshold - steps_day, color:"whit"});
+      arr.push({value: yellowthreshold - steps_day, color:"white"});
       setPieData(arr);
       setColorNumStepsDone("green");
      }
@@ -177,7 +192,7 @@ const HomePage_s = ({ navigation, route }) => {
         <View style={{ flex: 1, flexDirection: "column" }}>
           <Pressable
             style={{ flex: 1.5 }}
-            onPress={() => navigation.navigate('Sonno_s',{hours_sleeped: dayformattedtime})}
+            onPress={() => navigation.navigate('Sonno_s',{hours_sleeped: dayformattedtime ,color_num_hours_sleeped: colorNumHoursSleeped })}
           >
             <View style={styles.container_sonno}>
               <Card
@@ -304,7 +319,7 @@ const HomePage_s = ({ navigation, route }) => {
           <Pressable
             style={{ flex: 4 }}
             onPress={() =>
-              navigation.navigate("Alimentazione", {
+              navigation.navigate("Questionari", {
                 data: new Date(),
               })
             }
@@ -327,13 +342,25 @@ const HomePage_s = ({ navigation, route }) => {
               >
                 Alimentazione
               </Text>
-              <View
+               <View
                 style={{
                   flex: 2,
-                  justifyContent: "space-around",
+                  justifyContent: "space-evenly",
                   flexDirection: "column",
+                  alignItems: "center",
                 }}
               >
+
+              <View><Text>Hai ancora</Text></View>
+                <Text style={s.header(2,"bold")}>{num_questionari_da_compilare}</Text>
+              <View>
+                <Text>{num_questionari_da_compilare > 1 ? "questionari" : "questionario"}</Text>
+                <Text>da compilare</Text>
+              </View>        
+
+
+
+              {/* vista per l'alimentazione inserita manualmente
                 <View style={{ alignItems: "center" }}>
                   <View style={{ position: "relative", alignItems: "center" }}>
                     <ProgressChart
@@ -370,7 +397,8 @@ const HomePage_s = ({ navigation, route }) => {
                     290 calorie rimaste{" "}
                   </Text>
                 </View>
-              </View>
+                  */}
+                  </View>
 
               <View
                 style={{
@@ -380,9 +408,8 @@ const HomePage_s = ({ navigation, route }) => {
                   marginBottom: 10,
                 }}
               >
-                <AlimentazioneRow titolo="Colazione"></AlimentazioneRow>
-                <AlimentazioneRow titolo="Pranzo"></AlimentazioneRow>
-                <AlimentazioneRow titolo="Cena"></AlimentazioneRow>
+                <AlimentazioneRow titolo="Medas"></AlimentazioneRow>
+                <AlimentazioneRow titolo="Cereali"></AlimentazioneRow>
               </View>
             </Card>
           </Pressable>
