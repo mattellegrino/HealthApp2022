@@ -20,13 +20,14 @@ import Sonno_s from "./components/pages/Sonno/Sonno_s";
 import Attività_fisica_s from "./components/pages/Attività fisica/Attività_fisica_s";
 import Attività_fisica_c from "./components/pages/Attività fisica/Attività_fisica_c";
 import Analisi from "./components/pages/Analisi/Analisi";
-import FitbitForm from "./components/pages/SignInPage/FitbitForm";
 import AnalisiOutput from "./components/pages/Analisi/AnalisiOutput";
-
-global.matteo = "192.168.1.127";
-global.enrico = "192.168.1.53";
+import FitbitForm from "./components/pages/SignInPage/FitbitForm";
 
 const Stack = createNativeStackNavigator();
+
+global.matteo = "192.168.1.127";
+global.enrico = "192.168.1.54";
+
 const App = () => (
   <NavigationContainer>
     <Stack.Navigator initialRouteName='Home'>

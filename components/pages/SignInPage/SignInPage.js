@@ -106,7 +106,7 @@ const SignInPage = ({ navigation }) =>  {
                 console.log("Userobj user: " +_user)
 
                 global.id = _user.id;
-                navigation.navigate('HomePage', {
+                navigation.navigate('HomePage_s', {
                     username: username,
                     ip_add: ip_add
                 })
@@ -151,7 +151,7 @@ const SignInPage = ({ navigation }) =>  {
                 else
                 {
                     console.log("DATA: "+ loggedUser)
-                    navigation.navigate('HomePage',{ username:loggedUser.authUser.username,
+                    navigation.navigate('HomePage_s',{ username:loggedUser.authUser.username,
                         ip_add:ip_add,user:loggedUser.user
                     } )
                 }
