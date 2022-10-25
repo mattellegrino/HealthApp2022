@@ -73,7 +73,7 @@ const HomePage_s = ({ navigation, route }) => {
     else if (dayformattedtime >= redthresholdsleep && dayformattedtime < orangethresholdsleep)
     setColorNumHoursSleeped("orange")
     else if (dayformattedtime >= orangethresholdsleep && dayformattedtime < yellowthresholdsleep)
-    setColorNumHoursSleeped("yellow")
+    setColorNumHoursSleeped("#FFEA00")
     else if (dayformattedtime >= yellowthresholdsleep)
     setColorNumHoursSleeped("green")
 
@@ -92,10 +92,10 @@ const HomePage_s = ({ navigation, route }) => {
      }
     
      else if(steps_day >= orangethreshold && steps_day < yellowthreshold){
-      arr.push({value: steps_day, color:"yellow"});
+      arr.push({value: steps_day, color:"#FFEA00"});
       arr.push({value: yellowthreshold - steps_day, color:"white"});
       setPieData(arr);
-      setColorNumStepsDone("yellow");
+      setColorNumStepsDone("#FFEA00");
      }
     
      else if (steps_day >= yellowthreshold){
@@ -246,7 +246,7 @@ const HomePage_s = ({ navigation, route }) => {
               })
             }
           >
-            <View style={{ flex: 3 }}>
+            <View style={{ flex: 3,width: "100%"}}>
               <Card
                 cornerRadius={30}
                 style={{
@@ -255,13 +255,10 @@ const HomePage_s = ({ navigation, route }) => {
                   width: "95%",
                   margin:5,
                   marginBottom: 10,
-                  alignItems: "center",
+               
                 }}
               >
-               <View style={styles.title}>
-                 <View style={styles.moon}>
-                  <FontAwesome5 name="running" size={20} color="#008b00" />
-                 </View>    
+               <View style={styles.title}>    
                 <Text
                   style={[
                     s.header(4, "medium", "#008b00")
@@ -271,44 +268,30 @@ const HomePage_s = ({ navigation, route }) => {
                   Attività fisica{" "}
                 </Text>
               </View>  
-                <View
-                  style={{
-                    width: "100%",
-                    alignItems: "center",
-                    justifyContent: "space-around",
-                  }}
-                >
-                  <View
-                    style={{
-                      paddingTop: 10,
-                      paddingBottom: 50,
-                      alignItems: "center",
-                    }}
-                  >
-                   <PieChart
-                    donut
-                    radius={55}
-                    innerRadius={45}
-                    textSize={10}
-                    data={pieData}
-                    centerLabelComponent={() => {
-                    return <Text style={{fontSize: 25}}>{mockbardatadaysteps.steps}</Text>;
-                  }}
-            />
-                  </View>
-                  <View
-                    style={{ padding: 20, alignItems: "center", width: 300 }}
-                  >
-                    <FontAwesome5 name="heartbeat" size={45} color="#008b00" />
-                    <Text style={s.text("small", "#008b00")}>
-                      {" "}
-                      Ultimo battito registrato:{" "}
-                    </Text>
-                    <Text style={s.header(4, "medium", "#008b00")}>
-                      {" "}
-                      83 bpm{" "}
-                    </Text>
-                  </View>
+                  <View style={styles.container_attivita}>
+                   
+                    <View style={{flex:0 ,flexDirection:"row",alignItems: "baseline", justifyContent: "space-evenly"}}>
+                      <FontAwesome5 name="running" size={20} color="black"/>
+                    <View style={{flex:0, flexDirection:"row",alignItems: "baseline"}}>
+                      <Text style={[s.header(3,"bold"),{marginRight: 5}]} >{mockbardatadaysteps.steps}</Text>
+                      <Text style={s.smalltext("regular")}>
+                      Passi
+                      </Text>
+                    </View>    
+                  </View> 
+
+                  <View style={styles.borderbottom}></View>
+                  <View>
+                    <View style={{flex:0, flexDirection:"row",alignItems: "baseline",justifyContent: "space-evenly"}}>
+                    <FontAwesome5 name="heartbeat" size={20} color="red"/>
+                    <View style={{flex:0, flexDirection:"row",alignItems: "baseline"}}>
+                      <Text style={[s.header(3,"bold"),{marginRight: 5}]} >83</Text>
+                      <Text style={s.smalltext("regular")}>
+                      bpm
+                      </Text>
+                    </View>  
+                    </View>  
+                  </View> 
                 </View>
               </Card>
             </View>
@@ -319,9 +302,7 @@ const HomePage_s = ({ navigation, route }) => {
           <Pressable
             style={{ flex: 4 }}
             onPress={() =>
-              navigation.navigate("Questionari", {
-                data: new Date(),
-              })
+              navigation.navigate("Questionari")
             }
           >
             <Card
@@ -479,6 +460,22 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
+  },
+
+  borderbottom: {
+    height:10,
+    padding:5,
+    borderBottomWidth:1,
+    width:100,
+    borderColor:"grey",
+    alignSelf: "center",
+  },
+
+  container_attivita: {
+    flex:1,
+    width: "100%",
+    marginBottom: 50,
+    justifyContent: "space-around"
   },
 
   container_sonno: {

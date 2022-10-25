@@ -101,7 +101,7 @@ module.exports = StyleSheet.create({
   },
 
   multichoicebutton_selected : type => ({
-   backgroundColor: type == "questionari" ? "#FFF9C4" : type == "attività" ? "#c6f68d" : "#1565C0",
+   backgroundColor: type == "questionari" ? "#FFF9C4" : type == "attività" ? "#000" : "#1565C0",
    borderRadius:20, 
    padding:10,
    paddingLeft:20,
@@ -117,7 +117,7 @@ module.exports = StyleSheet.create({
 
   text_selected : type =>  ({
     fontWeight: "500",
-    color: type == "questionari" ? "#BB530B" : type == "attività" ? "#008b00" : "#fff",
+    color: type == "questionari" ? "#BB530B" : type == "attività" ? "#fff" : "#fff",
   }),
 
   primary_button_text : size => ({

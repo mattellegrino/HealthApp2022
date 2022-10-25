@@ -258,7 +258,7 @@ export default function Sonno_c({navigation,route}) {
     setColorNumHoursSleeped("orange");
  
    else if(dayformattedtime >= orangethreshold && dayformattedtime < yellowthreshold)
-    setColorNumHoursSleeped("yellow");
+    setColorNumHoursSleeped("#FFEA00");
  
    else if (dayformattedtime >= yellowthreshold)
     setColorNumHoursSleeped("green");
@@ -291,7 +291,7 @@ export default function Sonno_c({navigation,route}) {
         el.frontColor = "orange";
 
        else if(el.value >= orangethreshold && el.value <yellowthreshold)
-       el.frontColor = "yellow";
+       el.frontColor = "#FFEA00";
 
        else if (el.value >= yellowthreshold)
         el.frontColor = "green";
@@ -313,7 +313,7 @@ export default function Sonno_c({navigation,route}) {
        el.frontColor = "orange";
 
       else if(el.value >= orangethreshold && el.value <yellowthreshold)
-      el.frontColor = "yellow";
+      el.frontColor = "#FFEA00";
 
       else if (el.value >= yellowthreshold)
        el.frontColor = "green";
@@ -350,7 +350,7 @@ export default function Sonno_c({navigation,route}) {
       setColorNumHoursSleeped("orange");
 
      else if(bardataday >= orangethreshold && bardataday < yellowthreshold)
-      setColorNumHoursSleeped("yellow");
+      setColorNumHoursSleeped("#FFEA00");
 
      else if (bardataday >= yellowthreshold)
       setColorNumHoursSleeped("green");
@@ -380,7 +380,7 @@ export default function Sonno_c({navigation,route}) {
           setColorNumHoursSleeped("orange");
    
          else if(average_week_sleep_hours >= orangethreshold && average_week_sleep_hours <yellowthreshold)
-          setColorNumHoursSleeped("yellow");
+          setColorNumHoursSleeped("#FFEA00");
    
          else if (average_week_sleep_hours >= yellowthreshold)
           setColorNumHoursSleeped("green");
@@ -406,7 +406,7 @@ export default function Sonno_c({navigation,route}) {
           setColorNumHoursSleeped("orange");
    
          else if(average_month_sleep_hours >= orangethreshold && average_month_sleep_hours <yellowthreshold)
-          setColorNumHoursSleeped("yellow");
+          setColorNumHoursSleeped("#FFEA00");
    
          else if (average_month_sleep_hours >= yellowthreshold)
           setColorNumHoursSleeped("green");
@@ -439,7 +439,7 @@ export default function Sonno_c({navigation,route}) {
               <View style={styles.threshold_sleep_container}>
                 <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "red" ? "red" : "transparent")}></View><Text style={[s.smalltext(color_num_hours_sleeped == "red" ? "medium" :"regular",color_num_hours_sleeped == "red" ? "red" : "black"),{textAlign: "center"}]}>Scarso</Text></View>
                 <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "orange" ? "orange" : "transparent")}></View><Text style={[s.smalltext(color_num_hours_sleeped == "orange" ? "medium" :"regular",color_num_hours_sleeped == "orange" ? "orange" : "black"),{textAlign: "center"}]}>Discreto</Text></View>
-                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "yellow" ? "yellow" : "transparent")}></View><Text style={[s.smalltext(color_num_hours_sleeped == "yellow" ? "medium" :"regular",color_num_hours_sleeped == "yellow" ? "yellow" : "black"),{textAlign: "center"}]}>Buono</Text></View>
+                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "#FFEA00" ? "#FFEA00" : "transparent")}></View><Text style={[s.smalltext(color_num_hours_sleeped == "#FFEA00" ? "medium" :"regular",color_num_hours_sleeped == "#FFEA00" ? "#FFEA00" : "black"),{textAlign: "center"}]}>Buono</Text></View>
                 <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "green" ? "green" : "transparent")}></View><Text style={[s.smalltext(color_num_hours_sleeped == "green" ? "medium" :"regular",color_num_hours_sleeped == "green" ? "green" : "black"),{textAlign: "center"}]}>Ottimo</Text></View>
               </View>  
            </View>  

@@ -6,7 +6,14 @@ const s = require("../../core/styles");
 export default function CustomNavbar(props) {
   return (
     <View style={styles.container}>
-        <Card cornerRadius={10} elevation={3} style={{backgroundColor:"white",flex:0,flexDirection:"row",justifyContent:"space-between", borderWidth:0.2, borderColor:"white", borderRadius:30}}>
+        <Card cornerRadius={10} elevation={3} style={{
+           flex:0,
+           backgroundColor:"white",
+           flexDirection:"row",
+           justifyContent:"space-between", 
+           borderWidth:0.2, 
+           borderColor:"white", 
+           borderRadius:30}}>
           {props.selezioni && props.selezioni.map((selezione,i)=> (
 
             <Pressable key={i} onPress={()=> props.handleselection(selezione)}>
@@ -24,9 +31,8 @@ export default function CustomNavbar(props) {
 const styles = StyleSheet.create({
 
   container: {
-    flex:1,
-    paddingRight:20,
-    paddingLeft:20,
+    flex:0,
+    paddingLeft:10,
     justifyContent:"center",
     marginTop:10
   }

@@ -2,8 +2,10 @@ import { View, SafeAreaView, Text, StyleSheet,Dimensions, FlatList, StatusBar,Sc
 import React, { useState, useEffect } from "react";
 import CustomNavbar from "../../CustomNavbar/CustomNavbar";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Card } from "react-native-shadow-cards";
 const s = require("../../../core/styles");
 import { BarChart } from "react-native-gifted-charts";
+import * as Progress from 'react-native-progress';
 
 export default function Sonno_s({navigation,route}) {
 
@@ -119,7 +121,7 @@ export default function Sonno_s({navigation,route}) {
     return [year, month, day].join('-');
 }
 
-function formatDate2 (data) {
+  function formatDate2 (data) {
   const year = +data.substring(0, 4);
   const month = +data.substring(5, 7);
   const day = +data.substring(8, 10);
@@ -235,40 +237,81 @@ function formatDate2 (data) {
     minutes = minutes / 100;
     let total = parseInt(hours) + parseFloat(minutes);
     return total;
-}
-
-
-const convertDateintoDayoftheWeek = (date) => {
-
-  let fordate = formatDate2(date);
-  let dayoftheweek = fordate.getDay();
-
-  switch (dayoftheweek) {
-    case 1:
-      return "LUN";
-    case 2:
-      return "MAR";
-    case 3:
-      return "MER";
-    case 4:
-      return "GIO";
-    case 5:
-      return "VEN";
-    case 6:
-      return "SAB";
-    case 0:
-      return "DOM";
   }
-}
 
-const convertDateintoNumberDay = (data) => {
 
-  let fordate = formatDate2(data);
-  let date = fordate.getDate();
+  const convertDateintoDayoftheWeek = (date) => {
 
-  return parseInt(date,10);
-}
+    let fordate = formatDate2(date);
+    let dayoftheweek = fordate.getDay();
 
+    switch (dayoftheweek) {
+      case 1:
+        return "LUN";
+      case 2:
+        return "MAR";
+      case 3:
+        return "MER";
+      case 4:
+        return "GIO";
+      case 5:
+        return "VEN";
+      case 6:
+        return "SAB";
+      case 0:
+        return "DOM";
+    }
+  }
+
+  const convertDateintoNumberDay = (data) => {
+
+    let fordate = formatDate2(data);
+    let date = fordate.getDate();
+
+    return parseInt(date,10);
+  }
+
+  const convertIndicatorFromColor = (color) => {
+
+    switch (color) {
+
+      case "red" :
+        return "Scarso"
+      
+      case "orange" :
+        return "Discreto"
+        
+      case "#FFEA00" :
+        return "Buono"
+
+      case "green" :
+        return "Ottimo"
+
+    }
+
+
+  }
+
+  const convertColorFromValue = (num_hours) => {
+
+    if(num_hours < redthreshold)
+       return "red";
+
+      else if(num_hours >= redthreshold && num_hours < orangethreshold)
+       return "orange";
+
+      else if(num_hours>= orangethreshold && num_hours <yellowthreshold)
+       return "#FFEA00";
+
+      else if (num_hours >= yellowthreshold)
+       return "green";
+
+
+  }
+
+  const progressValue = (value) => {
+    return value/yellowthreshold;
+  }
 
   useEffect(() => {
 
@@ -301,7 +344,7 @@ const convertDateintoNumberDay = (data) => {
     setColorNumHoursSleeped("orange");
  
    else if(dayformattedtime >= orangethreshold && dayformattedtime < yellowthreshold)
-    setColorNumHoursSleeped("yellow");
+    setColorNumHoursSleeped("#FFEA00");
  
    else if (dayformattedtime >= yellowthreshold)
     setColorNumHoursSleeped("green");
@@ -334,7 +377,7 @@ const convertDateintoNumberDay = (data) => {
         el.frontColor = "orange";
 
        else if(el.value >= orangethreshold && el.value <yellowthreshold)
-       el.frontColor = "yellow";
+       el.frontColor = "#FFEA00";
 
        else if (el.value >= yellowthreshold)
         el.frontColor = "green";
@@ -359,7 +402,7 @@ const convertDateintoNumberDay = (data) => {
        el.frontColor = "orange";
 
       else if(el.value >= orangethreshold && el.value <yellowthreshold)
-      el.frontColor = "yellow";
+      el.frontColor = "#FFEA00";
 
       else if (el.value >= yellowthreshold)
        el.frontColor = "green";
@@ -399,7 +442,7 @@ const convertDateintoNumberDay = (data) => {
       setColorNumHoursSleeped("orange");
 
      else if(bardataday >= orangethreshold && bardataday < yellowthreshold)
-      setColorNumHoursSleeped("yellow");
+      setColorNumHoursSleeped("#FFEA00");
 
      else if (bardataday >= yellowthreshold)
       setColorNumHoursSleeped("green");
@@ -431,7 +474,7 @@ const convertDateintoNumberDay = (data) => {
           setColorNumHoursSleeped("orange");
    
          else if(average_week_sleep_hours >= orangethreshold && average_week_sleep_hours <yellowthreshold)
-          setColorNumHoursSleeped("yellow");
+          setColorNumHoursSleeped("#FFEA00");
    
          else if (average_week_sleep_hours >= yellowthreshold)
           setColorNumHoursSleeped("green");
@@ -457,7 +500,7 @@ const convertDateintoNumberDay = (data) => {
           setColorNumHoursSleeped("orange");
    
          else if(average_month_sleep_hours >= orangethreshold && average_month_sleep_hours <yellowthreshold)
-          setColorNumHoursSleeped("yellow");
+          setColorNumHoursSleeped("#FFEA00");
    
          else if (average_month_sleep_hours >= yellowthreshold)
           setColorNumHoursSleeped("green");
@@ -470,7 +513,7 @@ const convertDateintoNumberDay = (data) => {
 
   return (
    <View style={styles.container_main}>
-     <ScrollView style={{flex:1}}>
+     <ScrollView style={{height:Dimensions.get('window').height,padding:10, backgroundColor: "white"}}>
       <CustomNavbar type={"sonno"} isSelected={isSelected} selezioni={selezioni} handleselection={handleselection}></CustomNavbar>
         <View style={styles.container_rangetime}>
             <Ionicons name="chevron-back-outline" size={28} color="black" onPress={()=> minus()}></Ionicons>
@@ -478,23 +521,34 @@ const convertDateintoNumberDay = (data) => {
             <Ionicons name="chevron-forward-outline" size={28} color="black" onPress={()=> plus()}></Ionicons>
         </View>
 
-        <View style={styles.container_sleep}>
-          <Text style={[s.body("regular","black")]}>Durata del sonno</Text>
+        <Text style={[s.smalltext("medium","grey"), styles.subtitle]}>Durata del sonno</Text>
+        <Card
+                cornerRadius={20}
+                elevation={3}
+                style={{
+                  backgroundColor: "#1565C0",
+                  flex: 1,
+                  width: "55%",
+                  alignSelf: "center",
+                  padding: 10,
+                  margin:5,
+                  marginTop:10,
+                  marginBottom:10,
+                  alignItems: "center",
+                }}
+              >
             <View style={styles.details_sleep}>
-            
+            <Text style={s.smalltext("regular","white")}>{isSelected != "Giorno" ? "Media" : "Totale"}</Text>
               <View style={styles.hours_sleep}>
-                <Text style={[s.header(1,"bold","black"),{marginRight:"2%"}]}> {num_hours_sleeped}</Text>
-                <Text style={s.body("medium","black")}>h{isSelected != "Giorno" && <Text>/giorno</Text>}</Text>
+                <Text style={[s.header(1,"bold","white"),{marginRight:"2%"}]}> {num_hours_sleeped}</Text>
+                <Text style={s.body("medium","white")}>h{isSelected != "Giorno" && <Text>/giorno</Text>}</Text>
               </View>
             
-              <View style={styles.threshold_sleep_container}>
-                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "red" ? "red" : "transparent")}></View>{color_num_hours_sleeped == "red" && <Text style={[s.smalltext(color_num_hours_sleeped == "red" ? "medium" :"regular","black"),{textAlign: "center"}]}>Scarso</Text>}</View>
-                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "orange" ? "orange" : "transparent")}></View>{color_num_hours_sleeped == "orange" && <Text style={[s.smalltext(color_num_hours_sleeped == "orange" ? "medium" :"regular","black"),{textAlign: "center"}]}>Discreto</Text>}</View>
-                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "yellow" ? "yellow" : "transparent")}></View>{color_num_hours_sleeped == "yellow" && <Text style={[s.smalltext(color_num_hours_sleeped == "yellow" ? "medium" :"regular","black"),{textAlign: "center"}]}>Buono</Text>}</View>
-                <View style={styles.container_segnalatori}><View style={styles.circle(color_num_hours_sleeped == "green" ? "green" : "transparent")}></View>{color_num_hours_sleeped == "green" && <Text style={[s.smalltext(color_num_hours_sleeped == "green" ? "medium" :"regular","black"),{textAlign: "center"}]}>Ottimo</Text>}</View>
-              </View>  
+              <Progress.Bar progress={progressValue(num_hours_sleeped)} width={150} color={convertColorFromValue(num_hours_sleeped)} unfilledColor={"lightgrey"} borderColor={"white"} borderWidth={1} />
+              <Text style={[s.body("medium","white"),{margin:"1%"}]}>{convertIndicatorFromColor(color_num_hours_sleeped)}</Text>  
+              
            </View>  
-        </View> 
+        </Card> 
 
         {isSelected != "Giorno" && 
         (<View style={{height:"40%"}}>
@@ -507,10 +561,21 @@ const convertDateintoNumberDay = (data) => {
             barBorderRadius={4}
             initialSpacing = {5}
             noOfSections={3}
-            maxValue={9}
+            height={200}
+            maxValue={10}
+            hideRules
             yAxisThickness={0}
             xAxisThickness={0}
             barWidth={isSelected == "Settimana" ? 20 : 11}
+            showReferenceLine1
+            referenceLine1Position={num_hours_sleeped}
+            referenceLine1Config={{
+            color: 'gray',
+            labelText: "Media",
+            labelTextStyle: styles.progressStyle,
+            dashWidth: 2,
+            dashGap: 3,
+        }}
             />
         </View>)}
         
@@ -561,11 +626,18 @@ const styles = StyleSheet.create({
 
     container_sleep: {
         borderRadius:20,
-        backgroundColor:"#ACC8E5",
+        backgroundColor:"#abdbe3",
         borderColor:"#1565C0",
         margin:10,
         padding:10
     },
+
+    subtitle: {
+
+      borderBottomWidth: 1,
+      borderBottomColor: "lightgrey"
+   
+     },
 
     container_sleep_details: {
         flex: 1,
@@ -618,9 +690,8 @@ const styles = StyleSheet.create({
     },
 
     details_sleep: {
-      flexDirection: "row",
       justifyContent:"space-between",
-      alignItems: "baseline"
+      alignItems: "center"
     },
 
     hours_sleep: {
@@ -641,6 +712,10 @@ const styles = StyleSheet.create({
       marginLeft:15,
     },
 
+    progressStyle: {
+      fontSize:10
+    },
+  
     circle: color => ({
       height: color != "transparent" ? 30 : 20, 
       width: color != "transparent" ? 30 : 20, 

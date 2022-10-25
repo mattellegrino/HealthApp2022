@@ -1,4 +1,4 @@
-import { View, Text, Dimensions, StyleSheet, ScrollView } from "react-native";
+import { View, Text, Dimensions, StyleSheet, Pressable, ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
 import CustomNavbar from "../../CustomNavbar/CustomNavbar";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -7,15 +7,16 @@ import { Card } from "react-native-shadow-cards";
 import Battito_Cardiaco from "./Battito_Cardiaco"
 const s = require("../../../core/styles");
 import { BarChart, PieChart } from "react-native-gifted-charts";
-import {
-  ProgressChart
-} from "react-native-chart-kit";
-
+import * as Progress from 'react-native-progress';
 export default function Attività_fisica_s({route}) {
 
   const mockbardataday = {
     date: "2022-06-21",
     steps: 2200
+}
+const mockbardatadayhr = {
+  date: "2022-06-21",
+  rest: 80
 }
 
   const mockbardataweek = [
@@ -26,6 +27,16 @@ export default function Attività_fisica_s({route}) {
     {steps: 12000, date: '2022-06-24'}, 
     {steps: 3000, date: '2022-06-25'},
     {steps: 2000, date: '2022-06-26'},
+];
+
+const mockbardataweekhr = [
+  {rest: 80, date: '2022-06-20'},
+  {rest: 70, date: '2022-06-21'},
+  {rest: 90, date: '2022-06-22'}, 
+  {rest: 110, date: '2022-06-23'},
+  {rest: 75, date: '2022-06-24'}, 
+  {rest: 100, date: '2022-06-25'},
+  {rest: 96, date: '2022-06-26'},
 ];
 
 const mockbardatamonth = [
@@ -58,6 +69,37 @@ const mockbardatamonth = [
     {steps: 2730, date: '2022-06-27'},
     {steps: 1230, date: '2022-06-28'},
 ];   
+const mockbardatamonthhr = [
+  {rest: 100, date: '2022-06-1'},
+  {rest: 100, date: '2022-06-2'},
+  {rest: 120, date: '2022-06-3'}, 
+  {rest: 120,date: '2022-06-4'},
+  {rest: 60, date: '2022-06-5'},
+  {rest: 60, date: '2022-06-6'},
+  {rest: 60, date: '2022-06-7'},
+  {rest: 60, date: '2022-06-8'},
+  {rest: 60, date: '2022-06-9'},
+  {rest: 60, date: '2022-06-10'},
+  {rest: 60, date: '2022-06-11'},
+  {rest: 70, date: '2022-06-12'},
+  {rest: 70, date: '2022-06-13'},
+  {rest: 70, date: '2022-06-14'},
+  {rest: 70,  date: '2022-06-15'},
+  {rest: 65,date: '2022-06-16'},    
+  {rest: 65,date: '2022-06-17'}, 
+  {rest: 65, date: '2022-06-18'},
+  {rest: 65, date: '2022-06-19'}, 
+  {rest: 65,date: '2022-06-20'},
+  {rest: 65,date: '2022-06-21'},
+  {rest: 65, date: '2022-06-22'},
+  {rest: 75, date: '2022-06-23'}, 
+  {rest: 75,date: '2022-06-24'}, 
+  {rest: 75, date: '2022-06-25'},
+  {rest: 80, date: '2022-06-26'}, 
+  {rest: 80, date: '2022-06-27'},
+  {rest: 80, date: '2022-06-28'},
+];   
+
 
 
   var selezioni = ["Giorno", "Settimana", "Mese"];
@@ -84,10 +126,10 @@ const mockbardatamonth = [
   const [redthreshold,setRedThreshold] = useState(1000);
   const [orangethreshold,setOrangeThreshold] = useState(4000);
   const [yellowthreshold,setYellowThreshold] = useState(8000);
+  const [selectedChoice,setSelectedChoice] = useState("passi");
   // Passi fatti
   const [num_steps_done,setNumStepsDone] = useState(route.params.steps_done);
   const [color_num_steps_done, setColorNumStepsDone] = useState("grey");
-  const [pieData,setPieData] = useState([]);
 
 
   //Numero sospensioni
@@ -266,7 +308,53 @@ return date;
   
     return parseInt(date,10);
   }
+
+  const progressValueSteps = (value) => {
+    return value/yellowthreshold;
+  }
+
+
+  const convertColorFromValue = (num_hours) => {
+
+    if(num_hours < redthreshold)
+       return "red";
+
+      else if(num_hours >= redthreshold && num_hours < orangethreshold)
+       return "orange";
+
+      else if(num_hours>= orangethreshold && num_hours <yellowthreshold)
+       return "#FFEA00";
+
+      else if (num_hours >= yellowthreshold)
+       return "green";
+
+
+  }
+
+  const convertIndicatorFromColor = (color) => {
+
+    switch (color) {
+
+      case "red" :
+        return "Scarso"
+      
+      case "orange" :
+        return "Discreto"
+        
+      case "#FFEA00" :
+        return "Buono"
+
+      case "green" :
+        return "Ottimo"
+
+    }
+
+
+  }
   
+  const handleChoice = (choice) =>{
+    setSelectedChoice(choice);
+  }
   useEffect(() => {
 
   let dateforapi = formatDate(date); //variabile da inserire nell'API per ricavare il sonno giornaliero
@@ -285,32 +373,19 @@ return date;
 
   setFirstTime(true);
 
-  let arr = new Array();
 
   if(steps_day < redthreshold){
   setColorNumStepsDone("red");
-  arr.push({value: steps_day, color:"red"});
-  arr.push({value: yellowthreshold - steps_day, color:"white"});
-  setPieData(arr);
   }
  else if(steps_day >= redthreshold && steps_day < orangethreshold){
-  arr.push({value: steps_day, color:"orange"});
-  arr.push({value: yellowthreshold - steps_day, color:"white"});
-  setPieData(arr);
   setColorNumStepsDone("orange");
  }
 
  else if(steps_day >= orangethreshold && steps_day < yellowthreshold){
-  arr.push({value: steps_day, color:"yellow"});
-  arr.push({value: yellowthreshold - steps_day, color:"white"});
-  setPieData(arr);
-  setColorNumStepsDone("yellow");
+  setColorNumStepsDone("#FFEA00");
  }
 
  else if (steps_day >= yellowthreshold){
-  arr.push({value: steps_day, color:"green"});
-  arr.push({value: yellowthreshold - steps_day, color:"whit"});
-  setPieData(arr);
   setColorNumStepsDone("green");
  }
   
@@ -342,7 +417,7 @@ return date;
       el.frontColor = "orange";
 
      else if(el.value >= orangethreshold && el.value <yellowthreshold)
-     el.frontColor = "yellow";
+     el.frontColor = "#FFEA00";
 
      else if (el.value >= yellowthreshold)
       el.frontColor = "green";
@@ -366,7 +441,7 @@ return date;
      el.frontColor = "orange";
 
     else if(el.value >= orangethreshold && el.value <yellowthreshold)
-    el.frontColor = "yellow";
+    el.frontColor = "#FFEA00";
 
     else if (el.value >= yellowthreshold)
      el.frontColor = "green";
@@ -387,7 +462,7 @@ return date;
 },[])
 
 useEffect(() => {
-  let copiaPieData = Array.from(pieData);
+
 
   switch (isSelected) {
     case "Giorno": 
@@ -399,21 +474,17 @@ useEffect(() => {
     setNumStepsDone(bardataday);
 
     if(bardataday < redthreshold){
-      copiaPieData[0].value = bardataday;
-      copiaPieData[1].value = yellowthreshold - bardataday;
-      setPieData(copiaPieData);
+ 
       setColorNumStepsDone("red");
     }
 
    else if(bardataday >= redthreshold && bardataday < orangethreshold){
-    copiaPieData[0].value = bardataday;
-    copiaPieData[1].value = yellowthreshold - bardataday;
-    setPieData(copiaPieData);
+  
     setColorNumStepsDone("orange");
    }
 
    else if(bardataday >= orangethreshold && bardataday < yellowthreshold)
-    setColorNumStepsDone("yellow");
+    setColorNumStepsDone("#FFEA00");
 
    else if (bardataday >= yellowthreshold)
     setColorNumStepsDone("green");
@@ -441,26 +512,17 @@ useEffect(() => {
         setColorNumStepsDone("red");
 
        else if(average_steps_done >= redthreshold && average_steps_done < orangethreshold){
-        copiaPieData[0].value = average_steps_done;
-        copiaPieData[0].color = "orange";
-        copiaPieData[1].value = yellowthreshold - average_steps_done;
-        setPieData(copiaPieData);
+        
         setColorNumStepsDone("orange");
        }
  
        else if(average_steps_done >= orangethreshold && average_steps_done <yellowthreshold){
-        copiaPieData[0].value = average_steps_done;
-        copiaPieData[0].color = "yellow";
-        copiaPieData[1].value = yellowthreshold - average_steps_done;
-        setPieData(copiaPieData);
-        setColorNumStepsDone("yellow");
+        
+        setColorNumStepsDone("#FFEA00");
        }
  
        else if (average_steps_done >= yellowthreshold){
-        copiaPieData[0].value = average_steps_done;
-        copiaPieData[0].color = "green";
-        copiaPieData[1].value = yellowthreshold - average_steps_done;
-        setPieData(copiaPieData);
+        
         setColorNumStepsDone("green");
        }
       
@@ -479,34 +541,22 @@ useEffect(() => {
       setNumStepsDone(average_month_steps.toFixed(0));
       
       if(average_month_steps < redthreshold){
-        copiaPieData[0].value = average_month_steps;
-        copiaPieData[0].color = "red";
-        copiaPieData[1].value = yellowthreshold - average_month_steps;
-        setPieData(copiaPieData);
+      
         setColorNumStepsDone("red");
       }
 
        else if(average_month_steps >= redthreshold && average_month_steps < orangethreshold){
-        copiaPieData[0].value = average_month_steps;
-        copiaPieData[0].color = "orange";
-        copiaPieData[1].value = yellowthreshold - average_month_steps;
-        setPieData(copiaPieData);
+        
         setColorNumStepsDone("orange");
        }
 
        else if(average_month_steps >= orangethreshold && average_month_steps <yellowthreshold){
-        copiaPieData[0].value = average_month_steps;
-        copiaPieData[0].color = "yellow";
-        copiaPieData[1].value = yellowthreshold - average_month_steps;
-        setPieData(copiaPieData);
-        setColorNumStepsDone("yellow");
+       
+        setColorNumStepsDone("#FFEA00");
        }
  
        else if (average_month_steps >= yellowthreshold){
-        copiaPieData[0].value = average_month_steps;
-        copiaPieData[0].color = "green";
-        copiaPieData[1].value = yellowthreshold - average_month_steps;
-        setPieData(copiaPieData);
+      
         setColorNumStepsDone("green");
        }
       
@@ -516,86 +566,120 @@ useEffect(() => {
 }},[isSelected])
 
   return (
-    <ScrollView style={{height:Dimensions.get('window').height,padding:10, backgroundColor: "white"}}>
-     <View style={{flex:0.2}}>
+    <View style={{flex:1,padding:10, backgroundColor: "white"}}>
+
       <CustomNavbar
         type={"attività"}
         isSelected={isSelected}
         selezioni={selezioni}
         handleselection={handleselection}
       ></CustomNavbar>
-      </View>
+    
       <View style={{flex:0, marginTop:10, marginBottom:10,justifyContent:"center",alignItems:"center",flexDirection:"row"}}>
         <Ionicons name="chevron-back-outline" size={24} color="black" onPress={()=> minus()}></Ionicons>
           <Text style={s.body("medium")}> {range_time} </Text>
         <Ionicons name="chevron-forward-outline" size={24} color="black" onPress={()=> plus()}></Ionicons>
       </View>
-     <View style={{height:Dimensions.get('window').height}}>
-      <View style={{height:"20%"}}>
-        <Text style={[s.smalltext("medium","grey"), styles.subtitle]}>Passi</Text>
-        {/* <View style={{flex:0}}>
-            <PieChart
-               donut
-               radius={55}
-               innerRadius={45}
-               textSize={10}
-               data={pieData}
-               centerLabelComponent={() => {
-              return <Text style={{fontSize: 25}}>{num_steps_done}</Text>;
-                }}
-            />
-        </View> */}
-        <View style={{flex:0, flexDirection: "row",marginTop: 15,justifyContent: "space-between",width: "100%",alignItems: "center"}}>
-        
-        <View>
-          <Text>{isSelected != "Giorno" ? "Media" : "Totale"}</Text>
-         
-          <View>
-              <View style={{flex:0 ,flexDirection:"row",alignItems: "baseline"}}>
-                <Text style={[s.header(2,"bold"),{marginRight: 5}]} >{num_steps_done}</Text>
-                <Text style={s.smalltext("regular")}>
-                Passi
-                {isSelected != "Giorno" && <Text>/giorno</Text>}
-                </Text>
-              </View>  
-          </View>  
-        </View>
 
-          <View style={styles.threshold_sleep_container}>
-                    <View style={styles.container_segnalatori}><View style={styles.circle(color_num_steps_done == "red" ? "red" : "transparent")}></View>{color_num_steps_done == "red" && <Text style={[s.smalltext(color_num_steps_done == "red" ? "medium" :"regular","black"),{textAlign: "center"}]}>Scarso</Text>}</View>
-                    <View style={styles.container_segnalatori}><View style={styles.circle(color_num_steps_done == "orange" ? "orange" : "transparent")}></View>{color_num_steps_done == "orange" && <Text style={[s.smalltext(color_num_steps_done == "orange" ? "medium" :"regular","black"),{textAlign: "center"}]}>Discreto</Text>}</View>
-                    <View style={styles.container_segnalatori}><View style={styles.circle(color_num_steps_done == "yellow" ? "yellow" : "transparent")}></View>{color_num_steps_done == "yellow" && <Text style={[s.smalltext(color_num_steps_done == "yellow" ? "medium" :"regular","black"),{textAlign: "center"}]}>Buono</Text>}</View>
-                    <View style={styles.container_segnalatori}><View style={styles.circle(color_num_steps_done == "green" ? "green" : "transparent")}></View>{color_num_steps_done == "green" && <Text style={[s.smalltext(color_num_steps_done == "green" ? "medium" :"regular","black"),{textAlign: "center"}]}>Ottimo</Text>}</View>
-          
-          </View>  
-        </View>  
+     <View style={styles.container_multichoice}> 
+       <Pressable style={styles.choice} onPress={()=> handleChoice("passi")}>
+        <Text style={styles.textchoice}>Passi</Text>
+        <View style={styles.choiceicon(selectedChoice == "passi" ? true : false)}>
+         <FontAwesome5 name="running" size={20} color={selectedChoice == "passi" ? "white" : "black"} />
+        </View>
+       </Pressable>
+       
+       <Pressable style={styles.choice} onPress={()=> handleChoice("battito")}>
+        <Text style={styles.textchoice}>Battito Cardiaco</Text>
+        <View style={styles.choiceicon(selectedChoice == "battito" ? true : false)}>
+         <FontAwesome5 name="heartbeat" size={20} color={selectedChoice == "battito" ? "white" : "black"} />
+        </View>
+       </Pressable>
+     </View>
+
+     <View style={{height:Dimensions.get('window').height}}>
+     {selectedChoice == "passi" && 
+      <View style={{marginTop:30}}>
+      {/*tab passi*/}
+      <View style={{height:"30%"}}>
+        <Text style={[s.smalltext("medium","grey"), styles.subtitle]}>Passi</Text>
+            <Card
+                cornerRadius={20}
+                elevation={0}
+                style={{
+                  backgroundColor: "#fff",
+                  flex: 1,
+                  width: "95%",
+                  padding: 10,
+                  margin:5,
+                  marginTop:10,
+                  marginBottom:10,
+                  alignItems: "center",
+                }}
+              >
+            <View style={styles.details_sleep}>
+            <Text style={s.smalltext("regular")}>{isSelected != "Giorno" ? "Media" : "Totale"}</Text>
+              <View>
+                <View style={{flex:0 ,flexDirection:"row",alignItems: "baseline"}}>
+                  <Text style={[s.header(2,"bold"),{marginRight: 5}]} >{num_steps_done}</Text>
+                  <Text style={s.smalltext("regular")}>
+                  Passi
+                  {isSelected != "Giorno" && <Text>/giorno</Text>}
+                  </Text>
+                </View>  
+             </View> 
+            
+              <Progress.Bar progress={progressValueSteps(num_steps_done)} width={150} color={convertColorFromValue(num_steps_done)} unfilledColor={"lightgrey"} borderColor={"white"} borderWidth={1} />
+              <Text style={[s.body("medium"),{margin:"1%"}]}>{convertIndicatorFromColor(color_num_steps_done)}</Text>  
+              
+           </View>  
+        </Card> 
       </View>
+  
+
       {isSelected != "Giorno" && 
         (<View style={{height:"40%"}}>
          <BarChart 
             data={isSelected == "Settimana" ? bardataweek : isSelected =="Giorno" ? bardataday : bardatamonth}
             spacing={isSelected == "Settimana" ? 30 : 10}
             barBorderRadius={4}
-            initialSpacing = {5}
-            noOfSections={3}
-            maxValue={10000}
+            initialSpacing = {10}
+            noOfSections={4}
+            maxValue={15000}
+            yAxisTextStyle={styles.progressStyle}
+            xAxisLabelTextStyle={styles.progressXStyle}
             height={200}
+            hideRules
             yAxisThickness={0}
             xAxisThickness={0}
             barWidth={isSelected == "Settimana" ? 20 : 11}
+            showReferenceLine1
+            referenceLine1Position={num_steps_done}
+            referenceLine1Config={{
+            color: 'gray',
+            labelText: "Media",
+            labelTextStyle: styles.progressStyle,
+            dashWidth: 2,
+            dashGap: 3,
+        }}
+
             />
         </View>)}
 
-        <View>
+      </View>}
+
+      {selectedChoice == "battito" &&
+        <View style={{marginTop:30}}>
 
          <Text style={[s.smalltext("medium","grey"), styles.subtitle]}>Battito cardiaco (bpm)</Text>
 
+          <View style={{padding:10,marginTop:10}}>
          {isSelected != "Giorno" ?  
           (<View>
             
             <View style={{flex:0,flexDirection:"row",margin:15,alignItems:"baseline",justifyContent:"center"}}>
              <View style={{marginRight:20, alignSelf: "center"}}>
-              <FontAwesome5 name="heartbeat" size={30} color="black" />
+              <FontAwesome5 name="heartbeat" size={30} color="red" />
             </View>
             <Battito_Cardiaco battiti={69} type={"Media"}></Battito_Cardiaco>
             </View>
@@ -610,7 +694,7 @@ useEffect(() => {
 
          (<View style={{flex:0, flexDirection:"row", justifyContent: "space-around",alignItems:"center", margin:20}}>
             <View style={{marginRight:20}}>
-              <FontAwesome5 name="heartbeat" size={30} color="black" />
+              <FontAwesome5 name="heartbeat" size={30} color="red" />
             </View>
 
           <Battito_Cardiaco battiti={123} type={"Max"}></Battito_Cardiaco>
@@ -618,9 +702,11 @@ useEffect(() => {
           <Battito_Cardiaco battiti={80} type={"A riposo"}></Battito_Cardiaco>
           </View>)
          }
+         </View>
         </View>
+      }
     </View> 
-</ScrollView>  
+</View>  
   );
 }
 
@@ -640,6 +726,36 @@ const styles = StyleSheet.create({
     marginTop:20
   },
 
+  container_multichoice: {
+    flex:0, 
+    flexDirection:"row",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+
+
+  choice: {
+   margin:10,
+   alignItems: "center"
+  },
+
+
+  choiceicon: selected => ({
+    backgroundColor: selected ? "black" : "white",
+    padding:10,
+    width:45,
+    height:45,
+    marginTop:5,
+    borderRadius:40,
+    borderWidth:1,
+    alignItems: "center"
+  }),
+
+  textchoice: {
+   fontSize:8
+  },
+
   container_segnalatori: {
     flex:0, 
     alignItems: "center",
@@ -650,6 +766,16 @@ const styles = StyleSheet.create({
   square_container: {
     borderRadius:30,
     borderWidth:1
+  },
+
+  progressStyle: {
+    fontSize:11
+  },
+
+  progressXStyle: {
+    fontSize:12,
+    width:50,
+    marginLeft:5
   },
 
   circle: color => ({
