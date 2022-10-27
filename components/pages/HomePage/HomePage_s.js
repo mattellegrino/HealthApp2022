@@ -32,6 +32,11 @@ const HomePage_s = ({ navigation, route }) => {
     time_ms: 22300000
   }
 
+  const mocklinedatadayhr = {
+    date: "2022-06-21",
+    rest: 80,
+  };
+
   const mockbardatadaysteps = {
     date: "2022-06-21",
     steps: 2200
@@ -242,7 +247,8 @@ const HomePage_s = ({ navigation, route }) => {
             style={{ flex: 3.5 }}
             onPress={() =>
               navigation.navigate("Attività_fisica_s", {
-                steps_done: mockbardatadaysteps.steps
+                steps_done: mockbardatadaysteps.steps,
+                hr_rest: mocklinedatadayhr.rest
               })
             }
           >

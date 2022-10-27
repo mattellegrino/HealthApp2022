@@ -66,8 +66,12 @@ export default function Sonno_s({navigation,route}) {
   const [variableFirstWeekDay,setVariableFirstWeekDay] = useState("");
   const [variableLastWeekDay,setVariableLastWeekDay] = useState("");
   const [variableMonthDate,setVariableMonthDate] = useState("");
+
   const [firstWeekDay,setFirstWeekDay] = useState("");
   const [lastWeekDay,setLastWeekDay] = useState("");
+  const [firstWeekDayApi,setFirstWeekDayApi] = useState("");
+  const [lastWeekDayApi,setLastWeekDayApi] = useState("");     
+  
   const [firstMonthDay,setFirstMonthDay] = useState("");
   const [lastMonthDay,setLastMonthDay] = useState("");
   const [firstVariableMonthDay,setVariableFirstMonthDay] = useState("");
@@ -354,9 +358,15 @@ export default function Sonno_s({navigation,route}) {
     var first = currdate.getDate() - currdate.getDay(); 
     var last = first + 6; 
     let firstweekday = new Date(currdate.setDate(first));
+    let firstdayforapi = formatDate(firstweekday);
+    setFirstWeekDayApi(firstdayforapi);
     setFirstWeekDay(firstweekday);
     setVariableFirstWeekDay(firstweekday);
+
+
     let lastweekday = new Date(currdate.setDate(last));
+    let lastdayforapi = formatDate(lastweekday);
+    setLastWeekDayApi(lastdayforapi);
     setLastWeekDay(lastweekday);
     setVariableLastWeekDay(lastweekday);
 
@@ -367,6 +377,8 @@ export default function Sonno_s({navigation,route}) {
     setLastMonthDay(lastmonthday);
     setVariableLastMonthDay(lastmonthday);
 
+
+    //Inserire API per prendere i dati del sonno settimanale e metterli in mockbardataweek
     let _bardataweek = mockbardataweek.map((el) => {
       
        el.value = formatTime(el.time_ms);
@@ -452,9 +464,6 @@ export default function Sonno_s({navigation,route}) {
       
       case "Settimana": 
    
-        let firstdayforapi = formatDate(firstWeekDay);
-        let lastdayforapi = formatDate(lastWeekDay);
-
         let firstday_string = getday(firstWeekDay);
         let lastday_string = getday(lastWeekDay);
         setRangeTime(firstday_string + " - " + lastday_string);
