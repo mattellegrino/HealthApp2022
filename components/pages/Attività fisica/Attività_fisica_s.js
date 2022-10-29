@@ -423,10 +423,10 @@ export default function Attività_fisica_s({ route }) {
      return (
          <View
          style={{
-             width: 10,
-             height: 10,
+             width: 5,
+             height: 5,
              marginTop:18,
-             backgroundColor: 'white',
+             backgroundColor: 'black',
               borderWidth: 2,
               borderRadius: 10,
               borderColor: 'black',
@@ -456,6 +456,7 @@ export default function Attività_fisica_s({ route }) {
     setFirstTime(true);
 
     handleColorNumStepsDone(steps_day);
+    handleColorHrRest(hr_rest);
 
 
     //inizializzo primo e ultimo giorno della settimana
@@ -536,7 +537,7 @@ export default function Attività_fisica_s({ route }) {
       el.value = el.rest;
       el.dataPointText = `${el.rest}`;
       el.label = convertDateintoNumberDay(el.date);
-      el.customDataPoint = customDataPoint;
+
       return el;
 
     });
@@ -771,16 +772,21 @@ export default function Attività_fisica_s({ route }) {
         )}
 
         {selectedChoice == "battito" && (
-          <View style={{ marginTop: 30 }}>
+          <View style={{ marginTop: 30}}>
             
             <Text style={[s.smalltext("medium", "grey"), styles.subtitle]}>
-              Battito cardiaco (bpm)
+              Battito cardiaco {isSelected != "Giorno" ? "(media)" : ""}
             </Text>
             <View style={{padding: 10,
                   margin: 5,
                   marginTop: 10,
                   marginBottom: 10,alignItems: "center"}}>
+             <View style={{flex:0,flexDirection:"row",alignItems: "center"}}>
+              <View style={{marginRight:20}}>
+                <FontAwesome5 name="heartbeat" size={30} color="red" />
+              </View>
               <View style={styles.details_sleep}>
+
                     <Text style={s.smalltext("regular")}>
                       A riposo
                     </Text>
@@ -805,6 +811,7 @@ export default function Attività_fisica_s({ route }) {
                       {convertIndicatorFromColor(color_hr_rest)}
                     </Text>
               </View>
+             </View>
             </View>
             {isSelected != "Giorno" && 
             <LineChart
@@ -845,9 +852,11 @@ export default function Attività_fisica_s({ route }) {
               xAxisColor="#0BA5A4"
             />
             }
-            <View style={{ padding: 10, marginTop: 10 }}>
-              {isSelected != "Giorno" ? (
+            <View style={{marginTop:30}}>
                 <View>
+                <Text style={[s.smalltext("medium", "grey"), styles.subtitle]}>
+                  Altri valori {isSelected != "Giorno" ? "(media)" : ""}
+                </Text>
                   <View
                     style={{
                       flex: 0,
@@ -857,13 +866,6 @@ export default function Attività_fisica_s({ route }) {
                       justifyContent: "center",
                     }}
                   >
-                    <View style={{ marginRight: 20, alignSelf: "center" }}>
-                      <FontAwesome5 name="heartbeat" size={30} color="red" />
-                    </View>
-                    <Battito_Cardiaco
-                      battiti={69}
-                      type={"Media"}
-                    ></Battito_Cardiaco>
                   </View>
 
                   <View
@@ -889,34 +891,6 @@ export default function Attività_fisica_s({ route }) {
                     ></Battito_Cardiaco>
                   </View>
                 </View>
-              ) : (
-                <View
-                  style={{
-                    flex: 0,
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                    alignItems: "center",
-                    margin: 20,
-                  }}
-                >
-                  <View style={{ marginRight: 20 }}>
-                    <FontAwesome5 name="heartbeat" size={30} color="red" />
-                  </View>
-
-                  <Battito_Cardiaco
-                    battiti={123}
-                    type={"Max"}
-                  ></Battito_Cardiaco>
-                  <Battito_Cardiaco
-                    battiti={60}
-                    type={"Min"}
-                  ></Battito_Cardiaco>
-                  <Battito_Cardiaco
-                    battiti={80}
-                    type={"A riposo"}
-                  ></Battito_Cardiaco>
-                </View>
-              )}
             </View>
           </View>
         )}

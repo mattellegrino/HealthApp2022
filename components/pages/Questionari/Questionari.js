@@ -18,14 +18,16 @@ export default function Questionari({navigation}) {
 
   }
 
-  let domande_e_risposte = 
-  [{argomento: "Cereali", testo:"Quante volte a settimana consumi cereali raffinati (Pasta, riso bianco, pane)?",risposte:["Meno di una","Una","Due","Tre o più"]}, 
-   {argomento: "Cereali", testo:"Quante volte a settimana consumi cereali integrali (Pasta, riso bianco, pane)?",risposte:["Meno di una","Una","Due","Tre o più"]},
-   {argomento: "Medas", testo:"Quante porzioni di verdura consumi al giorno?",risposte:["Meno di una","Una","Due","Tre o più"]},
-   {argomento: "Medas", testo:"Usi l'olio di oliva come grasso da condimento principale?",risposte:["Sì","No"]}]
+  //API che chiama i PatientQuestionnaires 
+  let PatientQuestionnaires = 
+  [{id: "Cereali", description:"Quante volte a settimana consumi cereali raffinati (Pasta, riso bianco, pane)?",submissionDate:["Meno di una","Una","Due","Tre o più"]}, 
+   {id: "Cereali", description:"Quante volte a settimana consumi cereali integrali (Pasta, riso bianco, pane)?",risposte:["Meno di una","Una","Due","Tre o più"]},
+   {id: "Medas", description:"Quante porzioni di verdura consumi al giorno?",risposte:["Meno di una","Una","Due","Tre o più"]},
+   {id: "Medas", description:"Usi l'olio di oliva come grasso da condimento principale?",risposte:["Sì","No"]}]
   
+   
   return (
-    <View style={{ flex:8, width:"100%", backgroundColor:"#FFFFFF"}}>
+    <View style={{ flex:8,padding:10, width:"100%", backgroundColor:"#FFFFFF"}}>
          
        <CustomNavbar type={"questionari"} isSelected={isSelected} selezioni={["Tutti","Compilare","Compilati"]} handleselection={handleselection}/>
 

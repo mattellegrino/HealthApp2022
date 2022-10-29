@@ -11,6 +11,10 @@ export default function Questionario({route,navigation},props) {
   const [n_domanda,setNumeroDomanda] = useState(0);
  
 
+  //Patient questionnaireTemplate 
+  //QuestionAnswer
+
+
   return (
     <View style={s.container}>
       <Text style={s.header(2,"bold")}>{nomequestionario}</Text>
@@ -20,7 +24,7 @@ export default function Questionario({route,navigation},props) {
         ))}
        
       </View>  
-      <View style={{flex:5, width: "80%", borderWidth:1, borderRadius:15, marginBottom:50}}>
+      <View style={{flex:5, width: "80%",marginBottom:40}}>
        <Domanda n_domanda={n_domanda} testo={domande_e_risposte[n_domanda] ? domande_e_risposte[n_domanda].testo : ""} risposte={domande_e_risposte[n_domanda] ? domande_e_risposte[n_domanda].risposte : ""}></Domanda>
       </View>  
       <View style={{flex:1, flexDirection:"row", width: "80%", justifyContent: "space-around"}}>

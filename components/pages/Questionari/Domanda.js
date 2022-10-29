@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import React, {useState} from 'react'
 import RadioButton from '../../RadioButton/RadioButton';
 const s = require("../../../core/styles");
@@ -16,12 +16,12 @@ export default function Domanda(props) {
     }
 
   return (
-   <View style={{padding:20, flex:1}}>
-     <View style={{flex:1}}>
-       <Text style={s.header(3,"bold")}>Domanda n° {props.n_domanda + 1} </Text>
+   <View style={styles.container}>
+     <View style={{flex:0.5,alignItems: "center"}}>
+       <Text style={s.body("regular")}>Domanda n° {props.n_domanda + 1} </Text>
      </View>
-     <View style={{flex:1,alignItems: "flex-start"}}>
-       <Text style={s.header(4,"medium")}>{props.testo}</Text>
+     <View style={{flex:1.5,alignItems: "center"}}>
+       <Text style={s.header(3,"medium")}>{props.testo}</Text>
      </View>
      <View style={{flex:4}}>
       {props.risposte && props.risposte.map((risposta,i)=> (
@@ -31,3 +31,14 @@ export default function Domanda(props) {
    </View>  
   )
 }
+
+const styles = StyleSheet.create({
+
+  container: {
+    padding:10, 
+    flex:1,
+    borderWidth:1,
+    borderRadius:25, 
+  }
+
+})
