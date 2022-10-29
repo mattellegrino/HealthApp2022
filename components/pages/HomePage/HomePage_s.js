@@ -26,6 +26,7 @@ const s = require("../../../core/styles");
 
 
 const HomePage_s = ({ navigation, route }) => {
+  const {username} = route.params;
   const [giorno_dell_anno, setGiorno] = useState("");
   const mockbardataday = {
     date: "2022-06-21",
@@ -155,7 +156,7 @@ const HomePage_s = ({ navigation, route }) => {
         <View style={{ flex: 1, paddingTop: 10 }}>
           <Text>
             <Text style={s.header(1, "regular")}>Ciao </Text>
-            <Text style={s.header(1, "medium")}>Mario!</Text>
+            <Text style={s.header(1, "medium")}>{username}</Text>
           </Text>
           <Text style={s.header(4, "regular")}>
             Questi sono i risultati di oggi

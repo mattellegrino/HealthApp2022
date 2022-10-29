@@ -26,7 +26,7 @@ import FitbitForm from "./components/pages/SignInPage/FitbitForm";
 const Stack = createNativeStackNavigator();
 
 global.matteo = "192.168.1.127";
-global.enrico = "192.168.1.54";
+global.enrico = "192.168.11.55";
 
 const App = () => (
   <NavigationContainer>
