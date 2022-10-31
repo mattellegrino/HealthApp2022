@@ -18,8 +18,14 @@ module.exports = StyleSheet.create({
   container_homecard: {
     borderWidth: 1,
   },
+  input_num: {
+    width: 100,
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
 
-  header: (type,weight,fontColor) => ({
+    header: (type,weight,fontColor) => ({
 
     fontSize: type==1 ? 34 : type==2 ? 28 : type==3? 22: 18,
     color: fontColor? fontColor : theme.colors.text,

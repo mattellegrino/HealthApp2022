@@ -1,17 +1,18 @@
 import React from 'react'
 import {TextInput} from "react-native";
 const styles = require("../../core/styles");
-const  CustomInput = ({value,setValue,placeholder,secureTextEntry,onFocus,error}) => {
+const  CustomInput = ({value,setValue,placeholder,secureTextEntry,onFocus,error,keyboardType, numericInput}) => {
     return (
                     <TextInput
                         onFocus={onFocus}
                         placeholder={placeholder}
                         selectionColor={"grey"}
-                        style={styles.input}
+                        style={numericInput? styles.input_num : styles.input}
                         value={value}
                         onChangeText={setValue}
-                        secureTextEntry={secureTextEntry}ù
+                        secureTextEntry={secureTextEntry}
                         error={error}
+                        keyboardType={keyboardType}
                     />
     )
 }
