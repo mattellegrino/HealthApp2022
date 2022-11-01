@@ -22,6 +22,7 @@ import Attività_fisica_c from "./components/pages/Attività fisica/Attività_fi
 import Analisi from "./components/pages/Analisi/Analisi";
 import AnalisiOutput from "./components/pages/Analisi/AnalisiOutput";
 import FitbitForm from "./components/pages/SignInPage/FitbitForm";
+import Inserimento_Analisi from "./components/pages/Analisi/Inserimento Analisi";
 
 const Stack = createNativeStackNavigator();
 
@@ -159,7 +160,15 @@ const App = () => (
             }
         }}/>
 
-        <Stack.Screen name="AnalisiOutput" component={AnalisiOutput}  options={{
+      <Stack.Screen name="Analisi_Output" component={AnalisiOutput}  options={{
+            headerShadowVisible: false,
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+                fontSize: 16
+            }
+        }}/>
+
+        <Stack.Screen name="Inserimento Analisi" component={Inserimento_Analisi}  options={{
             headerShadowVisible: false,
             headerTitleAlign: "center",
             headerTitleStyle: {
