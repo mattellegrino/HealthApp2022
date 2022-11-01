@@ -20,12 +20,12 @@ export default function Domanda(props) {
      <View style={{flex:0.5,alignItems: "center"}}>
        <Text style={s.body("regular")}>Domanda n° {props.n_domanda + 1} </Text>
      </View>
-     <View style={{flex:1.5,alignItems: "center"}}>
+     <View style={{flex:1,alignItems: "center"}}>
        <Text style={s.header(3,"medium")}>{props.testo}</Text>
      </View>
      <View style={{flex:4}}>
       {props.risposte && props.risposte.map((risposta,i)=> (
-        <RadioButton checked={checked} key={i} number={i} risposta={risposta} handlechecked = {handlechecked} />
+        <RadioButton checked={checked} key={i} number={i} risposta={risposta.text} handlechecked = {handlechecked} />
       ))}
     </View>
    </View>  

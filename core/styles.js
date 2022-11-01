@@ -90,19 +90,16 @@ module.exports = StyleSheet.create({
 
   primary_button: {
     backgroundColor: "#4E67EB",
-    borderWidth: 1,
     borderRadius: 10,
   },
   secondary_button: {
     backgroundColor: "#fff",
     borderColor: "#4E67EB",
-    borderWidth: 1,
     borderRadius: 10,
   },
   tertiary_button: {
     backgroundColor: "#F9A825",
     borderRadius: 10,
-    borderWidth: 1,
     borderColor: "#F9A825"
   },
 

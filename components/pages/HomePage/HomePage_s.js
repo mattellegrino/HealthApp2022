@@ -86,28 +86,16 @@ const HomePage_s = ({ navigation, route }) => {
 
     if(steps_day < redthreshold){
       setColorNumStepsDone("red");
-      arr.push({value: steps_day, color:"red"});
-      arr.push({value: yellowthreshold - steps_day, color:"white"});
-      setPieData(arr);
       }
      else if(steps_day >= redthreshold && steps_day < orangethreshold){
-      arr.push({value: steps_day, color:"orange"});
-      arr.push({value: yellowthreshold - steps_day, color:"white"});
-      setPieData(arr);
       setColorNumStepsDone("orange");
      }
     
      else if(steps_day >= orangethreshold && steps_day < yellowthreshold){
-      arr.push({value: steps_day, color:"#FFEA00"});
-      arr.push({value: yellowthreshold - steps_day, color:"white"});
-      setPieData(arr);
       setColorNumStepsDone("#FFEA00");
      }
     
      else if (steps_day >= yellowthreshold){
-      arr.push({value: steps_day, color:"green"});
-      arr.push({value: yellowthreshold - steps_day, color:"white"});
-      setPieData(arr);
       setColorNumStepsDone("green");
      }
 
@@ -268,7 +256,7 @@ const HomePage_s = ({ navigation, route }) => {
                <View style={styles.title}>    
                 <Text
                   style={[
-                    s.header(4, "medium", "#008b00")
+                    s.header(4, "medium", "#000")
                   ]}
                 >
                   {" "}

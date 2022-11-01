@@ -44,7 +44,7 @@ export default function Questionario({route,navigation},props) {
        
       </View>  
       <View style={{flex:5, width: "80%",marginBottom:40}}>
-       <Domanda n_domanda={n_domanda} testo={domande_e_risposte[n_domanda] ? domande_e_risposte[n_domanda].testo : ""} risposte={domande_e_risposte[n_domanda] ? domande_e_risposte[n_domanda].risposte : ""}></Domanda>
+       <Domanda n_domanda={n_domanda} testo={domande_e_risposte[n_domanda] ? domande_e_risposte[n_domanda].text : ""} risposte={domande_e_risposte[n_domanda] ? domande_e_risposte[n_domanda].possibleQuestionAnswer : ""}></Domanda>
       </View>  
       <View style={{flex:1, flexDirection:"row", width: "80%", justifyContent: "space-around"}}>
       {n_domanda > 0 && (

@@ -66,11 +66,11 @@ export default function Attività_fisica_s({ route }) {
     { steps: 17000, date: "2022-06-17" },
     { steps: 2000, date: "2022-06-18" },
     { steps: 3200, date: "2022-06-19" },
-    { steps: 30000, date: "2022-06-20" },
+    { steps: 20000, date: "2022-06-20" },
     { steps: 10000, date: "2022-06-21" },
     { steps: 1000, date: "2022-06-22" },
     { steps: 1000, date: "2022-06-23" },
-    { steps: 30000, date: "2022-06-24" },
+    { steps: 20000, date: "2022-06-24" },
     { steps: 1230, date: "2022-06-25" },
     { steps: 3230, date: "2022-06-26" },
     { steps: 2730, date: "2022-06-27" },
@@ -111,6 +111,9 @@ export default function Attività_fisica_s({ route }) {
   var selezioni = ["Giorno", "Settimana", "Mese"];
 
   const date = new Date();
+
+  const [tipoUtente,setTipoUtente] = useState("controllo");
+
   const [isSelected, setIsSelected] = useState("Giorno");
   const [firstTime, setFirstTime] = useState(false);
   const [range_time, setRangeTime] = useState("");
@@ -481,13 +484,18 @@ export default function Attività_fisica_s({ route }) {
 
     let _bardataweek = mockbardataweek.map((el) => {
       el.value = el.steps;
+
+      if(tipoUtente == "sperimentale"){
       if (el.value < redthreshold) el.frontColor = "red";
       else if (el.value >= redthreshold && el.value < orangethreshold)
         el.frontColor = "orange";
       else if (el.value >= orangethreshold && el.value < yellowthreshold)
         el.frontColor = "#FFEA00";
       else if (el.value >= yellowthreshold) el.frontColor = "green";
+      }
 
+      else
+      el.frontColor = "grey";
       el.label = convertDateintoDayoftheWeek(el.date);
 
       el.dataPointLabelComponent = <LabelComponent/>
@@ -503,13 +511,17 @@ export default function Attività_fisica_s({ route }) {
     let _bardatamonth = mockbardatamonth.map((el) => {
       el.value = el.steps;
 
+      if(tipoUtente == "sperimentale"){
       if (el.value < redthreshold) el.frontColor = "red";
       else if (el.value >= redthreshold && el.value < orangethreshold)
         el.frontColor = "orange";
       else if (el.value >= orangethreshold && el.value < yellowthreshold)
         el.frontColor = "#FFEA00";
       else if (el.value >= yellowthreshold) el.frontColor = "green";
+      }
 
+      else
+      el.frontColor = "grey";
       el.label = convertDateintoNumberDay(el.date);
       return el;
     });
@@ -719,6 +731,8 @@ export default function Attività_fisica_s({ route }) {
                     </View>
                   </View>
 
+                  {tipoUtente == "sperimentale" &&  
+                  <>
                   <Progress.Bar
                     progress={progressValueSteps(num_steps_done)}
                     width={150}
@@ -730,6 +744,7 @@ export default function Attività_fisica_s({ route }) {
                   <Text style={[s.body("medium"), { margin: "1%" }]}>
                     {convertIndicatorFromColor(color_num_steps_done)}
                   </Text>
+                  </>}
                 </View>
               </Card>
             </View>
@@ -806,18 +821,19 @@ export default function Attività_fisica_s({ route }) {
                         </Text>
                       </View>
                     </View>
-
+                   {tipoUtente == "sperimentale" &&
                     <Text style={[s.body("medium"), { margin: "1%" }]}>
                       {convertIndicatorFromColor(color_hr_rest)}
                     </Text>
+                    }
               </View>
              </View>
             </View>
             {isSelected != "Giorno" && 
             <LineChart
-            color={color_hr_rest}
-            startFillColor={color_hr_rest}
-            endFillColor={color_hr_rest}
+            color={tipoUtente == "sperimentale" ? color_hr_rest : "grey"}
+            startFillColor={tipoUtente == "sperimentale" ? color_hr_rest : "grey"}
+            endFillColor={tipoUtente == "sperimentale" ? color_hr_rest : "grey"}
             areaChart
             maxValue={150}
             yAxisThickness={0}

@@ -18,7 +18,7 @@ export default function Questionari({navigation}) {
   const [isSelected,setIsSelected] = useState("Tutti");
   const [isLoadingQuests, setLoadingQuests] = useState(true);
   const [quests, setQuests] = useState();
-  const [quests_todo, setQuests_todo] = useState()
+  const [quests_todo, setQuests_todo] = useState([])
   let getQuestionnairesByPatientId,getQuestionnairesAvailable;
 
   const handleselection = (selected) => {
@@ -48,8 +48,19 @@ export default function Questionari({navigation}) {
          
        <CustomNavbar type={"questionari"} isSelected={isSelected} selezioni={["Tutti","Compilare","Compilati"]} handleselection={handleselection}/>
 
+    
       <View style={{flex: 4, flexDirection: "row", justifyContent: "space-around", alignItems: "center"}}>
-          {isLoadingQuests ? <ActivityIndicator/> :
+           
+      {quests_todo.map((quest) => {
+
+
+        <CopertinaQuestionario titolo={quest.name} domande_e_risposte={quest.questions}></CopertinaQuestionario> 
+
+
+        })}       
+           
+                  
+           {/*{isLoadingQuests ? <ActivityIndicator/> :
               (<CopertinaQuestionario titolo={quests_todo[0].questions[3].questionSection.name.substring(0, 6)} domande_e_risposte ={[{testo: quests_todo[0].questions[3].text,risposte:[quests_todo[0].questions[3].possibleQuestionAnswer[0].text,quests_todo[0].questions[3].possibleQuestionAnswer[1].text,quests_todo[0].questions[3].possibleQuestionAnswer[2].text]},
                       {testo: quests_todo[0].questions[4].text,risposte:[quests_todo[0].questions[4].possibleQuestionAnswer[0].text,quests_todo[0].questions[4].possibleQuestionAnswer[1].text,quests_todo[0].questions[4].possibleQuestionAnswer[2].text]}
                   ]}
@@ -65,7 +76,7 @@ export default function Questionari({navigation}) {
           {isLoadingQuests ? <ActivityIndicator/> :
               (<CopertinaQuestionario titolo={"SPMSQ"} domande_e_risposte ={["",""]}>
                   </CopertinaQuestionario>
-              )}
+                )} */}
       </View>
 
      <Pressable style={{flex:2}}onPress={()=> navigation.navigate("Peso")}>

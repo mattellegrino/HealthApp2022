@@ -59,6 +59,9 @@ export default function Sonno_s({navigation,route}) {
   var selezioni = ["Giorno","Settimana","Mese"];
   
   const date = new Date();
+
+  const [tipoUtente,setTipoUtente] = useState("controllo");
+
   const [isSelected, setIsSelected] = useState("Giorno");
   const [firstTime,setFirstTime] = useState(false);
   const [range_time,setRangeTime] = useState("");
@@ -324,7 +327,6 @@ export default function Sonno_s({navigation,route}) {
  
   useEffect(() => {
 
-    console.log(date);
     let dateforapi = formatDate(date); //variabile da inserire nell'API per ricavare il sonno giornaliero
     // data odierna, non va MAI cambiata
     // inizializzo date che poi vengono cambiate quando si va avanti/indietro con le frecce
@@ -382,6 +384,9 @@ export default function Sonno_s({navigation,route}) {
     let _bardataweek = mockbardataweek.map((el) => {
       
        el.value = formatTime(el.time_ms);
+
+       if(tipoUtente == "sperimentale"){
+
        if(el.value < redthreshold)
         el.frontColor = "red";
   
@@ -394,6 +399,12 @@ export default function Sonno_s({navigation,route}) {
        else if (el.value >= yellowthreshold)
         el.frontColor = "green";
 
+        else
+        el.frontColor = "#1565C0";   
+       }
+
+       else
+       el.frontColor = "#1565C0";
 
       el.label = convertDateintoDayoftheWeek(el.date);
 
@@ -407,6 +418,8 @@ export default function Sonno_s({navigation,route}) {
       
       el.value = formatTime(el.time_ms);
 
+      if(tipoUtente == "sperimentale"){
+
       if(el.value < redthreshold)
        el.frontColor = "red";
 
@@ -418,6 +431,10 @@ export default function Sonno_s({navigation,route}) {
 
       else if (el.value >= yellowthreshold)
        el.frontColor = "green";
+
+      }
+      else
+      el.frontColor = "#1565C0";
 
       el.label = convertDateintoNumberDay(el.date);
 
@@ -553,9 +570,12 @@ export default function Sonno_s({navigation,route}) {
                 <Text style={s.body("medium","white")}>h{isSelected != "Giorno" && <Text>/giorno</Text>}</Text>
               </View>
             
+            {tipoUtente == "sperimentale" && 
+            <>
               <Progress.Bar progress={progressValue(num_hours_sleeped)} width={150} color={convertColorFromValue(num_hours_sleeped)} unfilledColor={"lightgrey"} borderColor={"white"} borderWidth={1} />
               <Text style={[s.body("medium","white"),{margin:"1%"}]}>{convertIndicatorFromColor(color_num_hours_sleeped)}</Text>  
-              
+              </>
+            }
            </View>  
         </Card> 
 
