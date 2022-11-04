@@ -51,13 +51,13 @@ export default function Questionari({navigation}) {
     
       <View style={{flex: 4, flexDirection: "row", justifyContent: "space-around", alignItems: "center"}}>
            
-      {quests_todo.map((quest) => {
+      {quests_todo.map((quest,i) => (
 
 
-        <CopertinaQuestionario titolo={quest.name} domande_e_risposte={quest.questions}></CopertinaQuestionario> 
+        <CopertinaQuestionario key={i} titolo={quest.name} domande_e_risposte={quest.questions}></CopertinaQuestionario> 
 
 
-        })}       
+        ))}       
            
                   
            {/*{isLoadingQuests ? <ActivityIndicator/> :

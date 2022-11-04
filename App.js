@@ -27,7 +27,7 @@ import Inserimento_Analisi from "./components/pages/Analisi/Inserimento Analisi"
 const Stack = createNativeStackNavigator();
 
 global.matteo = "192.168.1.127";
-global.enrico = "192.168.11.55";
+global.enrico = "192.168.1.127";
 
 const App = () => (
   <NavigationContainer>

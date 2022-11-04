@@ -315,8 +315,6 @@ export default function Attività_fisica_s({ route }) {
     let fordate = formatDate2(date);
     let dayoftheweek = fordate.getDay();
 
-    console.log("fordate" + fordate);
-    console.log("dayoftheweek" + dayoftheweek);
 
     switch (dayoftheweek) {
       case 1:
@@ -835,7 +833,15 @@ export default function Attività_fisica_s({ route }) {
             startFillColor={tipoUtente == "sperimentale" ? color_hr_rest : "grey"}
             endFillColor={tipoUtente == "sperimentale" ? color_hr_rest : "grey"}
             areaChart
-            maxValue={150}
+            showReferenceLine1
+            maxValue={150}referenceLine1Position={hr_rest}
+            referenceLine1Config={{
+              color: "gray",
+              labelText: "Media",
+              labelTextStyle: styles.progressStyle,
+              dashWidth: 2,
+              dashGap: 3,
+            }}
             yAxisThickness={0}
             xAxisThickness={0}
             yAxisTextStyle={styles.progressStyle}

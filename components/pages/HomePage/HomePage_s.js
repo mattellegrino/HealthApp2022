@@ -74,7 +74,6 @@ const HomePage_s = ({ navigation, route }) => {
 
     if(dayformattedtime < redthresholdsleep){
     setColorNumHoursSleeped("red");
-    console.log(dayformattedtime);  
   }
     else if (dayformattedtime >= redthresholdsleep && dayformattedtime < orangethresholdsleep)
     setColorNumHoursSleeped("orange")
