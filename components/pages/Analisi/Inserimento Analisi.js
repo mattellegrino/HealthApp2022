@@ -4,7 +4,7 @@ import AnalisiInput from "./AnalisiInput";
 import CustomButton from "../../CustomButton";
 const s = require("../../../core/styles");
 
-const Inserimento_Analisi = () => {
+const Inserimento_Analisi = ({navigation}) => {
 
     const [isLoading, setIsLoading] = useState(true);
     let   [finished, setFinished] = useState(undefined)
@@ -98,7 +98,11 @@ const Inserimento_Analisi = () => {
                     }
 
                 })
-                .catch(err => { reject ({'error': 'Cannot communicate with the server'})})
+                .catch(function(error) {
+                    console.log('There has been a problem with your fetch operation: ' + error.message);
+                     // ADD THIS THROW error
+                      throw error;
+                    })
         })
     }
 

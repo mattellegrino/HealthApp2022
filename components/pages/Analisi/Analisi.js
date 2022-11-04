@@ -13,12 +13,14 @@ export default function Analisi({navigation}) {
 
     const getBloodValuesById = () => {
         fetch(`http://${global.enrico}:8080/api/patients/${global.id}/bloodAnalysis`)
-            .then((response) => response.json())
+            .then((response) => response.text())
             .then((json) =>{ 
-                let array_analisi = bloodValues;
-                array_analisi.push(json); 
-                setBloodValues(array_analisi)})
-            .catch((error) => { console.error(error)})
+                let bloodAnalysisArray = new Array();
+                bloodAnalysisArray = JSON.parse(json);
+                setBloodValues(bloodAnalysisArray)})
+            .catch((error) => { 
+                console.log(error.message);
+                throw error})
             .finally(() => {
                 setLoading(false)
             });
@@ -41,9 +43,9 @@ export default function Analisi({navigation}) {
            <CustomButton onPress={()=> navigation.navigate('Inserimento Analisi')} text={"Inserisci nuova analisi"} button={"first"} fontSize={"medium"}/> 
         {isLoading ? <ActivityIndicator/> :
             (
-                bloodValues.map((analisi) => (
-                    <View styles={styles.analisi}>
-                         <Analisi_Component navigation={navigation} date={analisi[0].date} analisi_data={analisi[0]}/>
+                bloodValues.map((analisi,i) => (
+                    <View key={i} styles={styles.analisi}>
+                         <Analisi_Component navigation={navigation} date={analisi.date} analisi_data={analisi}/>
                     </View>
             )))}
             
