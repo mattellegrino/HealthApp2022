@@ -60,7 +60,7 @@ export default function Sonno_s({navigation,route}) {
   
   const date = new Date();
 
-  const [tipoUtente,setTipoUtente] = useState("controllo");
+  const [tipoUtente,setTipoUtente] = useState("sperimentale");
 
   const [isSelected, setIsSelected] = useState("Giorno");
   const [firstTime,setFirstTime] = useState(false);

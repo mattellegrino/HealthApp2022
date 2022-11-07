@@ -1,15 +1,24 @@
 import { View, Text, Pressable, StyleSheet, PixelRatio} from 'react-native'
-import React from 'react'
+import React, {useEffect,useState} from 'react'
 const s = require("../../core/styles");
 
 export default function RadioButton(props) {
+
+
+  function handleinvio(number,risposta){
+
+    props.handlechecked(number,risposta);
+  }
+
   return (
     <View style={{flex:1,flexDirection:"row",alignItems: "center"}}>
-       <Pressable style={{padding:10,flex:1,flexDirection:"row",alignItems: "center"}} onPress={()=> props.handlechecked(props.number)}>
-          <View key={props.number} style={props.checked == props.number ? styles.buttonRispostaSelected(true) : styles.buttonRispostaSelected(false)}>
+       <Pressable style={{padding:10,flex:1,flexDirection:"row",alignItems: "center"}} onPress={()=> handleinvio(props.number,props.risposta)}>
+        {props.questionAnswer != null && 
+          <View key={props.number} style={(props.questionAnswer.chosenAnswer.id) == props.number ? styles.buttonRispostaSelected(true) : styles.buttonRispostaSelected(false)}>
             {/*<Text style={s.body(props.checked == props.number ? "medium" : "regular","black")}>{props.risposta}</Text>*/}
             <Text style={styles.text(props.risposta)}>{props.risposta}</Text>
          </View>
+        }
         </Pressable> 
    </View> 
   )
@@ -33,6 +42,7 @@ const styles = StyleSheet.create({
     padding:10,
     flex:0,
     justifyContent: "center",
+    alignItems: "center",
     fontSize: risposta.length > 100 ? 10 : 14     
   })
 })

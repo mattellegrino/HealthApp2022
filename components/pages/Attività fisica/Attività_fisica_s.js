@@ -112,7 +112,7 @@ export default function Attività_fisica_s({ route }) {
 
   const date = new Date();
 
-  const [tipoUtente,setTipoUtente] = useState("controllo");
+  const [tipoUtente,setTipoUtente] = useState("sperimentale");
 
   const [isSelected, setIsSelected] = useState("Giorno");
   const [firstTime, setFirstTime] = useState(false);

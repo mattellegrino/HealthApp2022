@@ -14,6 +14,7 @@ export default function Questionario({route,navigation},props) {
   const [patient, setPatient] = useState();
   const [questionAnswers,setQuestionAnswers] = useState([]);
   const [compilato,setCompilato] = useState(false);
+  const [changed,setChanged] = useState(false);
 
   let getQuestsById,getPatientById,patientQuestionnaire;
   /* backend part */
@@ -44,6 +45,15 @@ export default function Questionario({route,navigation},props) {
 
   }
 
+  function editQuestionAnswers(questionAnswer) {
+
+  let index = questionAnswers.indexOf((_questionAnswer) => _questionAnswer.question == questionAnswer.question);
+  let _questionAnswers = questionAnswers;
+  _questionAnswers[index] = questionAnswer;
+  setQuestionAnswers(_questionAnswers);
+  setChanged(!changed);
+  }
+
   useEffect(() => {
 
     // Controllare che il template del questionario non sia già stato compilato dal paziente
@@ -55,11 +65,10 @@ export default function Questionario({route,navigation},props) {
 
       let _questionAnswers = domande_e_risposte.map((el,i) => {
 
-        let questionAnswer = new QuestionAnswer(undefined,el.id,null);
-
+        let questionAnswer = {id:undefined, question:el.id, chosenAnswer: {id:-1,text:""}};
+      
         return questionAnswer;
       })
-
       setQuestionAnswers(_questionAnswers);
     }
 
@@ -70,15 +79,21 @@ export default function Questionario({route,navigation},props) {
     return (
     <View style={s.container}>
       <Text style={s.header(2,"bold")}>{nomequestionario}</Text>
-      <View style={{flex:1, flexDirection: "row", alignItems:"center",justifyContent:"space-around", width:"80%"}}>
-        {domande_e_risposte.map((_,i)=> (
-           <View key={i} style={n_domanda >= i ? s.progress_rectangle_active : s.progress_rectangle}></View>
+      <View style={{flex:1, flexDirection: "row", alignItems:"center",justifyContent:"space-between", width:"100%"}}>
+        {questionAnswers.map((_,i)=> (
+          <View style={{flex:1,flexDirection: "column"}}>
+          <View style={i == n_domanda && s.pointer}/>
+           <View key={i} style={questionAnswers[i].chosenAnswer.id>=0 ? s.progress_rectangle_active : s.progress_rectangle}>
+           </View>
+           </View>
         ))}
        
       </View>  
       <View style={{flex:5, width: "80%",marginBottom:40}}>
-       <Domanda questionAnswers = {questionAnswers} handlequestionAnswern_domanda={n_domanda} testo={domande_e_risposte[n_domanda] ? domande_e_risposte[n_domanda].text : ""} risposte={domande_e_risposte[n_domanda] ? domande_e_risposte[n_domanda].possibleQuestionAnswer : ""}></Domanda>
-      </View>  
+        {questionAnswers &&
+       <Domanda changed={changed} editQuestionAnswers = {editQuestionAnswers} questionAnswers={questionAnswers} questionAnswer={questionAnswers[n_domanda]} n_domanda={n_domanda} testo={domande_e_risposte[n_domanda] ? domande_e_risposte[n_domanda].text : ""} risposte={domande_e_risposte[n_domanda] ? domande_e_risposte[n_domanda].possibleQuestionAnswer : ""}></Domanda>
+        }
+       </View>  
       <View style={{flex:1, flexDirection:"row", width: "80%", justifyContent: "space-around"}}>
       {n_domanda > 0 && (
         <CustomButton button="second" onPress={()=> setNumeroDomanda(n_domanda - 1)} text="Precedente" fontSize="medium"/> )}
