@@ -56,6 +56,7 @@ const HomePage_s = ({ navigation, route }) => {
   const [num_questionari_da_compilare,setNumQuestionari_da_compilare] = useState(1);
   const [num_hours_sleeped, setNumHoursSleeped] = useState("0:00");
   const [pieData,setPieData] = useState([]);
+  const [steps_daily_done,setStepsDailyDone] = useState(0);
   const [colorNumHoursSleeped, setColorNumHoursSleeped] = useState("orange");
   const [colorNumStepsDone,setColorNumStepsDone] = useState("grey");
   const [redthreshold,setRedThreshold] = useState(1000);
@@ -71,6 +72,8 @@ const HomePage_s = ({ navigation, route }) => {
     var currentDate = new Date();
     setGiorno(currentDate);
     let steps_day = mockbardatadaysteps.steps;
+    //Inserire API per passi giornalieri
+    //setState(steps_daily_done)
 
     if(dayformattedtime < redthresholdsleep){
     setColorNumHoursSleeped("red");
@@ -267,7 +270,7 @@ const HomePage_s = ({ navigation, route }) => {
                     <View style={{flex:0 ,flexDirection:"row",alignItems: "baseline", justifyContent: "space-evenly"}}>
                       <FontAwesome5 name="running" size={20} color="black"/>
                     <View style={{flex:0, flexDirection:"row",alignItems: "baseline"}}>
-                      <Text style={[s.header(3,"bold"),{marginRight: 5}]} >{mockbardatadaysteps.steps}</Text>
+                      <Text style={[s.header(3,"bold"),{marginRight: 5}]} >{steps_daily_done}</Text>
                       <Text style={s.smalltext("regular")}>
                       Passi
                       </Text>

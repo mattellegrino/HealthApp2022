@@ -8,9 +8,10 @@ export default function Domanda(props) {
 
     const [checked, setChecked] = useState(-1);
 
-    const handlechecked = (number,risposta) => {
+    const handlechecked = (number,risposta,id) => {
 
      let _questionAnswer = props.questionAnswer;
+     _questionAnswer.id = id;
      _questionAnswer.chosenAnswer.id = number;
      _questionAnswer.chosenAnswer.text = risposta;
 
@@ -30,7 +31,7 @@ export default function Domanda(props) {
      </View>
      <View style={{flex:4}}>
       {props.risposte && props.risposte.map((risposta,i)=> (
-        <RadioButton questionAnswer = {props.questionAnswer} checked={checked} key={i} number={i} risposta={risposta.text} handlechecked = {handlechecked} />
+        <RadioButton questionAnswer = {props.questionAnswer} id={risposta.id} checked={checked} key={i} number={i} risposta={risposta.text} handlechecked = {handlechecked} />
       ))}
     </View>
    </View>  
