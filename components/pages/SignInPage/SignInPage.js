@@ -38,7 +38,7 @@ const SignInPage = ({ navigation }) =>  {
                 console.log(token_exists)
 
                 if(token_exists===false)
-                    fitbit_flag=true;
+                    fitbit_flag.current=true;
 
                 let role = authUser.roles[0].authority.split("_")[1]
                 console.log(role)

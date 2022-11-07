@@ -5,11 +5,12 @@ import CustomButton from "../../CustomButton";
 import { RadioButton } from 'react-native-paper';
 import PatientQuestionnaire from "../../../classes/PatientQuestionnaire";
 import QuestionAnswer from "../../../classes/QuestionAnswer";
+import zocial from "react-native-vector-icons/Zocial";
 const s = require("../../../core/styles");
 
 export default function Questionario({route,navigation},props) {
 
-  const {nomequestionario,domande_e_risposte} = route.params;
+  const {nomequestionario,domande_e_risposte,questionnaireTemplateId} = route.params;
   const [n_domanda,setNumeroDomanda] = useState(0);
   const [patient, setPatient] = useState();
   const [questionAnswers,setQuestionAnswers] = useState([]);
@@ -19,35 +20,60 @@ export default function Questionario({route,navigation},props) {
   let getQuestsById,getPatientById,patientQuestionnaire;
   /* backend part */
 
-  async function addPatientQuestionnaire(patientId, patientQuestionnaire) {
+
+  async function postPatientQuestionnaire() {
+
+    // check all AnalisiInput has values
+    //if yes, try to post in the backend
+    //if not, repeat
+
+    let date = new Date()
+    let questionAnswersForAPI = questionAnswers.map((el, i) => {
+      let questionAnswer = {questionId: el.question, possibleQuestionAnswerId: el.id};
+      console.log(questionAnswer)
+      return questionAnswer;
+    })
+
+    console.log("NOStro vettore")
+    console.log(questionAnswersForAPI)
+
     return new Promise ((resolve, reject) => {
-      fetch(`/api/patients/${patientId}/questionnaires`, {
+      fetch(`http://${global.enrico}:8080/api/patients/${global.id}/questionnaires`, {
         method: 'POST',
         headers: {'Content-Type': "application/json"},
-        body: JSON.stringify(patientQuestionnaire)
+        body:
+            {
+           "description": "Descrizione",
+           "submissionDate": date,
+          "questionAnswers": questionAnswersForAPI,
+          "questionnaireTemplateId": questionnaireTemplateId
+            }
       })
           .then((response) => {
-            console.log(JSON.stringify(patientQuestionnaire))
-            const patientQuestionnaireId = response.json()
-            if (response.ok){
-              resolve(patientQuestionnaireId);
-            } else {
-              reject(patientQuestionnaireId)
+            if(response.ok)
+            {
+                //setFinished(true);
+                // go to main page
+                navigation.navigate("Questionari")
             }
+            else console.log(response)
           })
-          .catch(err => { reject ({'error': 'Cannot communicate with the server'})})
+          .catch(function(error) {
+            console.log('There has been a problem with your fetch operation: ' + error.message);
+            // ADD THIS THROW error
+            throw error;
+          })
     })
   }
 
-  function submitQuestionnaire() {
-    //send API
-    navigation.navigate("Questionari");
+  async function submitQuestionnaire() {
+
+    await postPatientQuestionnaire();
 
   }
 
   function editQuestionAnswers(questionAnswer) {
-
-  let index = questionAnswers.indexOf((_questionAnswer) => _questionAnswer.question == questionAnswer.question);
+  let index = questionAnswers.indexOf((_questionAnswer) => _questionAnswer.question === questionAnswer.question);
   let _questionAnswers = questionAnswers;
   _questionAnswers[index] = questionAnswer;
   setQuestionAnswers(_questionAnswers);
@@ -64,9 +90,7 @@ export default function Questionario({route,navigation},props) {
     if(!compilato) {
 
       let _questionAnswers = domande_e_risposte.map((el,i) => {
-
-        let questionAnswer = {id:undefined, question:el.id, chosenAnswer: {id:-1,text:""}};
-      
+        let questionAnswer = {id:el.possibleQuestionAnswer[0], question:el.id, chosenAnswer: {id:-1,text:""}};
         return questionAnswer;
       })
       setQuestionAnswers(_questionAnswers);
@@ -82,7 +106,7 @@ export default function Questionario({route,navigation},props) {
       <View style={{flex:1, flexDirection: "row", alignItems:"center",justifyContent:"space-between", width:"100%"}}>
         {questionAnswers.map((_,i)=> (
           <View style={{flex:1,flexDirection: "column"}}>
-          <View style={i == n_domanda && s.pointer}/>
+          <View style={i === n_domanda && s.pointer}/>
            <View key={i} style={questionAnswers[i].chosenAnswer.id>=0 ? s.progress_rectangle_active : s.progress_rectangle}>
            </View>
            </View>

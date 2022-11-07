@@ -24,7 +24,8 @@ export default function CopertinaQuestionario(props) {
           domande_e_risposte : props.domande_e_risposte,
           username:props.username,
            ip_add: props.ip_add,
-           user:props.user
+           user:props.user,
+            questionnaireTemplateId: props.questionnaireTemplateId
         })} text={compilato ? "Modifica" : "Compila"} fontSize="medium"/>
        </Card>         
       </View> 

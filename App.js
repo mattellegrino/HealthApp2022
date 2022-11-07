@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+import * as Network from 'expo-network';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignInPage from "./components/pages/SignInPage/SignInPage";
@@ -26,168 +27,177 @@ import Inserimento_Analisi from "./components/pages/Analisi/Inserimento Analisi"
 
 const Stack = createNativeStackNavigator();
 
-global.matteo = "192.168.1.127";
-global.enrico = "192.168.1.127";
+global.enrico = "192.168.1.54";
 
-const App = () => (
-  <NavigationContainer>
-    <Stack.Navigator initialRouteName='Home'>
-      <Stack.Screen
-        name="HomePage_s"
-        component={HomePage_s}
-        options={{
-          title: "Benvenuto",
-          headerBackTitleVisible: false,
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="HomePage_c"
-        component={HomePage_c}
-        options={{
-          title: "Benvenuto",
-          headerBackTitleVisible: false,
-          headerShown: false,
-        }}
-      />
+const App = () => {
+    const [ipAddress, setIpAddress] = useState("");
+    const displayIp = async () => {
+        const ip = await Network.getIpAddressAsync();
+        console.log("Indirizzo ip = " + ip)
+        setIpAddress(ip)
+    }
 
-      <Stack.Screen
-        name="Home"
-        component={SignInPage}
-        options={{
-          title: "Benvenuto in Health App!",
-          headerShadowVisible: false,
-          headerTitleAlign: "center",
-          headerTitleStyle: {
-           fontSize: 16
-          }
-   }}
-      />
-      <Stack.Screen name="Impostazioni" component={Impostazioni} options={{
-         headerShadowVisible: false,
-         headerTitleAlign: "center",
-         headerTitleStyle: {
-          fontSize: 16
-         }
-  }}/>
-      <Stack.Screen name="Profilo" component={Profilo} options={{
-            headerShadowVisible: false,
-            headerTitleAlign: "center",
-            headerTitleStyle: {
-              fontSize: 16
-            }
-      }}/>
-      <Stack.Screen name="Questionari" component={Questionari}  options={{
-         headerShadowVisible: false,
-         headerTitleAlign: "center",
-         headerTitleStyle: {
-          fontSize: 16
-         }
-  }}  />
-      <Stack.Screen name="Questionario" component={Questionario} options={{
-         headerShadowVisible: false,
-         title:"",
-         headerTitleAlign: "center",
-         headerTitleStyle: {
-          fontSize: 16
-         }
-  }} />
-      <Stack.Screen name="Sonno_c" component={Sonno_c} options={{
-         headerShadowVisible: false,
-         headerTitleAlign: "center",
-         title:"Sonno",
-         headerTitleStyle: {
-          fontSize: 16
-         }
-  }} />
+    return (
 
-<Stack.Screen name="Sonno_s" component={Sonno_s} options={{
-         headerShadowVisible: false,
-         headerTitleAlign: "center",
-         title:"Sonno",
-         headerTitleStyle: {
-          fontSize: 16
-         }
-  }} />
-      <Stack.Screen name="Peso" component={Peso} options={{
-         headerShadowVisible: false,
-         headerTitleAlign: "center",
-         headerTitleStyle: {
-          fontSize: 16
-         }
-  }} />
-      <Stack.Screen name="Attività_fisica_s" component={Attività_fisica_s} options={{
-         headerShadowVisible: false,
-         headerTitleAlign: "center",
-         title: "Attività fisica",
-         headerTitleStyle: {
-          fontSize: 16
-         }
-  }} />
-   <Stack.Screen name="Attività_fisica_c" component={Attività_fisica_c} options={{
-         headerShadowVisible: false,
-         headerTitleAlign: "center",
-         headerTitleStyle: {
-          fontSize: 16
-         }
-  }} />
-      <Stack.Screen name="Recommendation" component={Recommendation}  options={{
-         headerShadowVisible: false,
-         headerTitleAlign: "center",
-         headerTitleStyle: {
-          fontSize: 16
-         }
-  }}/>
-  <Stack.Screen name="Alimentazione" component={Alimentazione}  options={{
-         headerShadowVisible: false,
-         headerTitleAlign: "center",
-         headerTitleStyle: {
-          fontSize: 16
-         }
-  }}/>
-    <Stack.Screen name="Alimenti" component={InserisciAlimento}  options={{
-         headerShadowVisible: false,
-         headerTitleAlign: "center",
-         headerTitleStyle: {
-          fontSize: 16
-         }
-  }}/>
-        <Stack.Screen name="Analisi" component={Analisi}  options={{
-            headerShadowVisible: false,
-            headerTitleAlign: "center",
-            headerTitleStyle: {
-                fontSize: 16
-            }
-        }}/>
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName='Home'>
+                <Stack.Screen
+                    name="HomePage_s"
+                    component={HomePage_s}
+                    options={{
+                        title: "Benvenuto",
+                        headerBackTitleVisible: false,
+                        headerShown: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="HomePage_c"
+                    component={HomePage_c}
+                    options={{
+                        title: "Benvenuto",
+                        headerBackTitleVisible: false,
+                        headerShown: false,
+                    }}
+                />
 
-      <Stack.Screen name="Analisi_Output" component={AnalisiOutput}  options={{
-            headerShadowVisible: false,
-            headerTitleAlign: "center",
-            headerTitleStyle: {
-                fontSize: 16
-            }
-        }}/>
+                <Stack.Screen
+                    name="Home"
+                    component={SignInPage}
+                    options={{
+                        title: "Benvenuto in Health App!",
+                        headerShadowVisible: false,
+                        headerTitleAlign: "center",
+                        headerTitleStyle: {
+                            fontSize: 16
+                        }
+                    }}
+                />
+                <Stack.Screen name="Impostazioni" component={Impostazioni} options={{
+                    headerShadowVisible: false,
+                    headerTitleAlign: "center",
+                    headerTitleStyle: {
+                        fontSize: 16
+                    }
+                }}/>
+                <Stack.Screen name="Profilo" component={Profilo} options={{
+                    headerShadowVisible: false,
+                    headerTitleAlign: "center",
+                    headerTitleStyle: {
+                        fontSize: 16
+                    }
+                }}/>
+                <Stack.Screen name="Questionari" component={Questionari} options={{
+                    headerShadowVisible: false,
+                    headerTitleAlign: "center",
+                    headerTitleStyle: {
+                        fontSize: 16
+                    }
+                }}/>
+                <Stack.Screen name="Questionario" component={Questionario} options={{
+                    headerShadowVisible: false,
+                    title: "",
+                    headerTitleAlign: "center",
+                    headerTitleStyle: {
+                        fontSize: 16
+                    }
+                }}/>
+                <Stack.Screen name="Sonno_c" component={Sonno_c} options={{
+                    headerShadowVisible: false,
+                    headerTitleAlign: "center",
+                    title: "Sonno",
+                    headerTitleStyle: {
+                        fontSize: 16
+                    }
+                }}/>
 
-        <Stack.Screen name="Inserimento Analisi" component={Inserimento_Analisi}  options={{
-            headerShadowVisible: false,
-            headerTitleAlign: "center",
-            headerTitleStyle: {
-                fontSize: 16
-            }
-        }}/>
+                <Stack.Screen name="Sonno_s" component={Sonno_s} options={{
+                    headerShadowVisible: false,
+                    headerTitleAlign: "center",
+                    title: "Sonno",
+                    headerTitleStyle: {
+                        fontSize: 16
+                    }
+                }}/>
+                <Stack.Screen name="Peso" component={Peso} options={{
+                    headerShadowVisible: false,
+                    headerTitleAlign: "center",
+                    headerTitleStyle: {
+                        fontSize: 16
+                    }
+                }}/>
+                <Stack.Screen name="Attività_fisica_s" component={Attività_fisica_s} options={{
+                    headerShadowVisible: false,
+                    headerTitleAlign: "center",
+                    title: "Attività fisica",
+                    headerTitleStyle: {
+                        fontSize: 16
+                    }
+                }}/>
+                <Stack.Screen name="Attività_fisica_c" component={Attività_fisica_c} options={{
+                    headerShadowVisible: false,
+                    headerTitleAlign: "center",
+                    headerTitleStyle: {
+                        fontSize: 16
+                    }
+                }}/>
+                <Stack.Screen name="Recommendation" component={Recommendation} options={{
+                    headerShadowVisible: false,
+                    headerTitleAlign: "center",
+                    headerTitleStyle: {
+                        fontSize: 16
+                    }
+                }}/>
+                <Stack.Screen name="Alimentazione" component={Alimentazione} options={{
+                    headerShadowVisible: false,
+                    headerTitleAlign: "center",
+                    headerTitleStyle: {
+                        fontSize: 16
+                    }
+                }}/>
+                <Stack.Screen name="Alimenti" component={InserisciAlimento} options={{
+                    headerShadowVisible: false,
+                    headerTitleAlign: "center",
+                    headerTitleStyle: {
+                        fontSize: 16
+                    }
+                }}/>
+                <Stack.Screen name="Analisi" component={Analisi} options={{
+                    headerShadowVisible: false,
+                    headerTitleAlign: "center",
+                    headerTitleStyle: {
+                        fontSize: 16
+                    }
+                }}/>
+
+                <Stack.Screen name="Analisi_Output" component={AnalisiOutput} options={{
+                    headerShadowVisible: false,
+                    headerTitleAlign: "center",
+                    headerTitleStyle: {
+                        fontSize: 16
+                    }
+                }}/>
+
+                <Stack.Screen name="Inserimento Analisi" component={Inserimento_Analisi} options={{
+                    headerShadowVisible: false,
+                    headerTitleAlign: "center",
+                    headerTitleStyle: {
+                        fontSize: 16
+                    }
+                }}/>
 
 
-        <Stack.Screen name="FitbitForm" component={FitbitForm}  options={{
-            headerShadowVisible: false,
-            headerTitleAlign: "center",
-            headerTitleStyle: {
-                fontSize: 16
-            }
-        }}/>
+                <Stack.Screen name="FitbitForm" component={FitbitForm} options={{
+                    headerShadowVisible: false,
+                    headerTitleAlign: "center",
+                    headerTitleStyle: {
+                        fontSize: 16
+                    }
+                }}/>
 
-      <Stack.Screen name="ServerData" component={ServerData} />
-      <Stack.Screen name="SleepChart" component={SleepChart} />
-    </Stack.Navigator>
-  </NavigationContainer>
-);
+                <Stack.Screen name="ServerData" component={ServerData}/>
+                <Stack.Screen name="SleepChart" component={SleepChart}/>
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+}
 export default App;

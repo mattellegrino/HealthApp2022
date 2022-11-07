@@ -2,7 +2,7 @@ import {View, Text, ActivityIndicator, FlatList, ScrollView} from 'react-native'
 import React, {useEffect, useRef, useState} from 'react'
 import Generalità from './Generalità'
 const s = require("../../../core/styles");
-
+import { Avatar } from 'react-native-paper';
 const Profilo = () =>  {
     const [isLoading, setLoading] = useState(true);
     const [profValues,setprofValues] = useState([]);
@@ -27,7 +27,7 @@ const Profilo = () =>  {
         <View style={{flex:1, backgroundColor:"white" }}>
             <View style={{flex:1, alignItems: "center"}}>
                 <View style={{flex:0,marginTop:30, width:"80%",flexDirection:"row", justifyContent: "space-between"}}>
-                    <Text> IMMAGINE </Text>
+                    <Avatar.Image size={72} source={require('../../../assets/avatar.png')} />
                     <View style={{marginLeft:20}}>
                         <Text style={s.header(3,"regular")}>{props.nome} {props.cognome}</Text>
                         <Text style={s.body("regular")}>{props.email} </Text>

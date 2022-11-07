@@ -54,7 +54,7 @@ export default function Questionari({navigation}) {
       {quests_todo.map((quest,i) => (
 
 
-        <CopertinaQuestionario key={i} titolo={quest.name} domande_e_risposte={quest.questions}></CopertinaQuestionario> 
+        <CopertinaQuestionario key={i} titolo={quest.name} domande_e_risposte={quest.questions} questionnaireTemplateId={quest.id}></CopertinaQuestionario>
 
 
         ))}       

@@ -13,6 +13,7 @@ let webViewRef ;
 let navigation ;
 let value;
 
+
 const onShouldStartLoadWithRequest = (navigator) => {
     console.log("Navigator.url fuori" + navigator.url)
 
@@ -23,7 +24,7 @@ const onShouldStartLoadWithRequest = (navigator) => {
         console.log("Navigator.url dentro" + navigator.url)
         const new_URL = MY_URL + navigator.url.substring(40,navigator.url.length+1)
         console.log("New url   "+ new_URL)
-        webViewRef.uri=new_URL;
+        //webViewRef.uri=new_URL;
         value=false;
         return value;
     }
