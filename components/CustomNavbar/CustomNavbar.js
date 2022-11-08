@@ -17,8 +17,8 @@ export default function CustomNavbar(props) {
           {props.selezioni && props.selezioni.map((selezione,i)=> (
 
             <Pressable key={i} onPress={()=> props.handleselection(selezione)}>
-            <View style={props.isSelected == selezione ? s.multichoicebutton_selected(props.type) : s.multichoicebutton_notselected}>
-            <Text style={props.isSelected == selezione && s.text_selected(props.type)}> {selezione} </Text>
+            <View style={props.isSelected === selezione ? s.multichoicebutton_selected(props.type) : s.multichoicebutton_notselected}>
+            <Text style={props.isSelected === selezione && s.text_selected(props.type)}> {selezione} </Text>
             </View> 
             </Pressable>
 

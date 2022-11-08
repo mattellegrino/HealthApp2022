@@ -100,7 +100,6 @@ export default function Questionario({route,navigation},props) {
     questionAnswers.forEach((questionAnswer) => {
       console.log(questionAnswer.chosenAnswer.id);
       if(questionAnswer.chosenAnswer.id < 0)
-
       compilato = 0;
       setQuestCompilato(false);
     })

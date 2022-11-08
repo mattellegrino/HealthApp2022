@@ -17,17 +17,30 @@ export default function Questionari({navigation}) {
 
   const [isSelected,setIsSelected] = useState("Tutti");
   const [isLoadingQuests, setLoadingQuests] = useState(true);
-  const [quests, setQuests] = useState();
-  const [quests_todo, setQuests_todo] = useState([])
-  let getQuestionnairesByPatientId,getQuestionnairesAvailable;
+  const [quests, setQuests] = useState([]);
+  const [allQuests, setAllQuests] = useState([]);
+  const [questsTodo, setQuestsTodo] = useState([]);
+  const [questsCompilati, setQuestsCompilati] = useState([]);
+
+  let getQuestionnairesCompiled,getQuestionnairesAvailable;
 
   const handleselection = (selected) => {
     setIsSelected(selected);
   }
 
 
+    getQuestionnairesCompiled = () => {
+        fetch(`http://${global.enrico}:8080/api/patients/${global.id}/questionnaires`)
+            .then((response) => response.json())
+            .then((json) =>{
+                setQuestsCompilati(json.map(json => QuestionnaireTemplate.from(json)))
+            })
+            .catch((error) => { console.error(error)})
+            .finally(() => setLoadingQuests(false));
+    }
 
-    getQuestionnairesAvailable  = () => {
+
+    getQuestionnairesAvailable = () => {
         fetch(`http://${global.enrico}:8080/api/questionnaires/templates`)
             .then((response) => response.json())
             .then((json) =>{
@@ -39,7 +52,8 @@ export default function Questionari({navigation}) {
 
 
     useEffect( () => {
-       getQuestionnairesAvailable()
+       getQuestionnairesAvailable();
+        getQuestionnairesCompiled();
     }, []);
 
 
