@@ -25,6 +25,22 @@ export default function Questionari({navigation}) {
   let getQuestionnairesCompiled,getQuestionnairesAvailable;
 
   const handleselection = (selected) => {
+
+    switch (selected) {
+
+        case "Tutti":
+            setQuests(allQuests);
+            break;
+        case "Compilare":
+            setQuests(questsTodo);
+            break;
+        case "Compilati":
+            setQuests(questsCompilati);
+            break;
+
+    }
+
+
     setIsSelected(selected);
   }
 
@@ -44,7 +60,8 @@ export default function Questionari({navigation}) {
         fetch(`http://${global.enrico}:8080/api/questionnaires/templates`)
             .then((response) => response.json())
             .then((json) =>{
-                setQuests_todo(json.map(json => QuestionnaireTemplate.from(json)))
+                setAllQuests(json.map(json => QuestionnaireTemplate.from(json)));
+                setQuests(json.map(json => QuestionnaireTemplate.from(json)));
             })
             .catch((error) => { console.error(error)})
             .finally(() => setLoadingQuests(false));
@@ -57,6 +74,7 @@ export default function Questionari({navigation}) {
     }, []);
 
 
+
   return (
     <View style={{ flex:8,padding:10, width:"100%", backgroundColor:"#FFFFFF"}}>
          
@@ -66,7 +84,7 @@ export default function Questionari({navigation}) {
       <View style={{flex: 8
         , flexDirection: "column", justifyContent: "space-around", alignItems: "center"}}>
            
-      {quests_todo.map((quest,i) => (
+      {quests.map((quest,i) => (
 
 
         <CopertinaQuestionario key={i} titolo={quest.name} domande_e_risposte={quest.questions} questionnaireTemplateId={quest.id}></CopertinaQuestionario>
