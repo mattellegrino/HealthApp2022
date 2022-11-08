@@ -21,11 +21,33 @@ export default function Questionario({route,navigation},props) {
   /* backend part */
 
 
-  async function postPatientQuestionnaire() {
+  async function postPatientQuestionnaire(body) {
 
-    // check all AnalisiInput has values
-    //if yes, try to post in the backend
-    //if not, repeat
+    return new Promise ((resolve, reject) => {
+      fetch(`http://${global.enrico}:8080/api/patients/${global.id}/questionnaires`, {
+        method: 'POST',
+        headers: {'Content-Type': "application/json"},
+        body: JSON.stringify(body)
+      })
+          .then((response) => {
+            if(response.ok)
+            {
+              //setFinished(true);
+              //console.log(JSON.stringify(response))
+              // go to main page
+              navigation.navigate('Questionari')
+            }
+            else console.log(JSON.stringify(response))
+
+          })
+          .catch(err => { reject ({'error': 'Cannot communicate with the server'})})
+    })
+
+  }
+
+
+
+  async function submitQuestionnaire() {
 
     let date = new Date()
     let questionAnswersForAPI = questionAnswers.map((el, i) => {
@@ -34,41 +56,18 @@ export default function Questionario({route,navigation},props) {
       return questionAnswer;
     })
 
-    console.log("NOStro vettore")
+    console.log("Nostro vettore")
     console.log(questionAnswersForAPI)
 
-    return new Promise ((resolve, reject) => {
-      fetch(`http://${global.enrico}:8080/api/patients/${global.id}/questionnaires`, {
-        method: 'POST',
-        headers: {'Content-Type': "application/json"},
-        body:
-            {
-           "description": "Descrizione",
-           "submissionDate": date,
-          "questionAnswers": questionAnswersForAPI,
-          "questionnaireTemplateId": questionnaireTemplateId
-            }
-      })
-          .then((response) => {
-            if(response.ok)
-            {
-                //setFinished(true);
-                // go to main page
-                navigation.navigate("Questionari")
-            }
-            else console.log(response)
-          })
-          .catch(function(error) {
-            console.log('There has been a problem with your fetch operation: ' + error.message);
-            // ADD THIS THROW error
-            throw error;
-          })
-    })
-  }
+    let body = {
+      "description": "Questionario_risposto_numero_"+questionnaireTemplateId,
+      "submissionDate": date,
+      "questionAnswers": questionAnswersForAPI,
+      "questionnaireTemplateId": questionnaireTemplateId
+    }
 
-  async function submitQuestionnaire() {
-
-    await postPatientQuestionnaire();
+    console.log(body)
+    await postPatientQuestionnaire(body);
 
   }
 
@@ -121,7 +120,7 @@ export default function Questionario({route,navigation},props) {
       <View style={{flex:1, flexDirection:"row", width: "80%", justifyContent: "space-around"}}>
       {n_domanda > 0 && (
         <CustomButton button="second" onPress={()=> setNumeroDomanda(n_domanda - 1)} text="Precedente" fontSize="medium"/> )}
-      {n_domanda + 1 === domande_e_risposte.length ? <CustomButton onPress={()=> submitQuestionnaire()} fontSize="medium" text="Concludi"></CustomButton> :
+      {n_domanda + 1 === domande_e_risposte.length ? <CustomButton onPress={ async () => await submitQuestionnaire()} fontSize="medium" text="Concludi"></CustomButton> :
         <CustomButton onPress={()=> setNumeroDomanda(n_domanda + 1)} text="Prossima" fontSize="medium"/>}
       </View>
     </View>
