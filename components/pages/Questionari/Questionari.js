@@ -49,7 +49,8 @@ export default function Questionari({navigation}) {
        <CustomNavbar type={"questionari"} isSelected={isSelected} selezioni={["Tutti","Compilare","Compilati"]} handleselection={handleselection}/>
 
     
-      <View style={{flex: 4, flexDirection: "row", justifyContent: "space-around", alignItems: "center"}}>
+      <View style={{flex: 8
+        , flexDirection: "column", justifyContent: "space-around", alignItems: "center"}}>
            
       {quests_todo.map((quest,i) => (
 

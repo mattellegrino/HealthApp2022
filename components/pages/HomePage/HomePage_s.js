@@ -56,7 +56,7 @@ const HomePage_s = ({ navigation, route }) => {
   const [num_questionari_da_compilare,setNumQuestionari_da_compilare] = useState(1);
   const [num_hours_sleeped, setNumHoursSleeped] = useState("0:00");
   const [pieData,setPieData] = useState([]);
-  const [steps_daily_done,setStepsDailyDone] = useState(0);
+  const [steps_daily_done,setStepsDailyDone] = useState(2200);
   const [colorNumHoursSleeped, setColorNumHoursSleeped] = useState("orange");
   const [colorNumStepsDone,setColorNumStepsDone] = useState("grey");
   const [redthreshold,setRedThreshold] = useState(1000);

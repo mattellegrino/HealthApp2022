@@ -69,18 +69,20 @@ module.exports = StyleSheet.create({
   progress_rectangle: {
 
     height: 10,
+    margin:10,
     backgroundColor: "white",
     borderWidth:1
   },
   progress_rectangle_active: {
+    margin:10,
     height: 10,
     backgroundColor: "#F9A825",
     borderWidth:1
   },
 
   pointer: {
-    height:5,
-    width:5,
+    height:10,
+    width:10,
     backgroundColor: "black",
     alignSelf: "center",
     borderWidth:1,

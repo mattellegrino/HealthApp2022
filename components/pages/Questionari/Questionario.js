@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Modal, Alert} from "react-native";
 import React, {useState, useEffect} from "react";
 import Domanda from "./Domanda";
 import CustomButton from "../../CustomButton";
@@ -6,6 +6,7 @@ import { RadioButton } from 'react-native-paper';
 import PatientQuestionnaire from "../../../classes/PatientQuestionnaire";
 import QuestionAnswer from "../../../classes/QuestionAnswer";
 import zocial from "react-native-vector-icons/Zocial";
+import { set } from "react-hook-form";
 const s = require("../../../core/styles");
 
 export default function Questionario({route,navigation},props) {
@@ -14,7 +15,9 @@ export default function Questionario({route,navigation},props) {
   const [n_domanda,setNumeroDomanda] = useState(0);
   const [patient, setPatient] = useState();
   const [questionAnswers,setQuestionAnswers] = useState([]);
-  const [compilato,setCompilato] = useState(false);
+  const [precedentementeCompilato,setPrecedentementeCompilato] = useState(false);
+  const [questCompilato,setQuestCompilato] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const [changed,setChanged] = useState(false);
 
   let getQuestsById,getPatientById,patientQuestionnaire;
@@ -79,6 +82,35 @@ export default function Questionario({route,navigation},props) {
   setChanged(!changed);
   }
 
+  function handleSubmitQuestionaire() {
+
+    if(questCompilato){
+      console.log("questCompilato");
+      async () => await submitQuestionnaire()
+    }
+    else{
+      Alert.alert("Compilare tutte le domande");
+  }
+  }
+
+  useEffect(() => {
+
+    let compilato = 1;
+
+    questionAnswers.forEach((questionAnswer) => {
+      console.log(questionAnswer.chosenAnswer.id);
+      if(questionAnswer.chosenAnswer.id < 0)
+
+      compilato = 0;
+      setQuestCompilato(false);
+    })
+
+    if(compilato == 1)
+    setQuestCompilato(true);
+
+  },[questionAnswers])
+
+
   useEffect(() => {
 
     // Controllare che il template del questionario non sia già stato compilato dal paziente
@@ -86,7 +118,7 @@ export default function Questionario({route,navigation},props) {
     // setCompilato(true)
     //Se il questionario non è stato compilato allora inizializzo il vettore con le possibili risposte
 
-    if(!compilato) {
+    if(!precedentementeCompilato) {
 
       let _questionAnswers = domande_e_risposte.map((el,i) => {
         let questionAnswer = {id:el.possibleQuestionAnswer[0], question:el.id, chosenAnswer: {id:-1,text:""}};
@@ -104,9 +136,9 @@ export default function Questionario({route,navigation},props) {
       <Text style={s.header(2,"bold")}>{nomequestionario}</Text>
       <View style={{flex:1, flexDirection: "row", alignItems:"center",justifyContent:"space-between", width:"100%"}}>
         {questionAnswers.map((_,i)=> (
-          <View style={{flex:1,flexDirection: "column"}}>
+          <View key={i} style={{flex:1,flexDirection: "column"}}>
           <View style={i === n_domanda && s.pointer}/>
-           <View key={i} style={questionAnswers[i].chosenAnswer.id>=0 ? s.progress_rectangle_active : s.progress_rectangle}>
+           <View style={questionAnswers[i].chosenAnswer.id>=0 ? s.progress_rectangle_active : s.progress_rectangle}>
            </View>
            </View>
         ))}
@@ -120,7 +152,7 @@ export default function Questionario({route,navigation},props) {
       <View style={{flex:1, flexDirection:"row", width: "80%", justifyContent: "space-around"}}>
       {n_domanda > 0 && (
         <CustomButton button="second" onPress={()=> setNumeroDomanda(n_domanda - 1)} text="Precedente" fontSize="medium"/> )}
-      {n_domanda + 1 === domande_e_risposte.length ? <CustomButton onPress={ async () => await submitQuestionnaire()} fontSize="medium" text="Concludi"></CustomButton> :
+      {n_domanda + 1 === domande_e_risposte.length ? <CustomButton onPress={handleSubmitQuestionaire} fontSize="medium" text="Concludi"></CustomButton> :
         <CustomButton onPress={()=> setNumeroDomanda(n_domanda + 1)} text="Prossima" fontSize="medium"/>}
       </View>
     </View>
