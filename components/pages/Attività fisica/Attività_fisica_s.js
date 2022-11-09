@@ -130,7 +130,7 @@ export default function Attività_fisica_s({ route }) {
   const [bardataday, setBarDataDay] = useState("");
   const [bardataweek, setBarDataWeek] = useState([]);
   const [bardatamonth, setBarDataMonth] = useState([]);
-  const [linedatadayhr, setLineDataDayHr] = useState("");
+  const [linedatadayhr, setLineDataDayHr] = useState([]);
   const [linedataweekhr, setLineDataWeekHr] = useState([]);
   const [linedatamonthhr, setLineDataMonthHr] = useState([]);
 
@@ -206,7 +206,7 @@ export default function Attività_fisica_s({ route }) {
         var dayafter = new Date(getdayconvertible(variableGiornoDate));
         dayafter.setDate(variableGiornoDate.getDate() + 1);
         let dayafterforapi = formatDate(dayafter);
-        //Inserire API per sonno giornaliero: /api/patients/{patientID}/activities/steps (startDate=dayafterforapi, endDate=dayafterforapi)
+        //Inserire API per sonno giornaliero: /api/patients/{patientID}/activities/steps (startDate=dayafterforapi, endDate=dayafterforapi
         setRangeTime(getday(dayafter));
         setVariableGiornoDate(dayafter);
         break;
@@ -469,7 +469,8 @@ export default function Attività_fisica_s({ route }) {
 
   useEffect(() => {
     let dateforapi = formatDate(date); //variabile da inserire nell'API per ricavare il sonno giornaliero
-
+    let value = getHrValuesById(dateforapi,dateforapi)
+    console.log("Data"+ value)
     // inizializzo date che poi vengono cambiate quando si va avanti/indietro con le frecce
     setVariableGiornoDate(date);
     setVariableMonthDate(date);
@@ -593,18 +594,20 @@ export default function Attività_fisica_s({ route }) {
       case "Giorno":
         let range_giorno = getday(date);
         setRangeTime(range_giorno);
-
+        let dateforapi = formatDate(date);
         if (bardataday) {
           setNumStepsDone(bardataday);
 
           handleColorNumStepsDone(bardataday);
         }
 
-        if(linedatadayhr) {
-          setHrRest(linedatadayhr);
+          //setbattitocardiac
+          let returned_value = getHrValuesById(dateforapi,dateforapi)
+          console.log("Prova "+ returned_value.date + " " + returned_value.rest);
 
           handleColorHrRest(linedatadayhr);
-        }
+
+
         break;
 
       case "Settimana":
@@ -621,7 +624,7 @@ export default function Attività_fisica_s({ route }) {
         setNumStepsDone(average_weekly_steps.toFixed(0));
         handleColorNumStepsDone(average_weekly_steps);
 
-        let average_weekly_hr = media(linedataweekhr);
+        let average_weekly_hr = media(getHrValuesById(firstdayforapi,lastdayforapi));
         setHrRest(average_weekly_hr.toFixed(0));
         handleColorHrRest(average_weekly_hr);
 
