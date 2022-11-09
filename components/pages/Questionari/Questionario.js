@@ -11,7 +11,7 @@ const s = require("../../../core/styles");
 
 export default function Questionario({route,navigation},props) {
 
-  const {nomequestionario,domande_e_risposte,questionnaireTemplateId} = route.params;
+  const {nomequestionario,domande_e_risposte,update,questionnaireTemplateId} = route.params;
   const [n_domanda,setNumeroDomanda] = useState(0);
   const [patient, setPatient] = useState();
   const [questionAnswers,setQuestionAnswers] = useState([]);
@@ -38,7 +38,7 @@ export default function Questionario({route,navigation},props) {
               //setFinished(true);
               //console.log(JSON.stringify(response))
               // go to main page
-              navigation.navigate('Questionari')
+              navigation.navigate('Questionari', {mandato:!update});
             }
             else console.log(JSON.stringify(response))
 
@@ -55,11 +55,9 @@ export default function Questionario({route,navigation},props) {
     let date = new Date()
     let questionAnswersForAPI = questionAnswers.map((el, i) => {
       let questionAnswer = {questionId: el.question, possibleQuestionAnswerId: el.id};
-      console.log(questionAnswer)
       return questionAnswer;
     })
 
-    console.log("Nostro vettore")
     console.log(questionAnswersForAPI)
 
     let body = {

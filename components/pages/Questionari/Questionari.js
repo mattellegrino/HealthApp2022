@@ -13,7 +13,7 @@ const s = require("../../../core/styles");
 
 
 
-export default function Questionari({navigation}) {
+export default function Questionari({navigation,route}) {
 
   const [isSelected,setIsSelected] = useState("Tutti");
   const [isLoadingQuests, setLoadingQuests] = useState(true);
@@ -21,6 +21,7 @@ export default function Questionari({navigation}) {
   const [allQuests, setAllQuests] = useState([]);
   const [questsTodo, setQuestsTodo] = useState([]);
   const [questsCompilati, setQuestsCompilati] = useState([]);
+  const {update} = route.params;
 
   let getQuestionnairesCompiled,getQuestionnairesAvailable;
 
@@ -68,10 +69,11 @@ export default function Questionari({navigation}) {
     }
 
 
+
     useEffect( () => {
        getQuestionnairesAvailable();
         getQuestionnairesCompiled();
-    }, []);
+    }, [update]);
 
 
 
@@ -86,8 +88,7 @@ export default function Questionari({navigation}) {
            
       {quests.map((quest,i) => (
 
-
-        <CopertinaQuestionario key={i} titolo={quest.name} domande_e_risposte={quest.questions} questionnaireTemplateId={quest.id}></CopertinaQuestionario>
+        <CopertinaQuestionario update={update} key={i} titolo={quest.name} domande_e_risposte={quest.questions} questionnaireTemplateId={quest.id}></CopertinaQuestionario>
 
 
         ))}       

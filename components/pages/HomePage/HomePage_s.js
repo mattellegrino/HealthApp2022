@@ -299,7 +299,9 @@ const HomePage_s = ({ navigation, route }) => {
           <Pressable
             style={{ flex: 4 }}
             onPress={() =>
-              navigation.navigate("Questionari")
+              navigation.navigate("Questionari", {
+                update:true
+              })
             }
           >
             <Card

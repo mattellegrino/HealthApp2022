@@ -21,8 +21,9 @@ export default function CopertinaQuestionario(props) {
           username:props.username,
            ip_add: props.ip_add,
            user:props.user,
+           update:props.update,
             questionnaireTemplateId: props.questionnaireTemplateId
-        })} text={compilato ? "Modifica" : "Compila"} fontSize="medium"/></View>
+        })} text={compilato ? "Visualizza" : "Compila"} fontSize="medium"/></View>
     </View>
   )
 }
