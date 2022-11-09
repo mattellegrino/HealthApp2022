@@ -84,15 +84,13 @@ export default function Questionario({route,navigation},props) {
 
   function handleSubmitQuestionaire() {
 
-    async () => await submitQuestionnaire()
-
-    /*if(questCompilato){
+    if(questCompilato){
       console.log("questCompilato");
-      async () => await submitQuestionnaire()
+      submitQuestionnaire();
     }
     else{
       Alert.alert("Compilare tutte le domande");
-  }*/
+  }
   }
 
   useEffect(() => {
@@ -109,7 +107,7 @@ export default function Questionario({route,navigation},props) {
     if(compilato == 1)
     setQuestCompilato(true);
 
-  },[questionAnswers])
+  },[JSON.stringify(questionAnswers)])
 
 
   useEffect(() => {
@@ -153,7 +151,7 @@ export default function Questionario({route,navigation},props) {
       <View style={{flex:1, flexDirection:"row", width: "80%", justifyContent: "space-around"}}>
       {n_domanda > 0 && (
         <CustomButton button="second" onPress={()=> setNumeroDomanda(n_domanda - 1)} text="Precedente" fontSize="medium"/> )}
-      {n_domanda + 1 === domande_e_risposte.length ? <CustomButton onPress={async () => await submitQuestionnaire()} fontSize="medium" text="Concludi"></CustomButton> :
+      {n_domanda + 1 === domande_e_risposte.length ? <CustomButton onPress={handleSubmitQuestionaire} fontSize="medium" text="Concludi"></CustomButton> :
         <CustomButton onPress={()=> setNumeroDomanda(n_domanda + 1)} text="Prossima" fontSize="medium"/>}
       </View>
     </View>
