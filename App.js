@@ -27,7 +27,7 @@ import Inserimento_Analisi from "./components/pages/Analisi/Inserimento Analisi"
 
 const Stack = createNativeStackNavigator();
 
-global.enrico = "192.168.1.54";
+global.enrico = "192.168.11.23";
 
 const App = () => {
     const [ipAddress, setIpAddress] = useState("");

@@ -65,6 +65,7 @@ export default function Questionari({navigation,route}) {
             .then((json) =>{
                 setAllQuests(json.map(json => QuestionnaireTemplate.from(json)));
                 setQuests(json.map(json => QuestionnaireTemplate.from(json)));
+                getQuestionnairesCompiled();
             })
             .catch((error) => { console.error(error)})
             .finally(() => setLoadingQuests(false));
@@ -74,7 +75,7 @@ export default function Questionari({navigation,route}) {
 
     useEffect( () => {
        getQuestionnairesAvailable();
-        getQuestionnairesCompiled();
+
     }, [update]);
 
 
