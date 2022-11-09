@@ -17,14 +17,11 @@ import { BarChart, LineChart, PieChart } from "react-native-gifted-charts";
 import * as Progress from "react-native-progress";
 import LabelComponent from "./LabelComponent";
 export default function Attività_fisica_s({ route }) {
-  const mockbardataday = {
-    date: "2022-06-21",
-    steps: 2200,
-  };
-  const mocklinedatadayhr = {
-    date: "2022-06-21",
-    rest: 80,
-  };
+
+  const [isLoading, setLoading] = useState(true);
+  const [hrValues,setHrValues] = useState([]);
+
+  const mocklinedatadayhr = hrValues
 
   const mockbardataweek = [
     { steps: 2000, date: "2022-06-20" },
@@ -112,7 +109,7 @@ export default function Attività_fisica_s({ route }) {
 
   const date = new Date();
 
-  const [tipoUtente,setTipoUtente] = useState("sperimentale");
+  const [tipoUtente,setTipoUtente] = useState("controllo");
 
   const [isSelected, setIsSelected] = useState("Giorno");
   const [firstTime, setFirstTime] = useState(false);
@@ -162,21 +159,21 @@ export default function Attività_fisica_s({ route }) {
 
   const getday = (data) => {
     let day =
-      data.getDate() +
-      "/" +
-      parseInt(data.getMonth() + Number(1)) +
-      "/" +
-      data.getFullYear();
+        data.getDate() +
+        "/" +
+        parseInt(data.getMonth() + Number(1)) +
+        "/" +
+        data.getFullYear();
 
     return day;
   };
   const getdayconvertible = (data) => {
     let day =
-      data.getFullYear() +
-      "-" +
-      padTo2Digits(parseInt(data.getMonth() + Number(1))) +
-      "-" +
-      padTo2Digits(data.getDate());
+        data.getFullYear() +
+        "-" +
+        padTo2Digits(parseInt(data.getMonth() + Number(1))) +
+        "-" +
+        padTo2Digits(data.getDate());
     return day;
   };
 
@@ -186,9 +183,9 @@ export default function Attività_fisica_s({ route }) {
 
   function formatDate(data) {
     let d = data,
-      month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
-      year = d.getFullYear();
+        month = "" + (d.getMonth() + 1),
+        day = "" + d.getDate(),
+        year = d.getFullYear();
     if (month.length < 2) month = "0" + month;
     if (day.length < 2) day = "0" + day;
     return [year, month, day].join("-");
@@ -238,24 +235,24 @@ export default function Attività_fisica_s({ route }) {
         var monthafter = new Date(getdayconvertible(variableMonthDate));
         monthafter.setMonth(variableMonthDate.getMonth() + 1);
         setVariableFirstMonthDay(
-          new Date(monthafter.getFullYear(), monthafter.getMonth(), 1)
+            new Date(monthafter.getFullYear(), monthafter.getMonth(), 1)
         );
         setVariableLastMonthDay(
-          new Date(monthafter.getFullYear(), monthafter.getMonth() + 1, 0)
+            new Date(monthafter.getFullYear(), monthafter.getMonth() + 1, 0)
         );
         let firstdaymonthafterapi = formatDate(
-          new Date(monthafter.getFullYear(), monthafter.getMonth(), 1)
+            new Date(monthafter.getFullYear(), monthafter.getMonth(), 1)
         );
         let lastdaymonthafterapi = formatDate(
-          new Date(monthafter.getFullYear(), monthafter.getMonth() + 1, 0)
+            new Date(monthafter.getFullYear(), monthafter.getMonth() + 1, 0)
         );
 
         //Inserire API per passi mensili: /api/patients/{patientID}/activities/steps (startDate=firstdaymonthafterforapi, endDate=lastdaymonthafterforapi)
 
         setRangeTime(
-          padTo2Digits(parseInt(monthafter.getMonth() + Number(1))) +
-          "/" +
-          monthafter.getFullYear()
+            padTo2Digits(parseInt(monthafter.getMonth() + Number(1))) +
+            "/" +
+            monthafter.getFullYear()
         );
         setVariableMonthDate(monthafter);
         break;
@@ -295,15 +292,15 @@ export default function Attività_fisica_s({ route }) {
         var monthbefore = new Date(getdayconvertible(variableMonthDate));
         monthbefore.setMonth(variableMonthDate.getMonth() - 1);
         setVariableFirstMonthDay(
-          new Date(monthbefore.getFullYear(), monthbefore.getMonth(), 1)
+            new Date(monthbefore.getFullYear(), monthbefore.getMonth(), 1)
         );
         setVariableLastMonthDay(
-          new Date(monthbefore.getFullYear(), monthbefore.getMonth() + 1, 0)
+            new Date(monthbefore.getFullYear(), monthbefore.getMonth() + 1, 0)
         );
         setRangeTime(
-          padTo2Digits(parseInt(monthbefore.getMonth() + Number(1))) +
-          "/" +
-          monthbefore.getFullYear()
+            padTo2Digits(parseInt(monthbefore.getMonth() + Number(1))) +
+            "/" +
+            monthbefore.getFullYear()
         );
         setVariableMonthDate(monthbefore);
         break;
@@ -380,7 +377,7 @@ export default function Attività_fisica_s({ route }) {
     array.forEach((el) => {
       sum = sum + el.value;
     });
-    
+
     return sum / array.length;
   }
 
@@ -388,13 +385,13 @@ export default function Attività_fisica_s({ route }) {
 
     if (value < redthreshold) setColorNumStepsDone("red");
     else if (
-      value >= redthreshold &&
-      value < orangethreshold
+        value >= redthreshold &&
+        value < orangethreshold
     ) {
       setColorNumStepsDone("orange");
     } else if (
-      value >= orangethreshold &&
-      value < yellowthreshold
+        value >= orangethreshold &&
+        value < yellowthreshold
     ) {
       setColorNumStepsDone("#FFEA00");
     } else if (value >= yellowthreshold) {
@@ -406,13 +403,13 @@ export default function Attività_fisica_s({ route }) {
 
     if (value > hr_redthreshold) setColorHrRest("red");
     else if (
-      value <= hr_redthreshold &&
-      value > hr_orangethreshold
+        value <= hr_redthreshold &&
+        value > hr_orangethreshold
     ) {
       setColorHrRest("orange");
     } else if (
-      value <= hr_orangethreshold &&
-      value > hr_yellowthreshold
+        value <= hr_orangethreshold &&
+        value > hr_yellowthreshold
     ) {
       setColorHrRest("#FFEA00");
     } else if (value <= hr_yellowthreshold) {
@@ -421,21 +418,54 @@ export default function Attività_fisica_s({ route }) {
   }
 
   const customDataPoint = () => {
-     return (
-         <View
-         style={{
-             width: 5,
-             height: 5,
-             marginTop:18,
-             backgroundColor: 'black',
+    return (
+        <View
+            style={{
+              width: 5,
+              height: 5,
+              marginTop:18,
+              backgroundColor: 'black',
               borderWidth: 2,
               borderRadius: 10,
               borderColor: 'black',
-          }}
-          />
-      );
+            }}
+        />
+    );
   };
-    
+
+   const getHrValuesById = async (startDate,endDate) => {
+    return fetch(`http://${global.enrico}:8080/api/patients/${global.id}/hrs/rest?startDate=${startDate}&endDate=${endDate}`)
+        .then((response) => response.text())
+        .then((json) =>{
+          let hrValues = Array.of(json);
+          console.log("Valore del vettore "+hrValues)
+          //console.log("Hr values => " + json)
+          setHrValues(hrValues)
+          return hrValues})
+        .catch((error) => {
+          console.log(error.message);
+          throw error})
+        .finally(() => {
+          setLoading(false)
+        });
+  }
+
+  const getHrPeakValuesById = (startDate,endDate) => {
+    fetch(`http://${global.enrico}:8080/api/patients/${global.id}/hrs/peak?startDate=${startDate}&endDate=${endDate}`)
+        .then((response) => response.text())
+        .then((json) =>{
+          let hrValues = JSON.parse(json);
+          console.log("Hr values => " + json)
+          setHrValues(hrValues)})
+        .catch((error) => {
+          console.log(error.message);
+          throw error})
+        .finally(() => {
+          setLoading(false)
+          return hrValues
+        });
+  }
+
 
   useEffect(() => {
     let dateforapi = formatDate(date); //variabile da inserire nell'API per ricavare il sonno giornaliero
@@ -484,21 +514,21 @@ export default function Attività_fisica_s({ route }) {
       el.value = el.steps;
 
       if(tipoUtente == "sperimentale"){
-      if (el.value < redthreshold) el.frontColor = "red";
-      else if (el.value >= redthreshold && el.value < orangethreshold)
-        el.frontColor = "orange";
-      else if (el.value >= orangethreshold && el.value < yellowthreshold)
-        el.frontColor = "#FFEA00";
-      else if (el.value >= yellowthreshold) el.frontColor = "green";
+        if (el.value < redthreshold) el.frontColor = "red";
+        else if (el.value >= redthreshold && el.value < orangethreshold)
+          el.frontColor = "orange";
+        else if (el.value >= orangethreshold && el.value < yellowthreshold)
+          el.frontColor = "#FFEA00";
+        else if (el.value >= yellowthreshold) el.frontColor = "green";
       }
 
       else
-      el.frontColor = "grey";
+        el.frontColor = "grey";
       el.label = convertDateintoDayoftheWeek(el.date);
 
       el.dataPointLabelComponent = <LabelComponent/>
 
-        
+
       return el;
     });
 
@@ -510,16 +540,16 @@ export default function Attività_fisica_s({ route }) {
       el.value = el.steps;
 
       if(tipoUtente == "sperimentale"){
-      if (el.value < redthreshold) el.frontColor = "red";
-      else if (el.value >= redthreshold && el.value < orangethreshold)
-        el.frontColor = "orange";
-      else if (el.value >= orangethreshold && el.value < yellowthreshold)
-        el.frontColor = "#FFEA00";
-      else if (el.value >= yellowthreshold) el.frontColor = "green";
+        if (el.value < redthreshold) el.frontColor = "red";
+        else if (el.value >= redthreshold && el.value < orangethreshold)
+          el.frontColor = "orange";
+        else if (el.value >= orangethreshold && el.value < yellowthreshold)
+          el.frontColor = "#FFEA00";
+        else if (el.value >= yellowthreshold) el.frontColor = "green";
       }
 
       else
-      el.frontColor = "grey";
+        el.frontColor = "grey";
       el.label = convertDateintoNumberDay(el.date);
       return el;
     });
@@ -530,7 +560,7 @@ export default function Attività_fisica_s({ route }) {
 
     //Inserire API per prendere i dati settimanali del battito a riposo e metterli in mocklinedataweekhr /api/patients/{patientID}/hrs/rest (startDate=dateforapi, endDate=dateforapi)
 
-    let _linedataweekhr = mocklinedataweekhr.map((el) => { 
+    let _linedataweekhr = mocklinedataweekhr.map((el) => {
 
       el.value = el.rest;
       el.dataPointText = `${el.rest}`;
@@ -542,7 +572,7 @@ export default function Attività_fisica_s({ route }) {
     setLineDataWeekHr(_linedataweekhr);
 
     //Inserire API per prendere i dati mensili del battito a riposo e metterli in mocklinedatamonthhr /api/patients/{patientID}/hrs/rest (startDate=dateforapi, endDate=dateforapi)
-    let _linedatamonthhr = mocklinedatamonthhr.map((el) => { 
+    let _linedatamonthhr = mocklinedatamonthhr.map((el) => {
 
       el.value = el.rest;
       el.dataPointText = `${el.rest}`;
@@ -567,7 +597,7 @@ export default function Attività_fisica_s({ route }) {
         if (bardataday) {
           setNumStepsDone(bardataday);
 
-         handleColorNumStepsDone(bardataday);
+          handleColorNumStepsDone(bardataday);
         }
 
         if(linedatadayhr) {
@@ -594,20 +624,20 @@ export default function Attività_fisica_s({ route }) {
         let average_weekly_hr = media(linedataweekhr);
         setHrRest(average_weekly_hr.toFixed(0));
         handleColorHrRest(average_weekly_hr);
-        
+
 
         //Inserire API per passi  settimanale: /api/patients/{patientID}/sleep/duration (startDate=firstdayforapi, endDate=lastdayforapi)
         break;
 
       case "Mese":
         setRangeTime(
-          padTo2Digits(parseInt(date.getMonth() + Number(1))) +
-          "/" +
-          date.getFullYear()
+            padTo2Digits(parseInt(date.getMonth() + Number(1))) +
+            "/" +
+            date.getFullYear()
         );
 
         let average_monthly_steps = media(bardatamonth);
-  
+
         setNumStepsDone(average_monthly_steps.toFixed(0));
         handleColorNumStepsDone(average_monthly_steps);
 
@@ -619,305 +649,305 @@ export default function Attività_fisica_s({ route }) {
   }, [isSelected]);
 
   return (
-    <ScrollView style={{ flex: 1, padding: 10, backgroundColor: "white" }}>
-      <CustomNavbar
-        type={"attività"}
-        isSelected={isSelected}
-        selezioni={selezioni}
-        handleselection={handleselection}
-      ></CustomNavbar>
+      <ScrollView style={{ flex: 1, padding: 10, backgroundColor: "white" }}>
+        <CustomNavbar
+            type={"attività"}
+            isSelected={isSelected}
+            selezioni={selezioni}
+            handleselection={handleselection}
+        ></CustomNavbar>
 
-      <View
-        style={{
-          flex: 0,
-          marginTop: 10,
-          marginBottom: 10,
-          justifyContent: "center",
-          alignItems: "center",
-          flexDirection: "row",
-        }}
-      >
-        <Ionicons
-          name="chevron-back-outline"
-          size={24}
-          color="black"
-          onPress={() => minus()}
-        ></Ionicons>
-        <Text style={s.body("medium")}> {range_time} </Text>
-        <Ionicons
-          name="chevron-forward-outline"
-          size={24}
-          color="black"
-          onPress={() => plus()}
-        ></Ionicons>
-      </View>
-
-      <View style={styles.container_multichoice}>
-        <Pressable style={styles.choice} onPress={() => handleChoice("passi")}>
-          <Text style={styles.textchoice}>Passi</Text>
-          <View
-            style={styles.choiceicon(selectedChoice == "passi" ? true : false)}
-          >
-            <FontAwesome5
-              name="running"
-              size={20}
-              color={selectedChoice == "passi" ? "white" : "black"}
-            />
-          </View>
-        </Pressable>
-
-        <Pressable
-          style={styles.choice}
-          onPress={() => handleChoice("battito")}
+        <View
+            style={{
+              flex: 0,
+              marginTop: 10,
+              marginBottom: 10,
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "row",
+            }}
         >
-          <Text style={styles.textchoice}>Battito Cardiaco</Text>
-          <View
-            style={styles.choiceicon(
-              selectedChoice == "battito" ? true : false
-            )}
-          >
-            <FontAwesome5
-              name="heartbeat"
-              size={20}
-              color={selectedChoice == "battito" ? "white" : "black"}
-            />
-          </View>
-        </Pressable>
-      </View>
+          <Ionicons
+              name="chevron-back-outline"
+              size={24}
+              color="black"
+              onPress={() => minus()}
+          ></Ionicons>
+          <Text style={s.body("medium")}> {range_time} </Text>
+          <Ionicons
+              name="chevron-forward-outline"
+              size={24}
+              color="black"
+              onPress={() => plus()}
+          ></Ionicons>
+        </View>
 
-      <View style={{ height: Dimensions.get("window").height }}>
-        {selectedChoice == "passi" && (
-          <View style={{ marginTop: 30 }}>
-            {/*tab passi*/}
-            <View style={{ height: "30%" }}>
-              <Text style={[s.smalltext("medium", "grey"), styles.subtitle]}>
-                Passi
-              </Text>
-              <Card
-                cornerRadius={20}
-                elevation={0}
-                style={{
-                  backgroundColor: "#fff",
-                  flex: 1,
-                  width: "95%",
-                  padding: 10,
-                  margin: 5,
-                  marginTop: 10,
-                  marginBottom: 10,
-                  alignItems: "center",
-                }}
-              >
-                <View style={styles.details_sleep}>
-                  <Text style={s.smalltext("regular")}>
-                    {isSelected != "Giorno" ? "Media" : "Totale"}
-                  </Text>
-                  <View>
-                    <View
-                      style={{
-                        flex: 0,
-                        flexDirection: "row",
-                        alignItems: "baseline",
-                      }}
-                    >
-                      <Text style={[s.header(2, "bold"), { marginRight: 5 }]}>
-                        {num_steps_done}
-                      </Text>
-                      <Text style={s.smalltext("regular")}>
-                        Passi
-                        {isSelected != "Giorno" && <Text>/giorno</Text>}
-                      </Text>
-                    </View>
-                  </View>
-
-                  {tipoUtente == "sperimentale" &&  
-                  <>
-                  <Progress.Bar
-                    progress={progressValueSteps(num_steps_done)}
-                    width={150}
-                    color={convertColorFromValue(num_steps_done)}
-                    unfilledColor={"lightgrey"}
-                    borderColor={"white"}
-                    borderWidth={1}
-                  />
-                  <Text style={[s.body("medium"), { margin: "1%" }]}>
-                    {convertIndicatorFromColor(color_num_steps_done)}
-                  </Text>
-                  </>}
-                </View>
-              </Card>
+        <View style={styles.container_multichoice}>
+          <Pressable style={styles.choice} onPress={() => handleChoice("passi")}>
+            <Text style={styles.textchoice}>Passi</Text>
+            <View
+                style={styles.choiceicon(selectedChoice == "passi" ? true : false)}
+            >
+              <FontAwesome5
+                  name="running"
+                  size={20}
+                  color={selectedChoice == "passi" ? "white" : "black"}
+              />
             </View>
+          </Pressable>
 
-            {isSelected != "Giorno" && (
-              <View style={{ height: "40%" }}>
-                <BarChart
-                  data={
-                    isSelected == "Settimana"
-                      ? bardataweek
-                      : isSelected == "Giorno"
-                        ? bardataday
-                        : bardatamonth
-                  }
-                  spacing={isSelected == "Settimana" ? 30 : 10}
-                  barBorderRadius={4}
-                  initialSpacing={10}
-                  noOfSections={4}
-                  maxValue={15000}
-                  yAxisTextStyle={styles.progressStyle}
-                  xAxisLabelTextStyle={styles.progressXStyle}
-                  height={200}
-                  hideRules
-                  yAxisThickness={0}
-                  xAxisThickness={0}
-                  barWidth={isSelected == "Settimana" ? 20 : 11}
-                  showReferenceLine1
-                  referenceLine1Position={num_steps_done}
-                  referenceLine1Config={{
-                    color: "gray",
-                    labelText: "Media",
-                    labelTextStyle: styles.progressStyle,
-                    dashWidth: 2,
-                    dashGap: 3,
-                  }}
-                />
+          <Pressable
+              style={styles.choice}
+              onPress={() => handleChoice("battito")}
+          >
+            <Text style={styles.textchoice}>Battito Cardiaco</Text>
+            <View
+                style={styles.choiceicon(
+                    selectedChoice == "battito" ? true : false
+                )}
+            >
+              <FontAwesome5
+                  name="heartbeat"
+                  size={20}
+                  color={selectedChoice == "battito" ? "white" : "black"}
+              />
+            </View>
+          </Pressable>
+        </View>
+
+        <View style={{ height: Dimensions.get("window").height }}>
+          {selectedChoice == "passi" && (
+              <View style={{ marginTop: 30 }}>
+                {/*tab passi*/}
+                <View style={{ height: "30%" }}>
+                  <Text style={[s.smalltext("medium", "grey"), styles.subtitle]}>
+                    Passi
+                  </Text>
+                  <Card
+                      cornerRadius={20}
+                      elevation={0}
+                      style={{
+                        backgroundColor: "#fff",
+                        flex: 1,
+                        width: "95%",
+                        padding: 10,
+                        margin: 5,
+                        marginTop: 10,
+                        marginBottom: 10,
+                        alignItems: "center",
+                      }}
+                  >
+                    <View style={styles.details_sleep}>
+                      <Text style={s.smalltext("regular")}>
+                        {isSelected != "Giorno" ? "Media" : "Totale"}
+                      </Text>
+                      <View>
+                        <View
+                            style={{
+                              flex: 0,
+                              flexDirection: "row",
+                              alignItems: "baseline",
+                            }}
+                        >
+                          <Text style={[s.header(2, "bold"), { marginRight: 5 }]}>
+                            {num_steps_done}
+                          </Text>
+                          <Text style={s.smalltext("regular")}>
+                            Passi
+                            {isSelected != "Giorno" && <Text>/giorno</Text>}
+                          </Text>
+                        </View>
+                      </View>
+
+                      {tipoUtente == "sperimentale" &&
+                          <>
+                            <Progress.Bar
+                                progress={progressValueSteps(num_steps_done)}
+                                width={150}
+                                color={convertColorFromValue(num_steps_done)}
+                                unfilledColor={"lightgrey"}
+                                borderColor={"white"}
+                                borderWidth={1}
+                            />
+                            <Text style={[s.body("medium"), { margin: "1%" }]}>
+                              {convertIndicatorFromColor(color_num_steps_done)}
+                            </Text>
+                          </>}
+                    </View>
+                  </Card>
+                </View>
+
+                {isSelected != "Giorno" && (
+                    <View style={{ height: "40%" }}>
+                      <BarChart
+                          data={
+                            isSelected == "Settimana"
+                                ? bardataweek
+                                : isSelected == "Giorno"
+                                    ? bardataday
+                                    : bardatamonth
+                          }
+                          spacing={isSelected == "Settimana" ? 30 : 10}
+                          barBorderRadius={4}
+                          initialSpacing={10}
+                          noOfSections={4}
+                          maxValue={15000}
+                          yAxisTextStyle={styles.progressStyle}
+                          xAxisLabelTextStyle={styles.progressXStyle}
+                          height={200}
+                          hideRules
+                          yAxisThickness={0}
+                          xAxisThickness={0}
+                          barWidth={isSelected == "Settimana" ? 20 : 11}
+                          showReferenceLine1
+                          referenceLine1Position={num_steps_done}
+                          referenceLine1Config={{
+                            color: "gray",
+                            labelText: "Media",
+                            labelTextStyle: styles.progressStyle,
+                            dashWidth: 2,
+                            dashGap: 3,
+                          }}
+                      />
+                    </View>
+                )}
               </View>
-            )}
-          </View>
-        )}
+          )}
 
-        {selectedChoice == "battito" && (
-          <View style={{ marginTop: 30}}>
-            
-            <Text style={[s.smalltext("medium", "grey"), styles.subtitle]}>
-              Battito cardiaco {isSelected != "Giorno" ? "(media)" : ""}
-            </Text>
-            <View style={{padding: 10,
+          {selectedChoice == "battito" && (
+              <View style={{ marginTop: 30}}>
+
+                <Text style={[s.smalltext("medium", "grey"), styles.subtitle]}>
+                  Battito cardiaco {isSelected != "Giorno" ? "(media)" : ""}
+                </Text>
+                <View style={{padding: 10,
                   margin: 5,
                   marginTop: 10,
                   marginBottom: 10,alignItems: "center"}}>
-             <View style={{flex:0,flexDirection:"row",alignItems: "center"}}>
-              <View style={{marginRight:20}}>
-                <FontAwesome5 name="heartbeat" size={30} color="red" />
-              </View>
-              <View style={styles.details_sleep}>
+                  <View style={{flex:0,flexDirection:"row",alignItems: "center"}}>
+                    <View style={{marginRight:20}}>
+                      <FontAwesome5 name="heartbeat" size={30} color="red" />
+                    </View>
+                    <View style={styles.details_sleep}>
 
-                    <Text style={s.smalltext("regular")}>
-                      A riposo
+                      <Text style={s.smalltext("regular")}>
+                        A riposo
+                      </Text>
+                      <View>
+                        <View
+                            style={{
+                              flex: 0,
+                              flexDirection: "row",
+                              alignItems: "baseline",
+                            }}
+                        >
+                          <Text style={[s.header(2, "bold"), { marginRight: 5 }]}>
+                            {hr_rest}
+                          </Text>
+                          <Text style={s.smalltext("regular")}>
+                            Bpm
+                          </Text>
+                        </View>
+                      </View>
+                      {tipoUtente == "sperimentale" &&
+                          <Text style={[s.body("medium"), { margin: "1%" }]}>
+                            {convertIndicatorFromColor(color_hr_rest)}
+                          </Text>
+                      }
+                    </View>
+                  </View>
+                </View>
+                {isSelected != "Giorno" &&
+                    <LineChart
+                        color={tipoUtente == "sperimentale" ? color_hr_rest : "grey"}
+                        startFillColor={tipoUtente == "sperimentale" ? color_hr_rest : "grey"}
+                        endFillColor={tipoUtente == "sperimentale" ? color_hr_rest : "grey"}
+                        areaChart
+                        showReferenceLine1
+                        maxValue={150}referenceLine1Position={hr_rest}
+                        referenceLine1Config={{
+                          color: "gray",
+                          labelText: "Media",
+                          labelTextStyle: styles.progressStyle,
+                          dashWidth: 2,
+                          dashGap: 3,
+                        }}
+                        yAxisThickness={0}
+                        xAxisThickness={0}
+                        yAxisTextStyle={styles.progressStyle}
+                        xAxisLabelTextStyle={styles.progressXStyle}
+                        startOpacity={0.1}
+                        endOpacity={0.7}
+                        initialSpacing={0}
+                        height={200}
+                        data={
+                          isSelected == "Settimana"
+                              ? linedataweekhr
+                              : isSelected == "Giorno"
+                                  ? linedatadayhr
+                                  : linedatamonthhr
+                        }
+                        spacing={isSelected == "Settimana" ? 50 : 20}
+                        textColor1="black"
+                        textShiftY={-10}
+                        textShiftX={-5}
+                        showTextOnPress
+                        pressEnabled={true}
+                        textFontSize={12}
+                        thickness={2}
+                        curved
+                        isAnimated={true}
+                        focusedDataPointRadius={5}
+                        focusedDataPointColor={"black"}
+                        hideRules
+                        yAxisColor="#0BA5A4"
+                        xAxisColor="#0BA5A4"
+                    />
+                }
+                <View style={{marginTop:30}}>
+                  <View>
+                    <Text style={[s.smalltext("medium", "grey"), styles.subtitle]}>
+                      Altri valori {isSelected != "Giorno" ? "(media)" : ""}
                     </Text>
-                    <View>
-                      <View
+                    <View
                         style={{
                           flex: 0,
                           flexDirection: "row",
+                          margin: 15,
                           alignItems: "baseline",
+                          justifyContent: "center",
                         }}
-                      >
-                        <Text style={[s.header(2, "bold"), { marginRight: 5 }]}>
-                          {hr_rest}
-                        </Text>
-                        <Text style={s.smalltext("regular")}>
-                          Bpm
-                        </Text>
-                      </View>
+                    >
                     </View>
-                   {tipoUtente == "sperimentale" &&
-                    <Text style={[s.body("medium"), { margin: "1%" }]}>
-                      {convertIndicatorFromColor(color_hr_rest)}
-                    </Text>
-                    }
-              </View>
-             </View>
-            </View>
-            {isSelected != "Giorno" && 
-            <LineChart
-            color={tipoUtente == "sperimentale" ? color_hr_rest : "grey"}
-            startFillColor={tipoUtente == "sperimentale" ? color_hr_rest : "grey"}
-            endFillColor={tipoUtente == "sperimentale" ? color_hr_rest : "grey"}
-            areaChart
-            showReferenceLine1
-            maxValue={150}referenceLine1Position={hr_rest}
-            referenceLine1Config={{
-              color: "gray",
-              labelText: "Media",
-              labelTextStyle: styles.progressStyle,
-              dashWidth: 2,
-              dashGap: 3,
-            }}
-            yAxisThickness={0}
-            xAxisThickness={0}
-            yAxisTextStyle={styles.progressStyle}
-            xAxisLabelTextStyle={styles.progressXStyle}
-            startOpacity={0.1}
-            endOpacity={0.7}
-              initialSpacing={0}
-              height={200}
-              data={
-                isSelected == "Settimana"
-                  ? linedataweekhr
-                  : isSelected == "Giorno"
-                    ? linedatadayhr
-                    : linedatamonthhr
-              }
-              spacing={isSelected == "Settimana" ? 50 : 20}
-              textColor1="black"
-              textShiftY={-10}
-              textShiftX={-5}
-              showTextOnPress
-              pressEnabled={true}
-              textFontSize={12}
-              thickness={2}
-              curved
-              isAnimated={true}
-              focusedDataPointRadius={5}
-              focusedDataPointColor={"black"}
-              hideRules
-              yAxisColor="#0BA5A4"
-              xAxisColor="#0BA5A4"
-            />
-            }
-            <View style={{marginTop:30}}>
-                <View>
-                <Text style={[s.smalltext("medium", "grey"), styles.subtitle]}>
-                  Altri valori {isSelected != "Giorno" ? "(media)" : ""}
-                </Text>
-                  <View
-                    style={{
-                      flex: 0,
-                      flexDirection: "row",
-                      margin: 15,
-                      alignItems: "baseline",
-                      justifyContent: "center",
-                    }}
-                  >
-                  </View>
 
-                  <View
-                    style={{
-                      flex: 0,
-                      flexDirection: "row",
-                      justifyContent: "space-around",
-                      alignItems: "center",
-                      margin: 20,
-                    }}
-                  >
-                    <Battito_Cardiaco
-                      battiti={123}
-                      type={"Max"}
-                    ></Battito_Cardiaco>
-                    <Battito_Cardiaco
-                      battiti={60}
-                      type={"Min"}
-                    ></Battito_Cardiaco>
-                    <Battito_Cardiaco
-                      battiti={80}
-                      type={"A riposo"}
-                    ></Battito_Cardiaco>
+                    <View
+                        style={{
+                          flex: 0,
+                          flexDirection: "row",
+                          justifyContent: "space-around",
+                          alignItems: "center",
+                          margin: 20,
+                        }}
+                    >
+                      <Battito_Cardiaco
+                          battiti={123}
+                          type={"Max"}
+                      ></Battito_Cardiaco>
+                      <Battito_Cardiaco
+                          battiti={60}
+                          type={"Min"}
+                      ></Battito_Cardiaco>
+                      <Battito_Cardiaco
+                          battiti={80}
+                          type={"A riposo"}
+                      ></Battito_Cardiaco>
+                    </View>
                   </View>
                 </View>
-            </View>
-          </View>
-        )}
-      </View>
-    </ScrollView>
+              </View>
+          )}
+        </View>
+      </ScrollView>
   );
 }
 
@@ -985,11 +1015,11 @@ const styles = StyleSheet.create({
   },
 
   circle: (color) => ({
-    height: color != "transparent" ? 30 : 20,
-    width: color != "transparent" ? 30 : 20,
+    height: color !== "transparent" ? 30 : 20,
+    width: color !== "transparent" ? 30 : 20,
     backgroundColor: color,
     borderRadius: 50,
-    borderColor: color != "transparent" ? color : "black",
+    borderColor: color !== "transparent" ? color : "black",
     borderWidth: 1,
   }),
 });

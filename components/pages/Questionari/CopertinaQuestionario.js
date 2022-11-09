@@ -39,7 +39,6 @@ export default function CopertinaQuestionario(props) {
     justifyContent:"space-between",
     borderRadius: 20,
     borderWidth: 1,
-    height: 100,
     margin:30,
     padding:10
     },

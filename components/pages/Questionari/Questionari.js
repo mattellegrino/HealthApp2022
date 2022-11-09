@@ -9,6 +9,7 @@ import CustomNavbar from "../../CustomNavbar/CustomNavbar";
 import PatientQuestionnaire from "../../../classes/PatientQuestionnaire";
 import Question from "../../../classes/Question";
 import QuestionnaireTemplate from "../../../classes/QuestionnaireTemplate";
+import QuestionAnswered from "../../../classes/QuestionAnswered";
 const s = require("../../../core/styles");
 
 
@@ -50,7 +51,8 @@ export default function Questionari({navigation,route}) {
         fetch(`http://${global.enrico}:8080/api/patients/${global.id}/questionnaires`)
             .then((response) => response.json())
             .then((json) =>{
-                setQuestsCompilati(json.map(json => QuestionnaireTemplate.from(json)))
+                setQuestsCompilati(json.map(json => QuestionAnswered.from(json)))
+                console.log(json.map(json => QuestionAnswered.from(json)))
             })
             .catch((error) => { console.error(error)})
             .finally(() => setLoadingQuests(false));
