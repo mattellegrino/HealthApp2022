@@ -3,8 +3,6 @@ import React, {useEffect, useState} from "react";
 import Navbar from "../../CustomNavbar/CustomNavbar";
 import CustomButton from "../../CustomButton/CustomButton";
 import CopertinaQuestionario from "./CopertinaQuestionario";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { Card } from "react-native-shadow-cards";
 import CustomNavbar from "../../CustomNavbar/CustomNavbar";
 import PatientQuestionnaire from "../../../classes/PatientQuestionnaire";
 import Question from "../../../classes/Question";
@@ -156,24 +154,6 @@ export default function Questionari({navigation,route}) {
                   </CopertinaQuestionario>
                 )} */}
       </View>
-
-     <Pressable style={{flex:2}}onPress={()=> navigation.navigate("Peso",{update:update})}>
-      <View style={{flex: 2, alignItems:"center", justifyContent:"center"}}>
-      <Card cornerRadius={10}
-               style={{
-                  backgroundColor: "#FFF9C4",
-                  flex: 0,
-                  width: "90%",
-                  marginBottom: 15,
-                  alignItems: "center",
-                  padding:20, borderRadius:20, flexDirection:"row"
-                }}
-              >
-         <Ionicons name="bar-chart" size={24} color="#F9A825" /> 
-         <Text style={[s.header(4,"regular"),{color:"#000",marginLeft:"20%"}]}> Inserisci il tuo peso </Text>    
-       </Card> 
-      </View>
-      </Pressable>
 
         <View style={{flex: 3, alignItems:"center", justifyContent:"center"}}>
             <View style={{flex:1,borderTopColor:"#000",borderTopWidth:2,width:"100%",alignItems: "center",padding:15}}>
