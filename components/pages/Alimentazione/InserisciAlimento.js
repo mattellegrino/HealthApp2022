@@ -5,7 +5,7 @@ import CiboCard from './CiboCard';
 
 export default function InserisciAlimento(props) {
 
-    const [isSelected,setIsSelected] = useState("Tutti");
+    const [isSelected,setIsSelected] = useState("Compilare");
   
     const handleselection = (selected) => {
   

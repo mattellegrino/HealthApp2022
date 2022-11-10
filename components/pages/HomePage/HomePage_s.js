@@ -22,6 +22,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import CustomButton from "../../CustomButton/CustomButton";
 import AlimentazioneRow from "../Alimentazione/AlimentazioneRow";
+import QuestionnaireTemplate from "../../../classes/QuestionnaireTemplate";
+import QuestionnaireAnswered from "../../../classes/QuestionnaireAnswered";
 const s = require("../../../core/styles");
 
 
@@ -53,7 +55,10 @@ const HomePage_s = ({ navigation, route }) => {
     return total;
   }
   const dayformattedtime = formatTime(mockbardataday.time_ms).toPrecision(3);
-  const [num_questionari_da_compilare,setNumQuestionari_da_compilare] = useState(1);
+  const [allQuests, setAllQuests] = useState([]);
+  const [quests, setQuests] = useState([]);
+  const [questsTodo, setQuestsTodo] = useState([]);
+  const [questsCompilati, setQuestsCompilati] = useState([]);
   const [num_hours_sleeped, setNumHoursSleeped] = useState("0:00");
   const [pieData,setPieData] = useState([]);
   const [steps_daily_done,setStepsDailyDone] = useState(2200);
@@ -66,6 +71,48 @@ const HomePage_s = ({ navigation, route }) => {
   const orangethresholdsleep = 6; 
   const yellowthresholdsleep = 7.30;
   
+
+  function filterDaCompilare(quest,questionari_compilati){
+
+    let trovato = 0;
+
+    questionari_compilati.forEach((quest_compilato) => {
+      if(quest_compilato.questionnaireTemplate.id == quest.id)
+        trovato = 1;
+    })
+
+    if(trovato == 1)
+    return false;
+
+    else
+    return true;
+
+  }
+
+  const getQuestionnairesCompiled = (AllQuestionnaireTemplate) => {
+    fetch(`http://${global.enrico}:8080/api/patients/${global.id}/questionnaires`)
+        .then((response) => response.json())
+        .then((json) =>{
+            let questionari_compilati = json.map(json => QuestionnaireAnswered.from(json));
+            setQuestsCompilati(json.map(json => QuestionnaireAnswered.from(json)))
+            let questionari_da_compilare = AllQuestionnaireTemplate.filter((quest) => filterDaCompilare(quest,questionari_compilati));      
+            setQuestsTodo(questionari_da_compilare);
+            setQuests(questionari_da_compilare);
+        })
+        .catch((error) => { console.error(error)})
+}
+
+
+const getQuestionnairesAvailable = () => {
+    fetch(`http://${global.enrico}:8080/api/questionnaires/templates`)
+        .then((response) => response.json())
+        .then((json) =>{
+            let AllQuestionnaireTemplate = json.map(json => QuestionnaireTemplate.from(json));
+            setAllQuests(json.map(json => QuestionnaireTemplate.from(json)));
+            getQuestionnairesCompiled(AllQuestionnaireTemplate);
+        })
+        .catch((error) => { console.error(error)})
+}
 
   useEffect(() => {
     let arr = new Array();
@@ -102,6 +149,10 @@ const HomePage_s = ({ navigation, route }) => {
      }
 
     setNumHoursSleeped(dayformattedtime);
+
+    getQuestionnairesAvailable();
+
+
 
     /*const backAction = () => {
       Alert.alert("Arrivederci", "Sei sicuro di voler chiudere l'app?", [
@@ -332,9 +383,9 @@ const HomePage_s = ({ navigation, route }) => {
               >
 
               <View><Text>Hai ancora</Text></View>
-                <Text style={s.header(2,"bold")}>{num_questionari_da_compilare}</Text>
+                <Text style={s.header(2,"bold")}>{questsTodo.length}</Text>
               <View>
-                <Text>{num_questionari_da_compilare > 1 ? "questionari" : "questionario"}</Text>
+                <Text>{questsTodo.length == 1 ? "questionario" : "questionari"}</Text>
                 <Text>da compilare</Text>
               </View>        
 
@@ -388,8 +439,10 @@ const HomePage_s = ({ navigation, route }) => {
                   marginBottom: 10,
                 }}
               >
-                <AlimentazioneRow titolo="Medas"></AlimentazioneRow>
-                <AlimentazioneRow titolo="Cereali"></AlimentazioneRow>
+                {allQuests.map((questTemplate,i) => {
+                  return  <AlimentazioneRow key={i} titolo={questTemplate.name}></AlimentazioneRow>
+                })}
+               
               </View>
             </Card>
           </Pressable>
