@@ -82,7 +82,7 @@ export default function Questionario({route,navigation},props) {
 
   function handleSubmitQuestionaire() {
 
-    if(compilato==undefined) {
+    if(compilato===undefined) {
 
 
     if(questCompilato){
@@ -90,7 +90,7 @@ export default function Questionario({route,navigation},props) {
     }
     else{
       Alert.alert("Compilare tutte le domande");
-  }
+       }
 }
 
 else
@@ -123,7 +123,7 @@ navigation.navigate('Questionari',{
     // setCompilato(true)
     //Se il questionario non è stato compilato allora inizializzo il vettore con le possibili risposte
 
-    if(compilato == undefined) {
+    if(compilato === undefined) {
 
       let _questionAnswers = domande_e_risposte.map((el,i) => {
         let questionAnswer = {id:el.possibleQuestionAnswer[0], question:el.id, chosenAnswer: {id:-1,text:""}};
@@ -151,7 +151,10 @@ navigation.navigate('Questionari',{
       </View>  
       <View style={{flex:5, width: "80%",marginBottom:40}}>
         {questionAnswers &&
-       <Domanda compilato={compilato} compiledAnswers={compiledAnswers} changed={changed} editQuestionAnswers = {editQuestionAnswers} questionAnswers={questionAnswers} questionAnswer={questionAnswers[n_domanda]} compiledAnswer={compiledAnswers[n_domanda]} n_domanda={n_domanda} testo={domande_e_risposte[n_domanda] ? domande_e_risposte[n_domanda].text : ""} risposte={domande_e_risposte[n_domanda] ? domande_e_risposte[n_domanda].possibleQuestionAnswer : ""}></Domanda>
+       <Domanda compilato={compilato} compiledAnswers={compiledAnswers} changed={changed} editQuestionAnswers = {editQuestionAnswers} questionAnswers={questionAnswers} questionAnswer={questionAnswers[n_domanda]}
+                compiledAnswer={compiledAnswers[n_domanda]}
+                n_domanda={n_domanda} testo={domande_e_risposte[n_domanda] ? domande_e_risposte[n_domanda].text : ""}
+                risposte={domande_e_risposte[n_domanda] ? domande_e_risposte[n_domanda].possibleQuestionAnswer : ""}></Domanda>
         }
        </View>  
       <View style={{flex:1, flexDirection:"row", width: "80%", justifyContent: "space-around"}}>

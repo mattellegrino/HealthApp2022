@@ -46,6 +46,15 @@ export default function Questionari({navigation,route}) {
     setIsSelected(selected);
   }
 
+    function formatDate() {
+        let d = new Date(),
+            month = "" + (d.getMonth() + 1),
+            day = "" + d.getDate(),
+            year = d.getFullYear();
+        if (month.length < 2) month = "0" + month;
+        if (day.length < 2) day = "0" + day;
+        return [year, month, day].join("-");
+    }
 
     getQuestionnairesCompiled = () => {
         fetch(`http://${global.enrico}:8080/api/patients/${global.id}/questionnaires`)
@@ -53,7 +62,6 @@ export default function Questionari({navigation,route}) {
             .then((json) =>{
                 console.log(json.map(json => QuestionnaireAnswered.from(json)))
                 setQuestsCompilati(json.map(json => QuestionnaireAnswered.from(json)))
-              
             })
             .catch((error) => { console.error(error)})
             .finally(() => setLoadingQuests(false));
@@ -75,10 +83,8 @@ export default function Questionari({navigation,route}) {
 
 
     useEffect( () => {
-       getQuestionnairesAvailable();
-
+        getQuestionnairesAvailable();
     }, [update]);
-
 
 
   return (
@@ -91,7 +97,12 @@ export default function Questionari({navigation,route}) {
         , flexDirection: "column", justifyContent: "space-around", alignItems: "center"}}>
            
       {quests.map((quest,i) => (
-        <CopertinaQuestionario submissionDate={questsCompilati.find((el) => el.name == quest.name) != undefined ? quest.submissionDate : "T"} compilato={questsCompilati.find((el) => el.name == quest.name)} compiledAnswers={(questsCompilati.find((el) => el.name == quest.name)!= undefined) ? quest.questionAnswers : ""} update={update} key={i} titolo={quest.name} domande_e_risposte={isSelected == "Compilati" ? quest.questionnaireTemplate.questions : quest.questions} questionnaireTemplateId={quest.id}></CopertinaQuestionario>
+        <CopertinaQuestionario submissionDate={ questsCompilati.find((el) => el.name === quest.name) !== undefined ? formatDate() : "error" }
+                               compilato={questsCompilati.find((el) => el.name === quest.name)}
+                               compiledAnswers={(questsCompilati.find((el) => el.name === quest.name)!== undefined) ? quest.questionAnswers : "error"}
+                               update={update} key={i} titolo={quest.name}
+                               domande_e_risposte={isSelected === "Compilati" ? quest.questionnaireTemplate.questions : quest.questions}
+                               questionnaireTemplateId={quest.id}></CopertinaQuestionario>
 
         ))}       
            
@@ -115,7 +126,7 @@ export default function Questionari({navigation,route}) {
                 )} */}
       </View>
 
-     <Pressable style={{flex:2}}onPress={()=> navigation.navigate("Peso")}>
+     <Pressable style={{flex:2}} onPress={()=> navigation.navigate("Peso")}>
       <View style={{flex: 2, alignItems:"center", justifyContent:"center"}}>
       <Card cornerRadius={10}
                style={{
