@@ -20,7 +20,7 @@ export default function Attività_fisica_s({ route }) {
 
   const [isLoading, setLoading] = useState(true);
   const [hrValues,setHrValues] = useState([]);
-
+  let mockbardataday
   const mocklinedatadayhr = hrValues
 
   const mockbardataweek = [
@@ -109,7 +109,12 @@ export default function Attività_fisica_s({ route }) {
 
   const date = new Date();
 
-  const [tipoUtente,setTipoUtente] = useState("controllo");
+  let tipoUtente;
+  if(global.patient_type === false)
+  {
+    tipoUtente="controllo"
+  }
+  else tipoUtente="sperimentale"
 
   const [isSelected, setIsSelected] = useState("Giorno");
   const [firstTime, setFirstTime] = useState(false);
@@ -130,7 +135,7 @@ export default function Attività_fisica_s({ route }) {
   const [bardataday, setBarDataDay] = useState("");
   const [bardataweek, setBarDataWeek] = useState([]);
   const [bardatamonth, setBarDataMonth] = useState([]);
-  const [linedatadayhr, setLineDataDayHr] = useState([]);
+  const [linedatadayhr, setLineDataDayHr] = useState("");
   const [linedataweekhr, setLineDataWeekHr] = useState([]);
   const [linedatamonthhr, setLineDataMonthHr] = useState([]);
 
@@ -181,6 +186,9 @@ export default function Attività_fisica_s({ route }) {
     return num.toString().padStart(2, "0");
   }
 
+
+
+
   function formatDate(data) {
     let d = data,
         month = "" + (d.getMonth() + 1),
@@ -206,7 +214,7 @@ export default function Attività_fisica_s({ route }) {
         var dayafter = new Date(getdayconvertible(variableGiornoDate));
         dayafter.setDate(variableGiornoDate.getDate() + 1);
         let dayafterforapi = formatDate(dayafter);
-        //Inserire API per sonno giornaliero: /api/patients/{patientID}/activities/steps (startDate=dayafterforapi, endDate=dayafterforapi
+        //Inserire API per sonno giornaliero: /api/patients/{patientID}/activities/steps (startDate=dayafterforapi, endDate=dayafterforapi)
         setRangeTime(getday(dayafter));
         setVariableGiornoDate(dayafter);
         break;
@@ -433,25 +441,10 @@ export default function Attività_fisica_s({ route }) {
     );
   };
 
-   const getHrValuesById = async (startDate,endDate) => {
-    return fetch(`http://${global.enrico}:8080/api/patients/${global.id}/hrs/rest?startDate=${startDate}&endDate=${endDate}`)
-        .then((response) => response.text())
-        .then((json) =>{
-          let hrValues = Array.of(json);
-          console.log("Valore del vettore "+hrValues)
-          //console.log("Hr values => " + json)
-          setHrValues(hrValues)
-          return hrValues})
-        .catch((error) => {
-          console.log(error.message);
-          throw error})
-        .finally(() => {
-          setLoading(false)
-        });
-  }
 
-  const getHrPeakValuesById = (startDate,endDate) => {
-    fetch(`http://${global.enrico}:8080/api/patients/${global.id}/hrs/peak?startDate=${startDate}&endDate=${endDate}`)
+
+  const getHrValuesById = (startDate,endDate) => {
+    fetch(`http://${global.enrico}:8080/api/patients/${global.id}/hrs/rest?startDate=${startDate}&endDate=${endDate}`)
         .then((response) => response.text())
         .then((json) =>{
           let hrValues = JSON.parse(json);
@@ -468,9 +461,14 @@ export default function Attività_fisica_s({ route }) {
 
 
   useEffect(() => {
+    let date = new Date()
+    date.setDate(date.getDate() - 1);
+    mockbardataday= getHrValuesById(formatDate(date),formatDate(date));
+  }, []);
+
+  useEffect(() => {
     let dateforapi = formatDate(date); //variabile da inserire nell'API per ricavare il sonno giornaliero
-    let value = getHrValuesById(dateforapi,dateforapi)
-    console.log("Data"+ value)
+
     // inizializzo date che poi vengono cambiate quando si va avanti/indietro con le frecce
     setVariableGiornoDate(date);
     setVariableMonthDate(date);
@@ -594,20 +592,18 @@ export default function Attività_fisica_s({ route }) {
       case "Giorno":
         let range_giorno = getday(date);
         setRangeTime(range_giorno);
-        let dateforapi = formatDate(date);
+
         if (bardataday) {
           setNumStepsDone(bardataday);
 
           handleColorNumStepsDone(bardataday);
         }
 
-          //setbattitocardiac
-          let returned_value = getHrValuesById(dateforapi,dateforapi)
-          console.log("Prova "+ returned_value.date + " " + returned_value.rest);
+        if(linedatadayhr) {
+          setHrRest(linedatadayhr);
 
           handleColorHrRest(linedatadayhr);
-
-
+        }
         break;
 
       case "Settimana":
@@ -624,7 +620,7 @@ export default function Attività_fisica_s({ route }) {
         setNumStepsDone(average_weekly_steps.toFixed(0));
         handleColorNumStepsDone(average_weekly_steps);
 
-        let average_weekly_hr = media(getHrValuesById(firstdayforapi,lastdayforapi));
+        let average_weekly_hr = media(linedataweekhr);
         setHrRest(average_weekly_hr.toFixed(0));
         handleColorHrRest(average_weekly_hr);
 
@@ -1018,11 +1014,11 @@ const styles = StyleSheet.create({
   },
 
   circle: (color) => ({
-    height: color !== "transparent" ? 30 : 20,
-    width: color !== "transparent" ? 30 : 20,
+    height: color != "transparent" ? 30 : 20,
+    width: color != "transparent" ? 30 : 20,
     backgroundColor: color,
     borderRadius: 50,
-    borderColor: color !== "transparent" ? color : "black",
+    borderColor: color != "transparent" ? color : "black",
     borderWidth: 1,
   }),
 });

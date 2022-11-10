@@ -17,7 +17,7 @@ export default function CopertinaQuestionario(props) {
     <View><Text style={[s.header(3,"bold"),styles.title]}>{props.titolo}</Text></View>
     <View style={styles.secondline}>
       
-      <Text style={styles.text}> {props.compilato !==undefined && ("Compilato il   " + props.submissionDate/*props.submissionDate.split("T")[0]*/)} </Text>
+      <Text style={styles.text}> {props.compilato !==undefined && ("Compilato il  " + props.submissionDate/*props.submissionDate.split("T")[0]*/)} </Text>
     
     <View style={styles.button}>
       <CustomButton onPress={()=>navigation.navigate("Questionario", {

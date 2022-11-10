@@ -59,8 +59,12 @@ export default function Sonno_s({navigation,route}) {
   var selezioni = ["Giorno","Settimana","Mese"];
   
   const date = new Date();
-
-  const [tipoUtente,setTipoUtente] = useState("sperimentale");
+    let tipoUtente;
+    if(global.patient_type === false)
+    {
+        tipoUtente="controllo"
+    }
+    else tipoUtente="sperimentale"
 
   const [isSelected, setIsSelected] = useState("Giorno");
   const [firstTime,setFirstTime] = useState(false);

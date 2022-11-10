@@ -17,11 +17,10 @@ const SignInPage = ({ navigation }) =>  {
     const [username,setUsername] = useState('')
     const [password,setPassword] = useState('')
     const [isLoading, setIsLoading] = useState(true);
-    const [errors, setErrors] = React.useState({});
+    const [errors, setErrors] = useState({});
     let authenticationError= useRef(false);
     let   loggedUser = useRef(undefined)
-    let   fitbit_flag = useRef(false);
-
+    let   type_of_user = useRef(false); // tipologia di paziente se sperimentale o controllo
 
     //indirizzo ip locale, da capire meglio quale ip usare quando i docker del backend saranno pronti.
     let ip_add = global.enrico
@@ -38,7 +37,7 @@ const SignInPage = ({ navigation }) =>  {
                 console.log(token_exists)
 
                 if(token_exists===false)
-                    fitbit_flag.current=true;
+                    type_of_user.current=true;
 
                 let role = authUser.roles[0].authority.split("_")[1]
                 console.log(role)
@@ -47,7 +46,11 @@ const SignInPage = ({ navigation }) =>  {
                 global.id = _user.id;
                 console.log(_user);
 
-                let fullUser = { authUser : authUser, user : _user};
+                let _user_type = await getPatientType(_user.id)
+                console.log("Patient type:( true experimental / false control ) = > " +_user_type)
+                global.patient_type = _user_type
+
+                let fullUser = { authUser : authUser, user : _user, _user_type: _user_type};
                 loggedUser=fullUser
                 console.log(fullUser);
 
@@ -61,6 +64,19 @@ const SignInPage = ({ navigation }) =>  {
             authenticationError=true;
         }
     }
+
+    async function getPatientType(_user_id) {
+        const response = await fetch(`http://${ip_add}:8080/api/patients/${_user_id}`);
+        const userJson = await response.json();
+        if (response.ok)
+        {
+            return userJson.experimental;
+        }
+        else {
+            throw userJson;
+        }
+    }
+
 
     async function getUser(username, type) {
 
@@ -100,12 +116,15 @@ const SignInPage = ({ navigation }) =>  {
                 console.log("Attraverso il cookie direttamente homepage");
                 console.log("COOKIE :" + value)
                 ip_add = global.enrico
+
                 let username= user_obj.authUser.username;
                 console.log("Userobj username: " +username)
                 let _user = user_obj.user
                 console.log("Userobj user: " +_user)
 
                 global.id = _user.id;
+                global.patient_type = loggedUser._user_type
+
                 navigation.navigate('HomePage_s', {
                     username: username,
                     ip_add: ip_add
@@ -132,8 +151,8 @@ const SignInPage = ({ navigation }) =>  {
             if (authenticationError.current===false) {
                 // login andato a buon fine.
                 setIsLoading(true);
-                console.log("Fitbit flag value= ",fitbit_flag)
-                if(fitbit_flag.current===true)
+                console.log("Type of user = ",type_of_user)
+                if(type_of_user.current===true)
                 {
                     try {
                         const value = await SecureStore.getItemAsync('cookie');
