@@ -7,11 +7,10 @@ const s = require("../../../core/styles");
 
 
 
-const Peso = ({navigation,route}) => {
+const Peso = ({navigation}) => {
     const [peso,setPeso] = useState('')
     const [isLoading, setIsLoading] = useState(true);
     let   [finished, setFinished] = useState(undefined);
-    const {update} = route.params;
   return (
     <View style={s.container}>
       <View
