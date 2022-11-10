@@ -5,7 +5,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Card } from "react-native-shadow-cards";
 const s = require("../../../core/styles");
 import { Avatar } from 'react-native-paper';
-const Profilo = () =>  {
+const Profilo = ({navigation,route}) =>  {
     const [isLoading, setLoading] = useState(true);
     const [profValues,setprofValues] = useState([]);
     /* */
@@ -43,7 +43,7 @@ const Profilo = () =>  {
                     <Generalità nome="Peso" valore={props.weight}></Generalità>
                 </View>
 
-                <Pressable style={{flex:2}}onPress={()=> navigation.navigate("Peso",{update:update})}>
+                <Pressable style={{flex:2}}onPress={()=> navigation.navigate("Peso")}>
                     <View style={{flex: 2, alignItems:"center", justifyContent:"center"}}>
                     <Card cornerRadius={10}
                             style={{

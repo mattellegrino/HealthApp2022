@@ -74,9 +74,7 @@ async function postWeight(peso) {
                 {
                     setFinished(true);
                     // go to main page
-                    navigation.navigate('Questionari', {
-                      update: update
-                    })
+                    navigation.navigate('Profilo')
                 }
 
             })

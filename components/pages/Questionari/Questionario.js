@@ -95,7 +95,7 @@ export default function Questionario({route,navigation},props) {
 
 else
 navigation.navigate('Questionari',{
-  update:update
+  update:!update
 });
   }
 
