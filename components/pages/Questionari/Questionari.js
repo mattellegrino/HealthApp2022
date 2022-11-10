@@ -12,7 +12,7 @@ const s = require("../../../core/styles");
 
 
 
-export default function Questionari({navigation,route}) {
+export default function Questionari({navigation: {goBack},route}) {
 
   const [isSelected,setIsSelected] = useState("Compilare");
   const [isLoadingQuests, setLoadingQuests] = useState(true);
@@ -102,7 +102,10 @@ export default function Questionari({navigation,route}) {
 
     useEffect( () => {
         getQuestionnairesAvailable();
-    }, [update]);
+    }, [route.params]);
+    useEffect( () => {
+      getQuestionnairesAvailable();
+  }, []);
 
 
   return (

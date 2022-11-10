@@ -25,6 +25,10 @@ const Profilo = ({navigation,route}) =>  {
         getprofValuesbyId()
     }, []);
 
+    useEffect(() => {
+        getprofValuesbyId()
+    },[route.params])
+
     const Item = (props ) => (
         <View style={{flex:1, backgroundColor:"white" }}>
             <View style={{flex:1, alignItems: "center"}}>

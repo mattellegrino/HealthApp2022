@@ -73,7 +73,9 @@ async function postWeight(peso) {
                 {
                     setFinished(true);
                     // go to main page
-                    navigation.navigate('Profilo')
+                    navigation.navigate('Profilo',{
+                      invioPeso: true
+                    })
                 }
 
             })
