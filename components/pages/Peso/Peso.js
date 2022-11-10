@@ -7,10 +7,11 @@ const s = require("../../../core/styles");
 
 
 
-const Peso = ({navigation}) => {
+const Peso = ({navigation,route}) => {
     const [peso,setPeso] = useState('')
     const [isLoading, setIsLoading] = useState(true);
-    let   [finished, setFinished] = useState(undefined)
+    let   [finished, setFinished] = useState(undefined);
+    const {update} = route.params;
   return (
     <View style={s.container}>
       <View
@@ -73,7 +74,9 @@ async function postWeight(peso) {
                 {
                     setFinished(true);
                     // go to main page
-                    navigation.navigate('Questionari')
+                    navigation.navigate('Questionari', {
+                      update: update
+                    })
                 }
 
             })

@@ -126,7 +126,7 @@ export default function Questionari({navigation,route}) {
                 )} */}
       </View>
 
-     <Pressable style={{flex:2}} onPress={()=> navigation.navigate("Peso")}>
+     <Pressable style={{flex:2}}onPress={()=> navigation.navigate("Peso",{update:update})}>
       <View style={{flex: 2, alignItems:"center", justifyContent:"center"}}>
       <Card cornerRadius={10}
                style={{
