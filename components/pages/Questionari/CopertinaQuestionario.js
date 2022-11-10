@@ -15,15 +15,23 @@ export default function CopertinaQuestionario(props) {
   
     <View style={styles.container}>
     <View><Text style={[s.header(3,"bold"),styles.title]}>{props.titolo}</Text></View>
-    <View style={styles.button}><CustomButton onPress={()=>navigation.navigate("Questionario", {
+    <View style={styles.secondline}>
+      
+      <Text style={styles.text}> {props.compilato !=undefined && ("Compilato il   " + props.submissionDate/*props.submissionDate.split("T")[0]*/)} </Text>
+    
+    <View style={styles.button}>
+      <CustomButton onPress={()=>navigation.navigate("Questionario", {
           nomequestionario : props.titolo,
           domande_e_risposte : props.domande_e_risposte,
+          compiledAnswers:props.compiledAnswers,
           username:props.username,
            ip_add: props.ip_add,
            user:props.user,
+           compilato:props.compilato,
            update:props.update,
             questionnaireTemplateId: props.questionnaireTemplateId
-        })} text={compilato ? "Visualizza" : "Compila"} fontSize="medium"/></View>
+        })} text={props.compilato != undefined ? "Visualizza" : "Compila"} fontSize="medium"/></View>
+    </View>
     </View>
   )
 }
@@ -43,6 +51,10 @@ export default function CopertinaQuestionario(props) {
     padding:10
     },
 
+    text: {
+      alignSelf:"flex-end"
+    },
+
     title: {
      alignSelf: "center",
      borderBottomWidth:1,
@@ -51,6 +63,10 @@ export default function CopertinaQuestionario(props) {
 
     button: {
       alignSelf:"flex-end"
+    },
+
+    secondline: {
+      flex:0, flexDirection: "row",justifyContent: "space-between",alignItems: "baseline"
     }
 
 })

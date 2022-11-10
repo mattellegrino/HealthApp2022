@@ -30,9 +30,15 @@ export default function Domanda(props) {
        <Text style={s.header(3,"medium")}>{props.testo}</Text>
      </View>
      <View style={{flex:4}}>
-      {props.risposte && props.risposte.map((risposta,i)=> (
-        <RadioButton questionAnswer = {props.questionAnswer} id={risposta.id} checked={checked} key={i} number={i} risposta={risposta.text} handlechecked = {handlechecked} />
+      
+      {props.compilato!=undefined && props.risposte.map((risposta,i)=> (
+        <RadioButton compilato={true} compiledAnswer = {props.compiledAnswer} id={risposta.id} checked={checked} key={i} number={risposta.id} risposta={risposta.text} />
       ))}
+
+      {props.compilato==undefined && props.risposte && props.risposte.map((risposta,i)=> (
+        <RadioButton compilato={false} questionAnswer = {props.questionAnswer} id={risposta.id} checked={checked} key={i} number={risposta.id} risposta={risposta.text} handlechecked = {handlechecked} />
+      ))}
+
     </View>
    </View>  
   )

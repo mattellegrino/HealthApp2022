@@ -1,4 +1,4 @@
-import {View, Text, Pressable, ActivityIndicator} from "react-native";
+import {View, ScrollView, Text, Pressable, ActivityIndicator} from "react-native";
 import React, {useEffect, useState} from "react";
 import Navbar from "../../CustomNavbar/CustomNavbar";
 import CustomButton from "../../CustomButton/CustomButton";
@@ -9,7 +9,7 @@ import CustomNavbar from "../../CustomNavbar/CustomNavbar";
 import PatientQuestionnaire from "../../../classes/PatientQuestionnaire";
 import Question from "../../../classes/Question";
 import QuestionnaireTemplate from "../../../classes/QuestionnaireTemplate";
-import QuestionAnswered from "../../../classes/QuestionAnswered";
+import QuestionnaireAnswered from "../../../classes/QuestionnaireAnswered";
 const s = require("../../../core/styles");
 
 
@@ -51,8 +51,9 @@ export default function Questionari({navigation,route}) {
         fetch(`http://${global.enrico}:8080/api/patients/${global.id}/questionnaires`)
             .then((response) => response.json())
             .then((json) =>{
-                setQuestsCompilati(json.map(json => QuestionAnswered.from(json)))
-                console.log(json.map(json => QuestionAnswered.from(json)))
+                console.log(json.map(json => QuestionnaireAnswered.from(json)))
+                setQuestsCompilati(json.map(json => QuestionnaireAnswered.from(json)))
+              
             })
             .catch((error) => { console.error(error)})
             .finally(() => setLoadingQuests(false));
@@ -81,7 +82,7 @@ export default function Questionari({navigation,route}) {
 
 
   return (
-    <View style={{ flex:8,padding:10, width:"100%", backgroundColor:"#FFFFFF"}}>
+    <ScrollView style={{ flex:8,padding:10, width:"100%", backgroundColor:"#FFFFFF"}}>
          
        <CustomNavbar type={"questionari"} isSelected={isSelected} selezioni={["Tutti","Compilare","Compilati"]} handleselection={handleselection}/>
 
@@ -90,9 +91,7 @@ export default function Questionari({navigation,route}) {
         , flexDirection: "column", justifyContent: "space-around", alignItems: "center"}}>
            
       {quests.map((quest,i) => (
-
-        <CopertinaQuestionario update={update} key={i} titolo={quest.name} domande_e_risposte={quest.questions} questionnaireTemplateId={quest.id}></CopertinaQuestionario>
-
+        <CopertinaQuestionario submissionDate={questsCompilati.find((el) => el.name == quest.name) != undefined ? quest.submissionDate : "T"} compilato={questsCompilati.find((el) => el.name == quest.name)} compiledAnswers={(questsCompilati.find((el) => el.name == quest.name)!= undefined) ? quest.questionAnswers : ""} update={update} key={i} titolo={quest.name} domande_e_risposte={isSelected == "Compilati" ? quest.questionnaireTemplate.questions : quest.questions} questionnaireTemplateId={quest.id}></CopertinaQuestionario>
 
         ))}       
            
@@ -144,6 +143,6 @@ export default function Questionari({navigation,route}) {
             </View>
         </View>
 
-    </View>
+    </ScrollView>
   );
 }

@@ -9,7 +9,7 @@ class PatientQuestionnaire{
     }
 
     static from(json){
-        return new PatientQuestionnaire(json.id, json.description, json.submissionDate, json.questionAnswers, json.questionnaireTemplate, json.patient);
+        return new PatientQuestionnaire(json.id, json.description, json.questionnaireTemplate.name, json.submissionDate, json.questionAnswers, json.questionnaireTemplate, json.patient);
     }
 }
 

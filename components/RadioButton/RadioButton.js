@@ -12,14 +12,22 @@ export default function RadioButton(props) {
 
   return (
     <View style={{flex:1,flexDirection:"row",alignItems: "center"}}>
-       <Pressable style={{padding:10,flex:1,flexDirection:"row",alignItems: "center"}} onPress={()=> handleinvio(props.number,props.risposta,props.id)}>
+
+      {!props.compilato && <Pressable style={{padding:10,flex:1,flexDirection:"row",alignItems: "center"}} onPress={()=> handleinvio(props.number,props.risposta,props.id)}>
         {props.questionAnswer != null && 
           <View key={props.number} style={(props.questionAnswer.chosenAnswer.id) == props.number ? styles.buttonRispostaSelected(true) : styles.buttonRispostaSelected(false)}>
             {/*<Text style={s.body(props.checked == props.number ? "medium" : "regular","black")}>{props.risposta}</Text>*/}
             <Text style={styles.text(props.risposta)}>{props.risposta}</Text>
          </View>
         }
-        </Pressable> 
+        </Pressable>}
+
+        {props.compilato && <View key={props.number} style={(props.compiledAnswer.chosenAnswer.id) == props.number ? styles.buttonRispostaSelected(true) : styles.buttonRispostaSelected(false)}>
+            {/*<Text style={s.body(props.checked == props.number ? "medium" : "regular","black")}>{props.risposta}</Text>*/}
+            <Text style={styles.text(props.risposta)}>{props.risposta}</Text>
+         </View>
+        }
+
    </View> 
   )
 }
