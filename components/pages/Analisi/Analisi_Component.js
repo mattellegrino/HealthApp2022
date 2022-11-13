@@ -12,7 +12,7 @@ const Analisi_Component = (props) => {
       <View><Text style={[s.body("bold"),styles.title]}>Analisi del {props.date}</Text></View>
       <View style={styles.button}><CustomButton onPress={()=> navigation.navigate("Analisi_Output", {
         analisi_data: props.analisi_data
-      })} text={"Visualizza"} fontSize={"small"} button="first" ></CustomButton></View>
+      })} text={"VISUALIZZA"} fontSize={"small"} button="first" ></CustomButton></View>
     </View>
   )
 }
