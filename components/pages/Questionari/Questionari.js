@@ -12,7 +12,7 @@ const s = require("../../../core/styles");
 
 
 
-export default function Questionari({navigation: {goBack},route}) {
+export default function Questionari({navigation,route}) {
 
   const [isSelected,setIsSelected] = useState("Compilare");
   const [isLoadingQuests, setLoadingQuests] = useState(true);
@@ -20,7 +20,6 @@ export default function Questionari({navigation: {goBack},route}) {
   const [allQuests, setAllQuests] = useState([]);
   const [questsTodo, setQuestsTodo] = useState([]);
   const [questsCompilati, setQuestsCompilati] = useState([]);
-  const {update} = route.params;
 
   let getQuestionnairesCompiled,getQuestionnairesAvailable;
 
@@ -102,6 +101,8 @@ export default function Questionari({navigation: {goBack},route}) {
 
     useEffect( () => {
         getQuestionnairesAvailable();
+        setIsSelected("Compilare");
+        console.log("aggiorno");
     }, [route.params]);
     useEffect( () => {
       getQuestionnairesAvailable();
@@ -118,7 +119,7 @@ export default function Questionari({navigation: {goBack},route}) {
         , flexDirection: "column", justifyContent: "space-around", alignItems: "center"}}>
 
 
-      {quests.length == 0 && 
+      {isLoadingQuests ? <ActivityIndicator/> : quests.length == 0 &&
       
       <View style={styles.scrittaquestionari}>
         <Text style={s.header(3,"bold")}> Nessun questionario {isSelected == "Compilare" ? "da compilare" : "compilato"}</Text>
@@ -126,13 +127,12 @@ export default function Questionari({navigation: {goBack},route}) {
       
       }  
 
-
-
-      {quests.map((quest,i) => (
+      {isLoadingQuests ? <ActivityIndicator/> : 
+      quests.map((quest,i) => (
         <CopertinaQuestionario submissionDate={ questsCompilati.find((el) => el.name === quest.name) !== undefined ? formatDate() : "error" }
                                compilato={questsCompilati.find((el) => el.name === quest.name)}
                                compiledAnswers={(questsCompilati.find((el) => el.name === quest.name)!== undefined) ? quest.questionAnswers : "error"}
-                               update={update} key={i} titolo={quest.name}
+                               key={i} titolo={quest.name}
                                domande_e_risposte={isSelected === "Compilati" ? quest.questionnaireTemplate.questions : quest.questions}
                                questionnaireTemplateId={quest.id}></CopertinaQuestionario>
 

@@ -31,7 +31,7 @@ const Peso = ({navigation}) => {
       </View>
       <View style={{ flex: 1 }}>
         <CustomButton
-          fontSize="big"
+          fontSize="medium"
           text={isLoading ? "Salva" :
               (finished?"Fatto":<ActivityIndicator/>)}
           onPress={async () => {

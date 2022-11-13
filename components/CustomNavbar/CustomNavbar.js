@@ -6,8 +6,8 @@ const s = require("../../core/styles");
 export default function CustomNavbar(props) {
   return (
     <View style={styles.container}>
-        <Card cornerRadius={10} elevation={3} style={{
-           flex:0,
+        <Card cornerRadius={10} elevation={5} style={{
+           flex:1,
            backgroundColor:"white",
            flexDirection:"row",
            justifyContent:"space-between", 

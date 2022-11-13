@@ -5,6 +5,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Card } from "react-native-shadow-cards";
 const s = require("../../../core/styles");
 import { Avatar } from 'react-native-paper';
+import CustomButton from '../../CustomButton';
 const Profilo = ({navigation,route}) =>  {
     const [isLoading, setLoading] = useState(true);
     const [profValues,setprofValues] = useState([]);
@@ -41,29 +42,12 @@ const Profilo = ({navigation,route}) =>  {
                 </View>
             </View>
                 <View style={{flex:3, width:"80%", alignSelf:"center"}}>
-                    <Generalità nome="Sesso" valore={props.gender}></Generalità>
-                    <Generalità nome="Data di nascita" valore={props.birth_date}></Generalità>
-                    <Generalità nome="Altezza" valore={props.height}></Generalità>
-                    <Generalità nome="Peso" valore={props.weight}></Generalità>
+                    <Generalità nome="Sesso" valore={props.gender} unità={""}></Generalità>
+                    <Generalità nome="Data di nascita" valore={props.birth_date} unità ={""}></Generalità>
+                    <Generalità nome="Altezza" valore={props.height} unità={"cm"}></Generalità>
+                    <Generalità nome="Peso" valore={props.weight} unità={"kg"} button={<CustomButton onPress={()=> navigation.navigate("Peso")} text={"MODIFICA"} fontSize="small"></CustomButton> }></Generalità>
                 </View>
-
-                <Pressable style={{flex:2}}onPress={()=> navigation.navigate("Peso")}>
-                    <View style={{flex: 2, alignItems:"center", justifyContent:"center"}}>
-                    <Card cornerRadius={10}
-                            style={{
-                                backgroundColor: "#FFF9C4",
-                                flex: 0,
-                                width: "90%",
-                                marginBottom: 15,
-                                alignItems: "center",
-                                padding:20, borderRadius:20, flexDirection:"row"
-                                }}
-                            >
-                        <Ionicons name="bar-chart" size={24} color="#F9A825" /> 
-                        <Text style={[s.header(4,"regular"),{color:"#000",marginLeft:"20%"}]}> Inserisci il tuo peso </Text>    
-                    </Card> 
-                    </View>
-                    </Pressable>
+           
             </View>
     );
 

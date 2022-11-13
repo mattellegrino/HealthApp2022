@@ -176,7 +176,7 @@ const getQuestionnairesAvailable = () => {
       backAction
     );
     return () => backHandler.remove();*/
-  }, []);
+  }, [route.params]);
 
   const image = "../Homepage/background.png";
 
@@ -383,7 +383,7 @@ const getQuestionnairesAvailable = () => {
               >
 
               <View><Text>Hai ancora</Text></View>
-                <Text style={s.header(2,"bold")}>{questsTodo.length}</Text>
+                <Text style={s.header(1,"bold")}>{questsTodo.length}</Text>
               <View>
                 <Text>{questsTodo.length == 1 ? "questionario" : "questionari"}</Text>
                 <Text>da compilare</Text>
@@ -431,7 +431,7 @@ const getQuestionnairesAvailable = () => {
                   */}
                   </View>
 
-              <View
+              {/*<View
                 style={{
                   flex: 1,
                   width: "100%",
@@ -443,7 +443,7 @@ const getQuestionnairesAvailable = () => {
                   return  <AlimentazioneRow key={i} titolo={questTemplate.name}></AlimentazioneRow>
                 })}
                
-              </View>
+              </View>*/}
             </Card>
           </Pressable>
 

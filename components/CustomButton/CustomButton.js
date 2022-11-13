@@ -1,21 +1,61 @@
-import React from 'react'
-import {View, Text,Pressable} from "react-native";
+import React, {useState} from 'react'
+import {View, Text,Pressable,StyleSheet} from "react-native";
 const s = require("../../core/styles");
-const  CustomButton = ({onPress,text,button,fontSize}) => {
+export default function CustomButton ({onPress, text,button,fontSize}){
+
+    const [shadow,setShadow] = useState(true);
 
     return (
-        <View style={{alignItems: "center"}}>
-        <Pressable onPress={onPress} style={button === "first" ? s.primary_button : button === "second" ? s.secondary_button : s.tertiary_button}>
-              {button === "first" 
-                ? <Text style={s.primary_button_text(fontSize)}> {text} </Text>
-                : button === "second" ?
-                <Text style={s.secondary_button_text(fontSize)}> {text} </Text>
-                : 
-                <Text style={s.tertiary_button_text(fontSize)}> {text} </Text>}
-        </Pressable>
+    <View style={{alignItems: "center"}}>
+        <View style={{width:"100%",position: "relative"}}>
+            <Pressable onPress={onPress} onPressIn={()=>setShadow(false)} onPressOut ={()=> setShadow(true)} style={button === "first" ? s.primary_button : button === "second" ? s.secondary_button : s.tertiary_button}>
+                {button === "first" 
+                    ? <Text style={s.primary_button_text(fontSize)}> {text} </Text>
+                    : button === "second" ?
+                    <Text style={s.secondary_button_text(fontSize)}> {text} </Text>
+                    : 
+                    <Text style={s.tertiary_button_text(fontSize)}> {text} </Text>}
+            </Pressable>
+            {shadow && 
+         <View style={button === "first" ? styles.shadow_primary : button === "second" ? styles.shadow_secondary : styles.shadow_tertiary}>
         </View>
+        }
+        </View>
+       
+    </View>    
     );
 
 };
 
-export default CustomButton
+const styles = StyleSheet.create({
+
+        shadow_primary: {
+            position:"absolute",
+            elevation: -1,
+            width:"100%",
+            top:"50%",
+            borderRadius:10,
+            padding:10,
+            backgroundColor:"black"
+        },
+
+        shadow_secondary: {
+            position:"absolute",
+            elevation: -1,
+            width:"100%",
+            top:"50%",
+            borderRadius:10,
+            backgroundColor:"black"
+        },
+
+        shadow_tertiary: {
+            position:"absolute",
+            elevation: -1,
+            width:"100%",
+            top:"50%",
+            borderRadius:10,
+            padding:10,
+            backgroundColor:"#A47119"
+        }
+
+    }) 

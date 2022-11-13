@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState} from 'react'
 import {
     View,
     SafeAreaView,
+    StyleSheet,
     ActivityIndicator,
     Alert, Keyboard
 } from 'react-native'
@@ -213,12 +214,14 @@ const SignInPage = ({ navigation }) =>  {
             <View style={styles.root}>
                 <CustomInput placeholder="Username"  value={username} setValue={setUsername}  onFocus={() => handleError(null, 'username')} error={errors.username}  />
                 <CustomInput placeholder="Password"  value={password} setValue={setPassword} secureTextEntry={true}  onFocus={() => handleError(null, 'password')} error={errors.password} />
+              <View style={styles.loginButton}>
                 <CustomButton  onPress={
                     validate
                 } button={"first"} text={isLoading ? "Accedi" :
                     (loggedUser?"Loggato":<ActivityIndicator/>)
                 }
                 />
+              </View>  
             </View>
         </SafeAreaView>
     );

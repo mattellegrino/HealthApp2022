@@ -1,10 +1,10 @@
 import { View, Text, Image, Pressable, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
-import { Card } from "react-native-shadow-cards";
 import React, {useState} from 'react'
 import CustomButton from "../../CustomButton";
 const s = require("../../../core/styles");
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Card } from 'react-native-shadow-cards';
 
 export default function CopertinaQuestionario(props) {
     const navigation = useNavigation();
@@ -13,13 +13,15 @@ export default function CopertinaQuestionario(props) {
 
   return (
   
-    <View style={styles.container}>
-    <View><Text style={[s.header(3,"bold"),styles.title]}>{props.titolo}</Text></View>
+    <Card elevation={5} style={styles.container}>
+      <View style={styles.firstline}>
+        <View><Text style={[s.header(3,"bold"),styles.title]}>{props.titolo}</Text></View>
+      </View>
     <View style={styles.secondline}>
       
       <Text style={styles.text}> {props.compilato !==undefined && ("Compilato il  " + props.submissionDate/*props.submissionDate.split("T")[0]*/)} </Text>
     
-    <View style={styles.button}>
+     <View style={styles.button}>
       <CustomButton onPress={()=>navigation.navigate("Questionario", {
           nomequestionario : props.titolo,
           domande_e_risposte : props.domande_e_risposte,
@@ -28,11 +30,11 @@ export default function CopertinaQuestionario(props) {
            ip_add: props.ip_add,
            user:props.user,
            compilato:props.compilato,
-           update:props.update,
             questionnaireTemplateId: props.questionnaireTemplateId
-        })} text={props.compilato !== undefined ? "Visualizza" : "Compila"} fontSize="medium"/></View>
+        })} text={props.compilato !== undefined ? "VISUALIZZA" : "COMPILA"} fontSize="small"/> 
+        </View>
     </View>
-    </View>
+    </Card>
   )
 }
 
@@ -46,9 +48,8 @@ export default function CopertinaQuestionario(props) {
     height: "20%",
     justifyContent:"space-between",
     borderRadius: 20,
-    borderWidth: 1,
     margin:30,
-    padding:10
+    padding:15
     },
 
     text: {
@@ -62,7 +63,11 @@ export default function CopertinaQuestionario(props) {
     },
 
     button: {
-      alignSelf:"flex-end"
+      alignSelf:"flex-end",
+    },
+
+    firstline: {
+     marginBottom:10
     },
 
     secondline: {

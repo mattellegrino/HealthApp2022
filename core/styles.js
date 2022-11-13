@@ -98,22 +98,54 @@ module.exports = StyleSheet.create({
     padding: 30,
   },
 
+  loginButton: {
+    flex:1,
+    flexDirection: "row",
+    alignSelf: "center"
+  },
+
   primary_button: {
+    position: "relative",
     backgroundColor: "#4E67EB",
     borderRadius: 10,
+    shadowColor: "#000000",
+       shadowOpacity: 0.8,
+       shadowRadius: 2,
+       shadowOffset: {
+         height: 1,
+         width: 1
+       }
   },
   secondary_button: {
+    position: "relative",
     backgroundColor: "#fff",
     borderColor: "#4E67EB",
     borderRadius: 10,
+    shadowColor: "#000000",
+       shadowOpacity: 0.8,
+       shadowRadius: 2,
+       shadowOffset: {
+         height: 1,
+         width: 1
+       }
   },
   tertiary_button: {
+    position: "relative",
     backgroundColor: "#F9A825",
     borderRadius: 10,
-    borderColor: "#F9A825"
+    height:35,
+    borderColor: "#F9A825",
+    shadowColor: "#fff",
+       shadowOpacity: 0.8,
+       shadowRadius: 2,
+       shadowOffset: {
+         height: 10,
+         width: 10
+       }
   },
 
   multichoicebutton_selected : type => ({
+   width:"100%",
    backgroundColor: type == "questionari" ? "#FFF9C4" : type == "attività" ? "#000" : "#1565C0",
    borderRadius:20, 
    padding:10,
@@ -137,26 +169,45 @@ module.exports = StyleSheet.create({
 
     padding: 8,
     paddingHorizontal: 20,
-    fontSize: size=="medium" ? 15 : size=="big" ? 20 : 10,
-    color: "white"
-
+    fontSize: size=="medium" ? 15 : size=="big" ? 20 : 13,
+    color: "white",
+    shadowColor: "#000000",
+       shadowOpacity: 0.8,
+       shadowRadius: 2,
+       shadowOffset: {
+         height: 1,
+         width: 1
+       }
   }),
 
   secondary_button_text : size => ({
-
     padding: 8,
     paddingHorizontal: 20,
-    fontSize: size=="medium" ? 15 : size=="big" ? 20 : 10,
-    color: "#4E67EB"
+    fontSize: size=="medium" ? 15 : size=="big" ? 20 : 13,
+    color: "#4E67EB",
+    shadowColor: "#000000",
+       shadowOpacity: 0.8,
+       shadowRadius: 2,
+       shadowOffset: {
+         height: 1,
+         width: 1
+       }
 
   }),
 
   tertiary_button_text : size => ({
-
     padding: 8,
+    fontWeight: "bold",
     paddingHorizontal: 20,
-    fontSize: size=="medium" ? 15 : size=="big" ? 20 : 10,
-    color: "#FFF"
+    fontSize: size=="medium" ? 15 : size=="big" ? 20 : 13,
+    color: "#FFF",
+    shadowColor: "#000000",
+       shadowOpacity: 0.8,
+       shadowRadius: 2,
+       shadowOffset: {
+         height: 10,
+         width: 10
+       }
 
   }),
 

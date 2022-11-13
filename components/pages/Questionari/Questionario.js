@@ -19,6 +19,10 @@ export default function Questionario({route,navigation},props) {
   const [questCompilato,setQuestCompilato] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [changed,setChanged] = useState(false);
+  const [shadow,setShadow] = useState(true);
+  const handleShadow = (value) => {
+    setShadow(value);
+  }
 
   let getQuestsById,getPatientById,patientQuestionnaire;
   /* backend part */
@@ -84,7 +88,6 @@ export default function Questionario({route,navigation},props) {
 
     if(compilato===undefined) {
 
-
     if(questCompilato){
       submitQuestionnaire();
     }
@@ -94,9 +97,7 @@ export default function Questionario({route,navigation},props) {
 }
 
 else
-navigation.navigate('Questionari',{
-  update:!update
-});
+navigation.navigate('Questionari');
   }
 
   useEffect(() => {
@@ -157,11 +158,12 @@ navigation.navigate('Questionari',{
                 risposte={domande_e_risposte[n_domanda] ? domande_e_risposte[n_domanda].possibleQuestionAnswer : ""}></Domanda>
         }
        </View>  
-      <View style={{flex:1, flexDirection:"row", width: "80%", justifyContent: "space-around"}}>
+      <View style={{flex:1, flexDirection:"row", width: "80%",justifyContent: "space-around"}}>
       {n_domanda > 0 && (
-        <CustomButton button="second" onPress={()=> setNumeroDomanda(n_domanda - 1)} text="Precedente" fontSize="medium"/> )}
-      {n_domanda + 1 === domande_e_risposte.length ? <CustomButton onPress={handleSubmitQuestionaire} fontSize="medium" text={compilato ? "Chiudi" : "Concludi"}></CustomButton> :
-        <CustomButton onPress={()=> setNumeroDomanda(n_domanda + 1)} text="Prossima" fontSize="medium"/>}
+        <CustomButton button="second" onPress={()=> setNumeroDomanda(n_domanda - 1)} text="PRECEDENTE" fontSize="small"/> )}
+      {n_domanda + 1 === domande_e_risposte.length ? 
+        <CustomButton onPress={handleSubmitQuestionaire} fontSize="small" text={compilato ? "CHIUDI" : "CONCLUDI"}></CustomButton> :
+        <CustomButton onPress={()=> setNumeroDomanda(n_domanda + 1)} text="PROSSIMA" fontSize="small"/>}
       </View>
     </View>
   );
