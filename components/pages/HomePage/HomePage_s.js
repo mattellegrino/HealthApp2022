@@ -140,8 +140,8 @@ const getTodayHrValue = (today) => {
 
     useEffect(() => {
     let  currentDate = new Date();
-    getTodaySteps("2022-10-10");
-    getTodayHrValue("2022-10-10");
+    getTodaySteps("2022-11-14");
+    getTodayHrValue("2022-11-14");
 
         setGiorno(currentDate);
     let steps_day = mockbardatadaysteps.steps;

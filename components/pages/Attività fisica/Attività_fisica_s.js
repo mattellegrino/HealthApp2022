@@ -521,30 +521,7 @@ export default function Attività_fisica_s({ route }) {
 
     //Converto i passi dell'ultima settimana nell'array da mettere nel grafico
 
-
-    let _bardataweek = mockbardataweek.map((el) => {
-      el.value = el.steps;
-
-      if(tipoUtente == "sperimentale"){
-        if (el.value < redthreshold) el.frontColor = "red";
-        else if (el.value >= redthreshold && el.value < orangethreshold)
-          el.frontColor = "orange";
-        else if (el.value >= orangethreshold && el.value < yellowthreshold)
-          el.frontColor = "#FFEA00";
-        else if (el.value >= yellowthreshold) el.frontColor = "green";
-      }
-
-      else
-        el.frontColor = "grey";
-      el.label = convertDateintoDayoftheWeek(el.date);
-
-      el.dataPointLabelComponent = <LabelComponent/>
-
-
-      return el;
-    });
-
-    setBarDataWeek(_bardataweek);
+    fillDates(firstweekdayapi,lastweekdayapi);
 
 
     //Converto i passi dell'ultimo mese nell'array da mettere nel grafico
