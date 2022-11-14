@@ -18,11 +18,6 @@ import * as Progress from "react-native-progress";
 import LabelComponent from "./LabelComponent";
 export default function Attività_fisica_s({ route }) {
 
-  const [isLoading, setLoading] = useState(true);
-  const [hrValues,setHrValues] = useState([]);
-  let mockbardataday
-  const mocklinedatadayhr = hrValues
-
   const mockbardataweek = [
     { steps: 2000, date: "2022-06-20" },
     { steps: 3000, date: "2022-06-21" },
@@ -215,6 +210,14 @@ export default function Attività_fisica_s({ route }) {
         dayafter.setDate(variableGiornoDate.getDate() + 1);
         let dayafterforapi = formatDate(dayafter);
         //Inserire API per sonno giornaliero: /api/patients/{patientID}/activities/steps (startDate=dayafterforapi, endDate=dayafterforapi)
+        getSteps(dayafterforapi,dayafterforapi).then((_steps) => {
+            setNumStepsDone(_steps[0].steps)
+        }
+      ).catch((err) => setNumStepsDone(0));
+
+        getHrValues(dayafterforapi,dayafterforapi).then((_hrValues) => {
+          setHrRest(_hrValues[0].rest)
+        }).catch((err) => setHrRest("-"));
         setRangeTime(getday(dayafter));
         setVariableGiornoDate(dayafter);
         break;
@@ -273,6 +276,15 @@ export default function Attività_fisica_s({ route }) {
       case "Giorno": {
         var daybefore = new Date(getdayconvertible(variableGiornoDate));
         daybefore.setDate(variableGiornoDate.getDate() - 1);
+        let daybeforeforapi = formatDate(daybefore);
+        getSteps(daybeforeforapi,daybeforeforapi).then((_steps) => {
+              setNumStepsDone(_steps[0].steps)
+            }
+        ).catch((err) => setNumStepsDone(0));
+
+        getHrValues(daybeforeforapi,daybeforeforapi).then((_hrValues) => {
+          setHrRest(_hrValues[0].rest)
+        }).catch((err) => setHrRest("-"));
         setRangeTime(getday(daybefore));
         setVariableGiornoDate(daybefore);
         break;
@@ -508,6 +520,7 @@ export default function Attività_fisica_s({ route }) {
     setVariableLastMonthDay(lastmonthday);
 
     //Converto i passi dell'ultima settimana nell'array da mettere nel grafico
+
 
     let _bardataweek = mockbardataweek.map((el) => {
       el.value = el.steps;
