@@ -236,6 +236,8 @@ export default function Attività_fisica_s({ route }) {
 
         //Inserire API per passi settimanale: /api/patients/{patientID}/activities/steps (startDate=firstdayafterforapi, endDate=lastdayafterforapi)
 
+        fillDates(firstdayafterforapi,lastdayafterforapi);
+
         setVariableFirstWeekDay(firstdayafter);
         setVariableLastWeekDay(lastdayafter);
         setRangeTime(firstday_string + " - " + lastday_string);
@@ -303,7 +305,7 @@ export default function Attività_fisica_s({ route }) {
         let lastday_string = getday(lastdaybefore);
 
         //Inserire API per sonno settimanale: /api/patients/{patientID}/sleep/duration (startDate=firstdayafterforapi, endDate=lastdayafterforapi)
-
+        fillDates(firstdaybeforeforapi,lastdaybeforeforapi);
         setRangeTime(firstday_string + " - " + lastday_string);
         break;
       }
@@ -478,6 +480,61 @@ export default function Attività_fisica_s({ route }) {
   }
 
 
+  const fillDates = async (firstweekdayapi,lastweekdayapi) => {
+    let giorniesistenti = [];
+
+    getSteps(firstweekdayapi,lastweekdayapi).then((_stepsweek) => {
+
+          _stepsweek.forEach((dayelement) => {
+            giorniesistenti.push(dayelement);
+          })
+
+          let _date;
+          if(_stepsweek.length > 0)
+          {
+            _date= new Date(giorniesistenti[giorniesistenti.length - 1].date);
+          }
+          else _date = new Date(firstweekdayapi);
+
+          let length = giorniesistenti.length;
+          for (let i = 0; i < 7 - length; i++) {
+            _date.setDate(_date.getDate() + 1);
+            let tempdatestring = _date.toISOString().split("T")[0];
+            let stepdayobject = {"date": tempdatestring, "steps": 0}
+            giorniesistenti.push(stepdayobject);
+          }
+          let _bardataweek = giorniesistenti.map((el) => {
+            el.value = el.steps;
+
+            if (tipoUtente === "sperimentale") {
+              if (el.value < redthreshold) el.frontColor = "red";
+              else if (el.value >= redthreshold && el.value < orangethreshold)
+                el.frontColor = "orange";
+              else if (el.value >= orangethreshold && el.value < yellowthreshold)
+                el.frontColor = "#FFEA00";
+              else if (el.value >= yellowthreshold) el.frontColor = "green";
+            } else
+              el.frontColor = "grey";
+            el.label = convertDateintoDayoftheWeek(el.date);
+
+            el.dataPointLabelComponent = <LabelComponent/>
+
+
+            return el;
+          });
+          setBarDataWeek(_bardataweek);
+      let average_weekly_steps = media(_bardataweek);
+
+      setNumStepsDone(average_weekly_steps.toFixed(0));
+      handleColorNumStepsDone(average_weekly_steps);
+        }
+    ).catch((err) => {
+      console.log(err);
+
+    })
+  }
+
+
   useEffect(() => {
     let dateforapi = formatDate(date); //variabile da inserire nell'API per ricavare il sonno giornaliero
 
@@ -507,9 +564,11 @@ export default function Attività_fisica_s({ route }) {
     var last = first + 6;
     let firstweekday = new Date(currdate.setDate(first));
     setFirstWeekDay(firstweekday);
+    let firstweekdayapi = formatDate(firstweekday);
     setVariableFirstWeekDay(firstweekday);
     let lastweekday = new Date(currdate.setDate(last));
     setLastWeekDay(lastweekday);
+    let lastweekdayapi = formatDate(lastweekday);
     setVariableLastWeekDay(lastweekday);
 
     let firstmonthday = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -587,7 +646,7 @@ export default function Attività_fisica_s({ route }) {
           setNumStepsDone(bardataday);
 
           handleColorNumStepsDone(bardataday);
-        }
+}
 
         if(linedatadayhr) {
           setHrRest(linedatadayhr);
