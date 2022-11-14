@@ -38,9 +38,10 @@ export default function Analisi({navigation}) {
     return (
             
         <ScrollView style={styles.container}>
-
-          <View style={styles.button}>
-           <CustomButton onPress={()=> navigation.navigate('Inserimento Analisi')} text={"Inserisci nuova analisi"} button={"first"} fontSize={"medium"}/> 
+          <View>  
+            <View style={styles.button}>
+            <CustomButton onPress={()=> navigation.navigate('Inserimento Analisi')} text={"Inserisci nuova analisi"} button={"first"} fontSize={"small"}/> 
+            </View>
         {isLoading ? <ActivityIndicator/> :
             (
                 bloodValues.map((analisi,i) => (
@@ -62,8 +63,14 @@ const styles = StyleSheet.create({
         backgroundColor:"white"
     },
 
+    analisi: {
+        flex:1,
+        marginTop: 30,
+    },
+
     button: {
-        marginTop: 40,
+        alignSelf: "center"
+        
     },
     analisi: {
         flex:1,

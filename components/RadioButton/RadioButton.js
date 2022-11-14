@@ -13,7 +13,7 @@ export default function RadioButton(props) {
   return (
     <View style={{flex:1,flexDirection:"row",alignItems: "center"}}>
 
-      {!props.compilato && <Pressable style={{padding:10,flex:1,flexDirection:"row",alignItems: "center"}} onPress={()=> handleinvio(props.number,props.risposta,props.id)}>
+      {!props.compilato && <Pressable style={styles.answer_container} onPress={()=> handleinvio(props.number,props.risposta,props.id)}>
         {props.questionAnswer != null && 
           <View key={props.number} style={(props.questionAnswer.chosenAnswer.id) == props.number ? styles.buttonRispostaSelected(true) : styles.buttonRispostaSelected(false)}>
             {/*<Text style={s.body(props.checked == props.number ? "medium" : "regular","black")}>{props.risposta}</Text>*/}
@@ -22,10 +22,13 @@ export default function RadioButton(props) {
         }
         </Pressable>}
 
-        {props.compilato && <View key={props.number} style={(props.compiledAnswer.chosenAnswer.id) == props.number ? styles.buttonRispostaSelected(true) : styles.buttonRispostaSelected(false)}>
+        {props.compilato && 
+      <View style={styles.answer_container}>
+        <View key={props.number} style={(props.compiledAnswer.chosenAnswer.id) == props.number ? styles.buttonRispostaSelected(true) : styles.buttonRispostaSelected(false)}>
             {/*<Text style={s.body(props.checked == props.number ? "medium" : "regular","black")}>{props.risposta}</Text>*/}
             <Text style={styles.text(props.risposta)}>{props.risposta}</Text>
          </View>
+      </View>   
         }
 
    </View> 
@@ -34,13 +37,19 @@ export default function RadioButton(props) {
 
 const styles = StyleSheet.create({
 
+  answer_container: {
+    flex:0,
+    padding:0,
+    flexDirection:"row",
+    alignItems: "center",
+
+  }, 
+
   buttonRispostaSelected: selected => ({ 
     borderRadius:50,
     height:"100%",
-    padding: 0,
-    flex:0,
+    padding: 10,
     alignItems: "center",
-    justifyContent: "center",
     width:"100%",
     backgroundColor: selected ? "#F9A825" : "#e2e2e2", 
     borderColor:"black"

@@ -32,8 +32,7 @@ const Peso = ({navigation}) => {
       <View style={{ flex: 1 }}>
         <CustomButton
           fontSize="medium"
-          text={isLoading ? "Salva" :
-              (finished?"Fatto":<ActivityIndicator/>)}
+          text={isLoading ? "Salva" : finished ? "Salvato" : "Salvataggio in corso.."}
           onPress={async () => {
               setIsLoading(false)
               let isValid=validate(peso);
@@ -72,10 +71,21 @@ async function postWeight(peso) {
                 if(response.ok)
                 {
                     setFinished(true);
+                    Alert.alert(
+                      "Peso",
+                      "Peso modificato correttamente!",
+                      [
+                        {
+                          text: "CHIUDI",
+                          onPress: () => navigation.navigate('Profilo',{
+                            invioPeso: true
+                          }),
+                          style: "cancel"
+                        },
+                      ]
+                    );
                     // go to main page
-                    navigation.navigate('Profilo',{
-                      invioPeso: true
-                    })
+                    
                 }
 
             })

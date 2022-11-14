@@ -18,7 +18,7 @@ export default function CustomNavbar(props) {
 
             <Pressable key={i} onPress={()=> props.handleselection(selezione)}>
             <View style={props.isSelected === selezione ? s.multichoicebutton_selected(props.type) : s.multichoicebutton_notselected}>
-            <Text style={props.isSelected === selezione && s.text_selected(props.type)}> {selezione} </Text>
+            <Text style={props.isSelected === selezione ? s.text_selected(props.type) : s.smalltext("bold")}> {selezione.toUpperCase()} </Text>
             </View> 
             </Pressable>
 

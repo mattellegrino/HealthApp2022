@@ -19,10 +19,7 @@ module.exports = StyleSheet.create({
     borderWidth: 1,
   },
   input_num: {
-    width: 100,
     padding: 10,
-    borderRadius: 10,
-    borderWidth: 1,
   },
 
     header: (type,weight,fontColor) => ({
@@ -162,12 +159,15 @@ module.exports = StyleSheet.create({
 
   text_selected : type =>  ({
     fontWeight: "500",
+    fontSize: 12,
     color: type == "questionari" ? "#BB530B" : type == "attività" ? "#fff" : "#fff",
   }),
+
 
   primary_button_text : size => ({
 
     padding: 8,
+    fontWeight: "bold",
     paddingHorizontal: 20,
     fontSize: size=="medium" ? 15 : size=="big" ? 20 : 13,
     color: "white",
@@ -182,6 +182,7 @@ module.exports = StyleSheet.create({
 
   secondary_button_text : size => ({
     padding: 8,
+    fontWeight: "bold",
     paddingHorizontal: 20,
     fontSize: size=="medium" ? 15 : size=="big" ? 20 : 13,
     color: "#4E67EB",

@@ -93,6 +93,7 @@ const Inserimento_Analisi = ({navigation}) => {
                     if(response.ok)
                     {
                         setFinished(true);
+                        Alert.alert("Analisi del sangue inviata!");
                         // go to main page
                         navigation.navigate('Impostazioni')
                     }
@@ -126,8 +127,8 @@ const Inserimento_Analisi = ({navigation}) => {
     };
 
   return (
-   <View style={styles.container}>
-             <ScrollView style={styles.scrollview}>
+   <View style={styles.scrollview}>
+             <ScrollView>
                 <AnalisiInput medicaldata={eritrociti}></AnalisiInput>
                 <AnalisiInput medicaldata={emoglobina}></AnalisiInput>
                 <AnalisiInput medicaldata={mcv}></AnalisiInput>
@@ -144,7 +145,7 @@ const Inserimento_Analisi = ({navigation}) => {
                 <AnalisiInput medicaldata={trigliceridi}></AnalisiInput>
                 <AnalisiInput medicaldata={pcr}></AnalisiInput>
 
-                <CustomButton  onPress={ async () => {
+                <View style={{alignSelf:"center",margin:20}}><CustomButton  onPress={ async () => {
                     setIsLoading(false)
                     let isValid=validate();
                     if(!isValid)
@@ -157,15 +158,11 @@ const Inserimento_Analisi = ({navigation}) => {
                         await postMedicalValues()
                     }
                 }
-                } button={"first"} text={isLoading ? "Manda analisi del sangue" :
-                    (finished?"Fatto":<ActivityIndicator/>)
-                }
+                } button={"first"} text={isLoading ? "Manda analisi del sangue" : "Invio in corso.."}
                  />
+                 </View>
             </ScrollView>
-        <View>
-                
-        </View>
-    </View>       
+    </View>            
   )
 }
 
@@ -180,8 +177,7 @@ const styles = StyleSheet.create({
     },
 
     scrollview: {
-        flex:3,
-        height: Dimensions.get("window").height + 20,
+        flex:1,
         width:"100%", 
         alignSelf:"center",
         padding:0
