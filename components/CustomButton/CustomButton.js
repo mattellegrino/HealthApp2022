@@ -6,23 +6,23 @@ export default function CustomButton ({onPress, text,button,fontSize}){
     const [shadow,setShadow] = useState(true);
 
     return (
-    <View style={{alignItems: "center"}}>
+    <Pressable onPress={onPress} onPressIn={()=>setShadow(false)} onPressOut ={()=> setShadow(true)}  style={{alignItems: "center"}}>
         <View style={{width:"100%",position: "relative"}}>
-            <Pressable onPress={onPress} onPressIn={()=>setShadow(false)} onPressOut ={()=> setShadow(true)} style={button === "first" ? s.primary_button : button === "second" ? s.secondary_button : s.tertiary_button}>
+            <View style={button === "first" ? s.primary_button : button === "second" ? s.secondary_button : s.tertiary_button}>
                 {button === "first" && text
                     ? <Text style={s.primary_button_text(fontSize)}> {text.toUpperCase()} </Text>
                     : button === "second" && text ?
                     <Text style={s.secondary_button_text(fontSize)}> {text.toUpperCase()} </Text>
                     : 
                     <Text style={s.tertiary_button_text(fontSize)}> {text.toUpperCase()} </Text>}
-            </Pressable>
+            </View>
             {shadow && 
          <View style={button === "first" ? styles.shadow_primary : button === "second" ? styles.shadow_secondary : styles.shadow_tertiary}>
         </View>
         }
         </View>
        
-    </View>    
+    </Pressable>    
     );
 
 };
