@@ -441,30 +441,30 @@ export default function Attività_fisica_s({ route }) {
     );
   };
 
-
-
-  const getHrValuesById = (startDate,endDate) => {
-    fetch(`http://${global.enrico}:8080/api/patients/${global.id}/hrs/rest?startDate=${startDate}&endDate=${endDate}`)
-        .then((response) => response.text())
-        .then((json) =>{
-          let hrValues = JSON.parse(json);
-          console.log("Hr values => " + json)
-          setHrValues(hrValues)})
-        .catch((error) => {
-          console.log(error.message);
-          throw error})
-        .finally(() => {
-          setLoading(false)
-          return hrValues
-        });
+  async function getSteps(startDate,endDate) {
+    const response = await fetch(`http://${global.enrico}:8080/api/patients/${global.id}/activities/steps?startDate=${startDate}&endDate=${endDate}`);
+    const steps= await response.json();
+    if (response.ok)
+    {
+      return steps;
+    }
+    else {
+      throw steps;
+    }
   }
 
+  async function getHrValues(startDate,endDate) {
+    const response = await fetch(`http://${global.enrico}:8080/api/patients/${global.id}/hrs/rest?startDate=${startDate}&endDate=${endDate}`);
+    const hrValues= await response.json();
+    if (response.ok)
+    {
+      return hrValues;
+    }
+    else {
+      throw hrValues;
+    }
+  }
 
-  useEffect(() => {
-    let date = new Date()
-    date.setDate(date.getDate() - 1);
-    mockbardataday= getHrValuesById(formatDate(date),formatDate(date));
-  }, []);
 
   useEffect(() => {
     let dateforapi = formatDate(date); //variabile da inserire nell'API per ricavare il sonno giornaliero
