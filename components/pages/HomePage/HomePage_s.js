@@ -6,22 +6,13 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  TouchableOpacity,
-  BackHandler,
-  Alert,
-  Dimensions,
   ImageBackground
 } from "react-native";
-import {
-  ProgressChart
-} from "react-native-chart-kit";
-import { BarChart, PieChart } from "react-native-gifted-charts";
+
 import { Card } from "react-native-shadow-cards";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
-import CustomButton from "../../CustomButton/CustomButton";
-import AlimentazioneRow from "../Alimentazione/AlimentazioneRow";
 import QuestionnaireTemplate from "../../../classes/QuestionnaireTemplate";
 import QuestionnaireAnswered from "../../../classes/QuestionnaireAnswered";
 const s = require("../../../core/styles");
@@ -61,7 +52,8 @@ const HomePage_s = ({ navigation, route }) => {
   const [questsCompilati, setQuestsCompilati] = useState([]);
   const [num_hours_sleeped, setNumHoursSleeped] = useState("0:00");
   const [pieData,setPieData] = useState([]);
-  const [steps_daily_done,setStepsDailyDone] = useState(2200);
+  const [steps_daily_done,setStepsDailyDone] = useState(undefined);
+  const [hr_daily_done,setHrDailyDone] = useState(undefined);
   const [colorNumHoursSleeped, setColorNumHoursSleeped] = useState("orange");
   const [colorNumStepsDone,setColorNumStepsDone] = useState("grey");
   const [redthreshold,setRedThreshold] = useState(1000);
@@ -103,21 +95,55 @@ const HomePage_s = ({ navigation, route }) => {
 }
 
 
-const getQuestionnairesAvailable = () => {
-    fetch(`http://${global.enrico}:8080/api/questionnaires/templates`)
+const getTodaySteps = (today) => {
+    fetch(`http://${global.enrico}:8080/api/patients/${global.id}/activities/steps?startDate=${today}&endDate=${today}`)
         .then((response) => response.json())
         .then((json) =>{
-            let AllQuestionnaireTemplate = json.map(json => QuestionnaireTemplate.from(json));
-            setAllQuests(json.map(json => QuestionnaireTemplate.from(json)));
-            getQuestionnairesCompiled(AllQuestionnaireTemplate);
+            if(json[json.length -1] !== undefined)
+            setStepsDailyDone(json[json.length -1]);
+            else
+            {
+                let value = {"date": today, "steps": "-" };
+                setStepsDailyDone(value)
+            }
         })
         .catch((error) => { console.error(error)})
 }
 
-  useEffect(() => {
-    let arr = new Array();
-    var currentDate = new Date();
-    setGiorno(currentDate);
+const getTodayHrValue = (today) => {
+        fetch(`http://${global.enrico}:8080/api/patients/${global.id}/hrs/rest?startDate=${today}&endDate=${today}`)
+            .then((response) => response.json())
+            .then((json) =>{
+                console.log(json)
+                if(json[json.length -1] !== undefined)
+                setHrDailyDone(json[json.length -1]);
+                else
+                {
+                    let value = {"date": today, "rest": "-" };
+                    setHrDailyDone(value)
+                }
+            })
+            .catch((error) => { console.error(error)})
+  }
+
+    const getQuestionnairesAvailable = () => {
+        fetch(`http://${global.enrico}:8080/api/questionnaires/templates`)
+            .then((response) => response.json())
+            .then((json) =>{
+                let AllQuestionnaireTemplate = json.map(json => QuestionnaireTemplate.from(json));
+                setAllQuests(json.map(json => QuestionnaireTemplate.from(json)));
+                getQuestionnairesCompiled(AllQuestionnaireTemplate);
+            })
+            .catch((error) => { console.error(error)})
+    }
+
+
+    useEffect(() => {
+    let  currentDate = new Date();
+    getTodaySteps("2022-10-10");
+    getTodayHrValue("2022-10-10");
+
+        setGiorno(currentDate);
     let steps_day = mockbardatadaysteps.steps;
     //Inserire API per passi giornalieri
     //setState(steps_daily_done)
@@ -289,8 +315,8 @@ const getQuestionnairesAvailable = () => {
             style={{ flex: 3.5 }}
             onPress={() =>
               navigation.navigate("Attività_fisica_s", {
-                steps_done: mockbardatadaysteps.steps,
-                hr_rest: mocklinedatadayhr.rest
+                steps_done: steps_daily_done.steps,
+                hr_rest: hr_daily_done.rest
               })
             }
           >
@@ -321,7 +347,8 @@ const getQuestionnairesAvailable = () => {
                     <View style={{flex:0 ,flexDirection:"row",alignItems: "baseline", justifyContent: "space-evenly"}}>
                       <FontAwesome5 name="running" size={20} color="black"/>
                     <View style={{flex:0, flexDirection:"row",alignItems: "baseline"}}>
-                      <Text style={[s.header(3,"bold"),{marginRight: 5}]} >{steps_daily_done}</Text>
+                        {steps_daily_done !== undefined &&
+                      <Text style={[s.header(3,"bold"),{marginRight: 5}]} >{steps_daily_done.steps}</Text>}
                       <Text style={s.smalltext("regular")}>
                       Passi
                       </Text>
@@ -333,7 +360,9 @@ const getQuestionnairesAvailable = () => {
                     <View style={{flex:0, flexDirection:"row",alignItems: "baseline",justifyContent: "space-evenly"}}>
                     <FontAwesome5 name="heartbeat" size={20} color="red"/>
                     <View style={{flex:0, flexDirection:"row",alignItems: "baseline"}}>
-                      <Text style={[s.header(3,"bold"),{marginRight: 5}]} >83</Text>
+                        {hr_daily_done !== undefined &&
+                            <Text style={[s.header(3, "bold"), {marginRight: 5}]}>{hr_daily_done.rest}</Text>
+                        }
                       <Text style={s.smalltext("regular")}>
                       bpm
                       </Text>
