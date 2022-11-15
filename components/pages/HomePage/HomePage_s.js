@@ -103,7 +103,7 @@ const getTodaySteps = (today) => {
             setStepsDailyDone(json[json.length -1]);
             else
             {
-                let value = {"date": today, "steps": "-" };
+                let value = {"date": today, "steps": 0 };
                 setStepsDailyDone(value)
             }
         })
