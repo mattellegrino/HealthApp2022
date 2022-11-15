@@ -120,8 +120,8 @@ export default function Attività_fisica_s({ route }) {
   const [variableMonthDate, setVariableMonthDate] = useState("");
   const [firstWeekDay, setFirstWeekDay] = useState("");
   const [lastWeekDay, setLastWeekDay] = useState("");
-  const [firstMonthDay, setFirstMonthDay] = useState("");
-  const [lastMonthDay, setLastMonthDay] = useState("");
+  const [firstmonthday, setFirstMonthDay] = useState("");
+  const [lastmonthday, setLastMonthDay] = useState("");
   const [firstVariableMonthDay, setVariableFirstMonthDay] = useState("");
   const [lastVariableMonthDay, setVariableLastMonthDay] = useState("");
   const [monthdate, setMonthDate] = useState("");
@@ -242,7 +242,8 @@ export default function Attività_fisica_s({ route }) {
 
         //Inserire API per passi settimanale: /api/patients/{patientID}/activities/steps (startDate=firstdayafterforapi, endDate=lastdayafterforapi)
 
-        fillDates(firstdayafterforapi,lastdayafterforapi);
+        fillDates(firstdayafterforapi,lastdayafterforapi,"steps","week",7);
+        fillDates(firstdayafterforapi,lastdayafterforapi,"heart_rate","week",7);
 
         setVariableFirstWeekDay(firstdayafter);
         setVariableLastWeekDay(lastdayafter);
@@ -253,17 +254,23 @@ export default function Attività_fisica_s({ route }) {
       case "Mese": {
         var monthafter = new Date(getdayconvertible(variableMonthDate));
         monthafter.setMonth(variableMonthDate.getMonth() + 1);
+        let variablefirstmonthday = new Date(monthafter.getFullYear(), monthafter.getMonth(), 1);
         setVariableFirstMonthDay(
-            new Date(monthafter.getFullYear(), monthafter.getMonth(), 1)
+            variablefirstmonthday
         );
+        let variablelastmonthday =  new Date(monthafter.getFullYear(), monthafter.getMonth() + 1, 0);
         setVariableLastMonthDay(
-            new Date(monthafter.getFullYear(), monthafter.getMonth() + 1, 0)
+            variablelastmonthday
+
         );
+
+        let firstdaymonthafter = new Date(monthafter.getFullYear(), monthafter.getMonth(), 1);
         let firstdaymonthafterapi = formatDate(
-            new Date(monthafter.getFullYear(), monthafter.getMonth(), 1)
+          firstdaymonthafter
         );
+        let lastdaymonthafter = new Date(monthafter.getFullYear(), monthafter.getMonth() + 1, 0);
         let lastdaymonthafterapi = formatDate(
-            new Date(monthafter.getFullYear(), monthafter.getMonth() + 1, 0)
+            lastdaymonthafter
         );
 
         //Inserire API per passi mensili: /api/patients/{patientID}/activities/steps (startDate=firstdaymonthafterforapi, endDate=lastdaymonthafterforapi)
@@ -274,6 +281,9 @@ export default function Attività_fisica_s({ route }) {
             monthafter.getFullYear()
         );
         setVariableMonthDate(monthafter);
+
+        let number_days_of_month = lastdaymonthafter.getDate() - firstdaymonthafter.getDate();
+        fillDates(firstdaymonthafterapi,lastdaymonthafterapi,"steps","month",number_days_of_month);
         break;
       }
     }
@@ -320,6 +330,7 @@ export default function Attività_fisica_s({ route }) {
       case "Mese": {
         var monthbefore = new Date(getdayconvertible(variableMonthDate));
         monthbefore.setMonth(variableMonthDate.getMonth() - 1);
+
         setVariableFirstMonthDay(
             new Date(monthbefore.getFullYear(), monthbefore.getMonth(), 1)
         );
@@ -332,6 +343,18 @@ export default function Attività_fisica_s({ route }) {
             monthbefore.getFullYear()
         );
         setVariableMonthDate(monthbefore);
+
+        let firstdaymonthbefore = new Date(monthbefore.getFullYear(), monthbefore.getMonth(), 1);
+        let firstdaymonthbeforeapi = formatDate(
+            firstdaymonthbefore
+        );
+        let lastdaymonthbefore = new Date(monthbefore.getFullYear(), monthbefore.getMonth() + 1, 0);
+        let lastdaymonthbeforeapi = formatDate(
+            lastdaymonthbefore
+        );
+
+        let number_days_of_month = lastdaymonthbefore.getDate() - firstdaymonthbefore.getDate();
+        fillDates(firstdaymonthbeforeapi,lastdaymonthbeforeapi,"steps","month",number_days_of_month);
         break;
       }
     }
@@ -660,10 +683,14 @@ export default function Attività_fisica_s({ route }) {
 
     let firstmonthday = new Date(date.getFullYear(), date.getMonth(), 1);
     setFirstMonthDay(firstmonthday);
+    let firstmonthdayapi = formatDate(firstmonthday);
     setVariableFirstMonthDay(firstmonthday);
     let lastmonthday = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    let lastmonthdayapi = formatDate(lastmonthday);
     setLastMonthDay(lastmonthday);
     setVariableLastMonthDay(lastmonthday);
+
+    let number_days_of_month = lastmonthday.getDate() - firstmonthday.getDate();
 
     //Converto i passi dell'ultima settimana nell'array da mettere nel grafico
 
@@ -692,11 +719,12 @@ export default function Attività_fisica_s({ route }) {
       return el;
     });
 
-    setBarDataMonth(_bardatamonth);
+   // setBarDataMonth(_bardatamonth);
 
     //Inizializzazione Dati per linechart del battito
 
     //Inserire API per prendere i dati settimanali del battito a riposo e metterli in mocklinedataweekhr /api/patients/{patientID}/hrs/rest (startDate=dateforapi, endDate=dateforapi)
+
 
     let _linedataweekhr = mocklinedataweekhr.map((el) => {
 
@@ -754,14 +782,16 @@ export default function Attività_fisica_s({ route }) {
         setRangeTime(firstday_string + " - " + lastday_string);
 
         //calcolo media passi settimanali
-        let average_weekly_steps = media(bardataweek);
+        /*let average_weekly_steps = media(bardataweek);
 
         setNumStepsDone(average_weekly_steps.toFixed(0));
         handleColorNumStepsDone(average_weekly_steps);
 
         let average_weekly_hr = media(linedataweekhr);
         setHrRest(average_weekly_hr.toFixed(0));
-        handleColorHrRest(average_weekly_hr);
+        handleColorHrRest(average_weekly_hr);*/
+
+        fillDates(firstdayforapi,lastdayforapi,"steps","week",7);
 
 
         //Inserire API per passi  settimanale: /api/patients/{patientID}/sleep/duration (startDate=firstdayforapi, endDate=lastdayforapi)
@@ -774,14 +804,18 @@ export default function Attività_fisica_s({ route }) {
             date.getFullYear()
         );
 
-        let average_monthly_steps = media(bardatamonth);
+        let firstmonthdayapi = formatDate(firstmonthday);
+        let lastmonthdayapi = formatDate(lastmonthday);
+        let number_days_of_month = lastmonthday.getDate() - firstmonthday.getDate();
+        fillDates(firstmonthdayapi,lastmonthdayapi,"steps","month",number_days_of_month);
+        /*let average_monthly_steps = media(bardatamonth);
 
         setNumStepsDone(average_monthly_steps.toFixed(0));
         handleColorNumStepsDone(average_monthly_steps);
 
         let average_monthly_hr = media(linedatamonthhr);
         setHrRest(average_monthly_hr.toFixed(0));
-        handleColorHrRest(average_monthly_hr);
+        handleColorHrRest(average_monthly_hr);*/
         break;
     }
   }, [isSelected]);
