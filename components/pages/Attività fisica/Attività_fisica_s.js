@@ -311,7 +311,8 @@ export default function Attività_fisica_s({ route }) {
         let lastday_string = getday(lastdaybefore);
 
         //Inserire API per sonno settimanale: /api/patients/{patientID}/sleep/duration (startDate=firstdayafterforapi, endDate=lastdayafterforapi)
-        fillDates(firstdaybeforeforapi,lastdaybeforeforapi);
+        fillDates(firstdaybeforeforapi,lastdaybeforeforapi,"steps","week",7);
+        fillDates(firstdaybeforeforapi,lastdaybeforeforapi,"heart_rate","week",7);
         setRangeTime(firstday_string + " - " + lastday_string);
         break;
       }
@@ -498,59 +499,127 @@ export default function Attività_fisica_s({ route }) {
   }
 
 
-  const fillDates = async (firstweekdayapi,lastweekdayapi) => {
+  const fillDates = async (firstweekdayapi,lastweekdayapi,activity_type,granularity,number_of_days) => {
     let giorniesistenti = [];
 
-    getSteps(firstweekdayapi,lastweekdayapi).then((_stepsweek) => {
+    if(activity_type==="steps")
+    {
+      getSteps(firstweekdayapi,lastweekdayapi).then((_stepsweek) => {
 
-          _stepsweek.forEach((dayelement) => {
-            giorniesistenti.push(dayelement);
-          })
+            _stepsweek.forEach((dayelement) => {
+              giorniesistenti.push(dayelement);
+            })
 
-          let _date;
-          if(_stepsweek.length > 0)
-          {
-            _date= new Date(giorniesistenti[giorniesistenti.length - 1].date);
+            let _date;
+            if(_stepsweek.length > 0)
+            {
+              _date= new Date(giorniesistenti[giorniesistenti.length - 1].date);
+            }
+            else _date = new Date(firstweekdayapi);
+
+            let length = giorniesistenti.length;
+            for (let i = 0; i < number_of_days - length; i++) {
+
+              _date.setDate(_date.getDate() + 1);
+              let tempdatestring = _date.toISOString().split("T")[0];
+              let dayobject= {"date": tempdatestring, "steps": 0}
+              giorniesistenti.push(dayobject);
+            }
+            let _bardata = giorniesistenti.map((el) => {
+              el.value = el.steps;
+
+              if (tipoUtente === "sperimentale") {
+                if (el.value < redthreshold) el.frontColor = "red";
+                else if (el.value >= redthreshold && el.value < orangethreshold)
+                  el.frontColor = "orange";
+                else if (el.value >= orangethreshold && el.value < yellowthreshold)
+                  el.frontColor = "#FFEA00";
+                else if (el.value >= yellowthreshold) el.frontColor = "green";
+              } else
+                el.frontColor = "grey";
+              if(granularity === "week")
+              el.label = convertDateintoDayoftheWeek(el.date);
+              else
+                el.label = convertDateintoNumberDay(el.date);
+
+              return el;
+            });
+
+            if(granularity === "week") {
+              setBarDataWeek(_bardata);
+              let average_weekly_steps = media(_bardata);
+
+              setNumStepsDone(average_weekly_steps.toFixed(0));
+              handleColorNumStepsDone(average_weekly_steps);
+            }else {
+              setBarDataMonth(_bardata);
+              let average_monthly_steps = media(_bardata);
+
+              setNumStepsDone(average_monthly_steps.toFixed(0));
+              handleColorNumStepsDone(average_monthly_steps);
+
+            }
+
           }
-          else _date = new Date(firstweekdayapi);
+      ).catch((err) => {
+        console.log(err);
 
-          let length = giorniesistenti.length;
-          for (let i = 0; i < 7 - length; i++) {
-            _date.setDate(_date.getDate() + 1);
-            let tempdatestring = _date.toISOString().split("T")[0];
-            let stepdayobject = {"date": tempdatestring, "steps": 0}
-            giorniesistenti.push(stepdayobject);
+      })
+    }
+    else
+    {
+      getHrValues(firstweekdayapi,lastweekdayapi).then((hrweek) => {
+
+            hrweek.forEach((dayelement) => {
+              giorniesistenti.push(dayelement);
+            })
+
+            let _date;
+            if(hrweek.length > 0)
+            {
+              _date= new Date(giorniesistenti[giorniesistenti.length - 1].date);
+            }
+            else _date = new Date(firstweekdayapi);
+
+            let length = giorniesistenti.length;
+            for (let i = 0; i < number_of_days - length; i++) {
+
+              _date.setDate(_date.getDate() + 1);
+              let tempdatestring = _date.toISOString().split("T")[0];
+              let dayobject= {"date": tempdatestring, "rest": 0}
+              giorniesistenti.push(dayobject);
+            }
+            let _bardataweek = giorniesistenti.map((el) => {
+              el.value = el.rest;
+
+              if (tipoUtente === "sperimentale") {
+                if (el.value < redthreshold) el.frontColor = "red";
+                else if (el.value >= redthreshold && el.value < orangethreshold)
+                  el.frontColor = "orange";
+                else if (el.value >= orangethreshold && el.value < yellowthreshold)
+                  el.frontColor = "#FFEA00";
+                else if (el.value >= yellowthreshold) el.frontColor = "green";
+              } else
+                el.frontColor = "grey";
+              el.label = convertDateintoDayoftheWeek(el.date);
+
+              return el;
+            });
+            setLineDataWeekHr(_bardataweek);
+            let average_weekly_hr = media(_bardataweek);
+
+            setHrRest(average_weekly_hr.toFixed(0));
+            handleColorHrRest(average_weekly_hr);
+
           }
-          let _bardataweek = giorniesistenti.map((el) => {
-            el.value = el.steps;
+      ).catch((err) => {
+        console.log(err);
 
-            if (tipoUtente === "sperimentale") {
-              if (el.value < redthreshold) el.frontColor = "red";
-              else if (el.value >= redthreshold && el.value < orangethreshold)
-                el.frontColor = "orange";
-              else if (el.value >= orangethreshold && el.value < yellowthreshold)
-                el.frontColor = "#FFEA00";
-              else if (el.value >= yellowthreshold) el.frontColor = "green";
-            } else
-              el.frontColor = "grey";
-            el.label = convertDateintoDayoftheWeek(el.date);
+      })
+    }
 
-            el.dataPointLabelComponent = <LabelComponent/>
-
-
-            return el;
-          });
-          setBarDataWeek(_bardataweek);
-      let average_weekly_steps = media(_bardataweek);
-
-      setNumStepsDone(average_weekly_steps.toFixed(0));
-      handleColorNumStepsDone(average_weekly_steps);
-        }
-    ).catch((err) => {
-      console.log(err);
-
-    })
   }
+
 
 
   useEffect(() => {
@@ -598,14 +667,17 @@ export default function Attività_fisica_s({ route }) {
 
     //Converto i passi dell'ultima settimana nell'array da mettere nel grafico
 
-    fillDates(firstweekdayapi,lastweekdayapi);
+
+    fillDates(firstweekdayapi,lastweekdayapi,"heart_rate","week",7);
+    fillDates(firstmonthdayapi,lastmonthdayapi,"heart_rate","month",number_days_of_month);
+
 
 
     //Converto i passi dell'ultimo mese nell'array da mettere nel grafico
     let _bardatamonth = mockbardatamonth.map((el) => {
       el.value = el.steps;
 
-      if(tipoUtente == "sperimentale"){
+      if(tipoUtente === "sperimentale"){
         if (el.value < redthreshold) el.frontColor = "red";
         else if (el.value >= redthreshold && el.value < orangethreshold)
           el.frontColor = "orange";
