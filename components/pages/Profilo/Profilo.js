@@ -1,4 +1,5 @@
-import {View, Text, ActivityIndicator, Pressable, FlatList, ScrollView} from 'react-native'
+import {View, Text, ActivityIndicator, Pressable, FlatList, StyleSheet, ScrollView} from 'react-native'
+import { BarChart, LineChart, PieChart } from "react-native-gifted-charts";
 import React, {useEffect, useRef, useState} from 'react'
 import Generalità from './Generalità'
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -14,7 +15,7 @@ const Profilo = ({navigation,route}) =>  {
     let getweightValuesbyId;
 
 
-    const mocklinedatamonthhr = [
+    const mocklinedatamonthweights = [
         { id:1, weight:55, bmi:17, date: "2022-06-1"},
         { id:1, weight:55, bmi:17, date: "2022-06-2" },
         { id:1, weight:56, bmi:17, date: "2022-06-3" },
@@ -27,7 +28,35 @@ const Profilo = ({navigation,route}) =>  {
         { id:1, weight:55, bmi:17, date: "2022-06-20" },
         { id:1, weight:55, bmi:17, date: "2022-06-28" },
       ];  
+
+      const _mocklinedatamonthweight = [
+        { id:1, value:55, bmi:17, label: "Oct 21"},
+        { id:1, value:55, bmi:17, label: "" },
+        { id:1, value:56, bmi:17, label: "" },
+        { id:1, value:55, bmi:17, label: "" },
+        { id:1, value:55, bmi:17, label: "" },
+        { id:1, value:55, bmi:17, label: "" },
+        { id:1, value:55, bmi:17, label: "" },
+        { id:1, value:55, bmi:17, label: "" },
+        { id:1, value:58, bmi:20, label: "" },
+        { id:1, value:55, bmi:17, label: "Nov 21" },
+        { id:1, value:55, bmi:17, label: "" },
+      ];  
+      function formatDate2(data) {
+        const year = +data.substring(0, 4);
+        const month = +data.substring(5, 7);
+        const day = +data.substring(8, 10);
+    
+        const date = new Date(year, month - 1, day);
+        return date;
+      }
       
+      const convertDateintoNumberDay = (data) => {
+        let fordate = formatDate2(data);
+        let date = fordate.getDate();
+    
+        return parseInt(date, 10);
+      };
 
     getweightValuesbyId = () => {
         fetch(`http://${global.enrico}:8080/api/patients/${global.id}/weights`)
@@ -43,6 +72,26 @@ const Profilo = ({navigation,route}) =>  {
 
     useEffect(() => {
         getweightValuesbyId()
+
+        let _bardatamonth = mocklinedatamonthweights.map((el) => {
+            el.value = el.weight;
+      
+            /*if(tipoUtente == "sperimentale"){
+              if (el.value < redthreshold) el.frontColor = "red";
+              else if (el.value >= redthreshold && el.value < orangethreshold)
+                el.frontColor = "orange";
+              else if (el.value >= orangethreshold && el.value < yellowthreshold)
+                el.frontColor = "#FFEA00";
+              else if (el.value >= yellowthreshold) el.frontColor = "green";
+            }
+      
+            else*/
+              el.frontColor = "grey";
+            el.label = convertDateintoNumberDay(el.date);
+            return el;
+          });
+      
+          setweightValues(_bardatamonth);
     }, []);
 
 
@@ -90,7 +139,10 @@ const Profilo = ({navigation,route}) =>  {
                  renderItem={renderItem}
                  keyExtractor={item => item.id}
                 />
-                <View>
+                <View style={{alignItems: 'center'}}>
+                    <Text style={s.header(3,"bold")}>Analisi del peso</Text>
+                </View>
+                <View style={{width: 400}}>
                     <LineChart
                             color="grey"
                             startFillColor="grey"
@@ -105,36 +157,48 @@ const Profilo = ({navigation,route}) =>  {
                             dashWidth: 2,
                             dashGap: 3,
                             }}
-                            yAxisThickness={0}
-                            xAxisThickness={0}
+                            yAxisThickness={1}
+                            xAxisThickness={1}
                             yAxisTextStyle={styles.progressStyle}
                             xAxisLabelTextStyle={styles.progressXStyle}
                             startOpacity={0.1}
                             endOpacity={0.7}
-                            initialSpacing={0}
-                            height={200}
+                            initialSpacing={1}
+                            height={250}
                             data={
-                                mocklinedatamonthhr
+                                _mocklinedatamonthweight
                             }
-                            spacing={isSelected == "Settimana" ? 50 : 20}
+                            spacing={30}
                             textColor1="black"
                             textShiftY={-10}
                             textShiftX={-5}
                             showTextOnPress
                             pressEnabled={true}
-                            textFontSize={12}
-                            thickness={2}
+                            textFontSize={10}
+                            thickness={3}
                             curved
                             isAnimated={true}
                             focusedDataPointRadius={5}
                             focusedDataPointColor={"black"}
                             hideRules
-                            yAxisColor="#0BA5A4"
-                            xAxisColor="#0BA5A4"
+                            yAxisColor="#000"
+                            xAxisColor="#000"
                         />
                 </View>
                 </>
             )
   )
 }
+
+const styles = StyleSheet.create({
+
+    progressStyle: {
+        fontSize:10
+      },
+      progressXStyle: {
+        fontSize: 12,
+        width: 50,
+        marginLeft: 5,
+      },  
+})
 export default Profilo;

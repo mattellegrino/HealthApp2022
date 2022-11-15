@@ -864,7 +864,7 @@ export default function Attività_fisica_s({ route }) {
                           barBorderRadius={4}
                           initialSpacing={10}
                           noOfSections={4}
-                          maxValue={15000}
+                          maxValue={20000}
                           yAxisTextStyle={styles.progressStyle}
                           xAxisLabelTextStyle={styles.progressXStyle}
                           height={200}                        
