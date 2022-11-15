@@ -6,7 +6,7 @@ import {
   Pressable,
   ScrollView,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import CustomNavbar from "../../CustomNavbar/CustomNavbar";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -126,6 +126,12 @@ export default function Attività_fisica_s({ route }) {
   const [lastVariableMonthDay, setVariableLastMonthDay] = useState("");
   const [monthdate, setMonthDate] = useState("");
   const [sleepdata, setSleepData] = useState([]);
+
+  //props Card onPress
+  const [cardvisible, setCardVisible] = useState(false);
+  const [passiCard,setpassiCard] = useState(0);
+  const [dateCard,setdateCard] = useState("");
+
 
   const [bardataday, setBarDataDay] = useState("");
   const [bardataweek, setBarDataWeek] = useState([]);
@@ -479,6 +485,18 @@ export default function Attività_fisica_s({ route }) {
     }
   }
 
+  const activeCard = (value,date) => {
+
+    setdateCard(date);
+    setpassiCard(value);
+    setCardVisible(true);
+    function myStopFunction() {
+      setCardVisible(false);
+    }
+    setTimeout(myStopFunction, 1000);
+
+  }
+
 
   const fillDates = async (firstweekdayapi,lastweekdayapi) => {
     let giorniesistenti = [];
@@ -825,6 +843,13 @@ export default function Attività_fisica_s({ route }) {
                   </Card>
                 </View>
 
+                {cardvisible &&
+                <Card style={styles.cardOnpress}>
+                  <Text>Totale</Text>
+                  <Text>{passiCard}</Text>
+                </Card>
+                }
+
                 {isSelected != "Giorno" && (
                     <View style={{ height: "40%" }}>
                       <BarChart
@@ -842,7 +867,7 @@ export default function Attività_fisica_s({ route }) {
                           maxValue={15000}
                           yAxisTextStyle={styles.progressStyle}
                           xAxisLabelTextStyle={styles.progressXStyle}
-                          height={200}
+                          height={200}                        
                           hideRules
                           yAxisThickness={0}
                           xAxisThickness={0}
@@ -952,7 +977,7 @@ export default function Attività_fisica_s({ route }) {
                         xAxisColor="#0BA5A4"
                     />
                 }
-                <View style={{marginTop:30}}>
+                {/* <View style={{marginTop:30}}>
                   <View>
                     <Text style={[s.smalltext("medium", "grey"), styles.subtitle]}>
                       Altri valori {isSelected != "Giorno" ? "(media)" : ""}
@@ -992,6 +1017,7 @@ export default function Attività_fisica_s({ route }) {
                     </View>
                   </View>
                 </View>
+                      */}
               </View>
           )}
         </View>
@@ -1060,6 +1086,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     width: 50,
     marginLeft: 5,
+  },
+
+  cardOnpress: {
+    padding: 10,
   },
 
   circle: (color) => ({

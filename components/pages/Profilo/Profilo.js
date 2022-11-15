@@ -8,14 +8,33 @@ import { Avatar } from 'react-native-paper';
 import CustomButton from '../../CustomButton';
 const Profilo = ({navigation,route}) =>  {
     const [isLoading, setLoading] = useState(true);
-    const [profValues,setprofValues] = useState([]);
+    const [weightValues,setweightValues] = useState([]);
+    const [lastWeight,setlastWeight] = useState([]);
     /* */
-    let getprofValuesbyId;
+    let getweightValuesbyId;
 
-    getprofValuesbyId = () => {
+
+    const mocklinedatamonthhr = [
+        { id:1, weight:55, bmi:17, date: "2022-06-1"},
+        { id:1, weight:55, bmi:17, date: "2022-06-2" },
+        { id:1, weight:56, bmi:17, date: "2022-06-3" },
+        { id:1, weight:55, bmi:17, date: "2022-06-8" },
+        { id:1, weight:55, bmi:17, date: "2022-06-9" },
+        { id:1, weight:55, bmi:17, date: "2022-06-10" },
+        { id:1, weight:55, bmi:17, date: "2022-06-17" },
+        { id:1, weight:55, bmi:17, date: "2022-06-18" },
+        { id:1, weight:58, bmi:20, date: "2022-06-19" },
+        { id:1, weight:55, bmi:17, date: "2022-06-20" },
+        { id:1, weight:55, bmi:17, date: "2022-06-28" },
+      ];  
+      
+
+    getweightValuesbyId = () => {
         fetch(`http://${global.enrico}:8080/api/patients/${global.id}/weights`)
             .then((response) => response.json())
-            .then((json) =>{ setprofValues(Array.of(json[json.length -1])); console.log(Array.of(json[json.length -1])); })
+            .then((json) =>{ 
+                setlastWeight(Array.of(json[json.length -1])); 
+                setweightValues(Array.of(json))})
             .catch((error) => { console.error(error)})
             .finally(() => {
                 setLoading(false)
@@ -23,14 +42,15 @@ const Profilo = ({navigation,route}) =>  {
     }
 
     useEffect(() => {
-        getprofValuesbyId()
+        getweightValuesbyId()
     }, []);
 
+
     useEffect(() => {
-        getprofValuesbyId()
+        getweightValuesbyId()
     },[route.params])
 
-    const Item = (props ) => (
+    const Item = (props) => (
         <View style={{flex:1, backgroundColor:"white" }}>
             <View style={{flex:1, alignItems: "center"}}>
                 <View style={{flex:0,marginTop:30, width:"80%",flexDirection:"row", justifyContent: "space-between"}}>
@@ -47,7 +67,6 @@ const Profilo = ({navigation,route}) =>  {
                     <Generalità nome="Altezza" valore={props.height} unità={"cm"}></Generalità>
                     <Generalità nome="Peso" valore={props.weight} unità={"kg"} button={<CustomButton onPress={()=> navigation.navigate("Peso")} text={"MODIFICA"} fontSize="small"></CustomButton> }></Generalità>
                 </View>
-           
             </View>
     );
 
@@ -65,11 +84,56 @@ const Profilo = ({navigation,route}) =>  {
   return (
         isLoading ? <ActivityIndicator/> :
             (
+                <>
                 <FlatList
-                 data={profValues}
+                 data={lastWeight}
                  renderItem={renderItem}
                  keyExtractor={item => item.id}
                 />
+                <View>
+                    <LineChart
+                            color="grey"
+                            startFillColor="grey"
+                            endFillColor="grey"
+                            areaChart
+                            showReferenceLine1
+                            maxValue={100}referenceLine1Position={60}
+                            referenceLine1Config={{
+                            color: "gray",
+                            labelText: "Media",
+                            labelTextStyle: styles.progressStyle,
+                            dashWidth: 2,
+                            dashGap: 3,
+                            }}
+                            yAxisThickness={0}
+                            xAxisThickness={0}
+                            yAxisTextStyle={styles.progressStyle}
+                            xAxisLabelTextStyle={styles.progressXStyle}
+                            startOpacity={0.1}
+                            endOpacity={0.7}
+                            initialSpacing={0}
+                            height={200}
+                            data={
+                                mocklinedatamonthhr
+                            }
+                            spacing={isSelected == "Settimana" ? 50 : 20}
+                            textColor1="black"
+                            textShiftY={-10}
+                            textShiftX={-5}
+                            showTextOnPress
+                            pressEnabled={true}
+                            textFontSize={12}
+                            thickness={2}
+                            curved
+                            isAnimated={true}
+                            focusedDataPointRadius={5}
+                            focusedDataPointColor={"black"}
+                            hideRules
+                            yAxisColor="#0BA5A4"
+                            xAxisColor="#0BA5A4"
+                        />
+                </View>
+                </>
             )
   )
 }
