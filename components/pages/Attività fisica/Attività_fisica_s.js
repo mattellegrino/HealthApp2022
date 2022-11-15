@@ -284,6 +284,7 @@ export default function Attività_fisica_s({ route }) {
 
         let number_days_of_month = lastdaymonthafter.getDate() - firstdaymonthafter.getDate();
         fillDates(firstdaymonthafterapi,lastdaymonthafterapi,"steps","month",number_days_of_month);
+        fillDates(firstdaymonthafterapi,lastdaymonthafterapi,"heart_rate","month",number_days_of_month);
         break;
       }
     }
@@ -355,6 +356,8 @@ export default function Attività_fisica_s({ route }) {
 
         let number_days_of_month = lastdaymonthbefore.getDate() - firstdaymonthbefore.getDate();
         fillDates(firstdaymonthbeforeapi,lastdaymonthbeforeapi,"steps","month",number_days_of_month);
+        fillDates(firstdaymonthbeforeapi,lastdaymonthbeforeapi,"heart_rate","month",number_days_of_month);
+
         break;
       }
     }
@@ -612,7 +615,7 @@ export default function Attività_fisica_s({ route }) {
               let dayobject= {"date": tempdatestring, "rest": 0}
               giorniesistenti.push(dayobject);
             }
-            let _bardataweek = giorniesistenti.map((el) => {
+            let _bardatahr = giorniesistenti.map((el) => {
               el.value = el.rest;
 
               if (tipoUtente === "sperimentale") {
@@ -624,15 +627,24 @@ export default function Attività_fisica_s({ route }) {
                 else if (el.value >= yellowthreshold) el.frontColor = "green";
               } else
                 el.frontColor = "grey";
+              if(granularity === "week")
               el.label = convertDateintoDayoftheWeek(el.date);
-
+              else el.label =convertDateintoNumberDay(el.date);
               return el;
             });
-            setLineDataWeekHr(_bardataweek);
-            let average_weekly_hr = media(_bardataweek);
+            if(granularity === "week"){
+            setLineDataWeekHr(_bardatahr);
+            let average_weekly_hr = media(_bardatahr);
 
             setHrRest(average_weekly_hr.toFixed(0));
-            handleColorHrRest(average_weekly_hr);
+            handleColorHrRest(average_weekly_hr);}
+            else {
+              setLineDataMonthHr(_bardatahr);
+              let average_monthly_hr = media(_bardatahr);
+
+              setHrRest(average_monthly_hr.toFixed(0));
+              handleColorHrRest(average_monthly_hr);
+            }
 
           }
       ).catch((err) => {
@@ -808,6 +820,7 @@ export default function Attività_fisica_s({ route }) {
         let lastmonthdayapi = formatDate(lastmonthday);
         let number_days_of_month = lastmonthday.getDate() - firstmonthday.getDate();
         fillDates(firstmonthdayapi,lastmonthdayapi,"steps","month",number_days_of_month);
+        fillDates(firstmonthdayapi,lastmonthdayapi,"heart_rate","month",number_days_of_month);
         /*let average_monthly_steps = media(bardatamonth);
 
         setNumStepsDone(average_monthly_steps.toFixed(0));
