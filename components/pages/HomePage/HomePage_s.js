@@ -119,7 +119,7 @@ const getTodayHrValue = (today) => {
                 setHrDailyDone(json[json.length -1]);
                 else
                 {
-                    let value = {"date": today, "rest": "-" };
+                    let value = {"date": today, "rest": 0 };
                     setHrDailyDone(value)
                 }
             })
@@ -137,11 +137,22 @@ const getTodayHrValue = (today) => {
             .catch((error) => { console.error(error)})
     }
 
+    function formatDate(data) {
+      let d = data,
+          month = "" + (d.getMonth() + 1),
+          day = "" + d.getDate(),
+          year = d.getFullYear();
+      if (month.length < 2) month = "0" + month;
+      if (day.length < 2) day = "0" + day;
+      return [year, month, day].join("-");
+    }
+  
 
     useEffect(() => {
     let  currentDate = new Date();
-    getTodaySteps("2022-11-14");
-    getTodayHrValue("2022-11-14");
+    let currentDateApi = formatDate(currentDate);
+    getTodaySteps(currentDateApi);
+    getTodayHrValue(currentDateApi);
 
         setGiorno(currentDate);
     let steps_day = mockbardatadaysteps.steps;

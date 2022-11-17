@@ -155,7 +155,7 @@ export default function Attività_fisica_s({ route }) {
   const [color_num_steps_done, setColorNumStepsDone] = useState("grey");
 
   //Battito a riposo
-  const [hr_rest,setHrRest] = useState(route.params.hr_rest);
+  const [hr_rest,setHrRest] = useState([]);
   const [color_hr_rest, setColorHrRest] = useState("red");
 
   //Numero sospensioni
@@ -223,7 +223,8 @@ export default function Attività_fisica_s({ route }) {
 
         getHrValues(dayafterforapi,dayafterforapi).then((_hrValues) => {
           setHrRest(_hrValues[0].rest)
-        }).catch((err) => setHrRest("-"));
+          console.log(_hrValues[0].rest);
+        }).catch((err) => setHrRest(0));
         setRangeTime(getday(dayafter));
         setVariableGiornoDate(dayafter);
         break;
@@ -303,7 +304,7 @@ export default function Attività_fisica_s({ route }) {
 
         getHrValues(daybeforeforapi,daybeforeforapi).then((_hrValues) => {
           setHrRest(_hrValues[0].rest)
-        }).catch((err) => setHrRest("-"));
+        }).catch((err) => setHrRest(0));
         setRangeTime(getday(daybefore));
         setVariableGiornoDate(daybefore);
         break;
@@ -632,12 +633,14 @@ export default function Attività_fisica_s({ route }) {
               else el.label =convertDateintoNumberDay(el.date);
               return el;
             });
-            if(granularity === "week"){
+            if(granularity == "week"){
             setLineDataWeekHr(_bardatahr);
+            console.log(_bardatahr);
             let average_weekly_hr = media(_bardatahr);
 
             setHrRest(average_weekly_hr.toFixed(0));
-            handleColorHrRest(average_weekly_hr);}
+            handleColorHrRest(average_weekly_hr)
+          }
             else {
               setLineDataMonthHr(_bardatahr);
               let average_monthly_hr = media(_bardatahr);
@@ -673,6 +676,7 @@ export default function Attività_fisica_s({ route }) {
 
     let hr_rest = route.params.hr_rest;
     setLineDataDayHr(hr_rest);
+    console.log(hr_rest);
 
     setFirstTime(true);
 
@@ -708,7 +712,7 @@ export default function Attività_fisica_s({ route }) {
 
 
     fillDates(firstweekdayapi,lastweekdayapi,"heart_rate","week",7);
-    fillDates(firstmonthdayapi,lastmonthdayapi,"heart_rate","month",number_days_of_month);
+    fillDates(firstmonthdayapi,lastmonthdayapi,"heart_rate","week",7);
 
 
 
@@ -770,19 +774,20 @@ export default function Attività_fisica_s({ route }) {
     switch (isSelected) {
       case "Giorno":
         let range_giorno = getday(date);
+        let dayafterforapi = formatDate(date);
+        
         setRangeTime(range_giorno);
 
         if (bardataday) {
           setNumStepsDone(bardataday);
-
           handleColorNumStepsDone(bardataday);
-}
-
-        if(linedatadayhr) {
-          setHrRest(linedatadayhr);
-
-          handleColorHrRest(linedatadayhr);
         }
+
+        getHrValues(dayafterforapi,dayafterforapi).then((_hrValues) => {
+          setHrRest(_hrValues[0].rest)
+          handleColorHrRest(_hrValues[0].rest);
+        }).catch((err) => setHrRest(0));
+        
         break;
 
       case "Settimana":
@@ -802,8 +807,10 @@ export default function Attività_fisica_s({ route }) {
         let average_weekly_hr = media(linedataweekhr);
         setHrRest(average_weekly_hr.toFixed(0));
         handleColorHrRest(average_weekly_hr);*/
+        console.log(firstdayforapi,lastdayforapi);
 
         fillDates(firstdayforapi,lastdayforapi,"steps","week",7);
+        fillDates(firstdayforapi,lastdayforapi,"heart_rate","week",7);
 
 
         //Inserire API per passi  settimanale: /api/patients/{patientID}/sleep/duration (startDate=firstdayforapi, endDate=lastdayforapi)
@@ -1060,7 +1067,6 @@ export default function Attività_fisica_s({ route }) {
                         referenceLine1Config={{
                           color: "gray",
                           labelText: "Media",
-                          labelTextStyle: styles.progressStyle,
                           dashWidth: 2,
                           dashGap: 3,
                         }}
@@ -1073,11 +1079,9 @@ export default function Attività_fisica_s({ route }) {
                         initialSpacing={0}
                         height={200}
                         data={
-                          isSelected == "Settimana"
+                          isSelected == "Settimana" && linedataweekhr
                               ? linedataweekhr
-                              : isSelected == "Giorno"
-                                  ? linedatadayhr
-                                  : linedatamonthhr
+                              : linedatamonthhr
                         }
                         spacing={isSelected == "Settimana" ? 50 : 20}
                         textColor1="black"
@@ -1096,47 +1100,7 @@ export default function Attività_fisica_s({ route }) {
                         xAxisColor="#0BA5A4"
                     />
                 }
-                {/* <View style={{marginTop:30}}>
-                  <View>
-                    <Text style={[s.smalltext("medium", "grey"), styles.subtitle]}>
-                      Altri valori {isSelected != "Giorno" ? "(media)" : ""}
-                    </Text>
-                    <View
-                        style={{
-                          flex: 0,
-                          flexDirection: "row",
-                          margin: 15,
-                          alignItems: "baseline",
-                          justifyContent: "center",
-                        }}
-                    >
-                    </View>
-
-                    <View
-                        style={{
-                          flex: 0,
-                          flexDirection: "row",
-                          justifyContent: "space-around",
-                          alignItems: "center",
-                          margin: 20,
-                        }}
-                    >
-                      <Battito_Cardiaco
-                          battiti={123}
-                          type={"Max"}
-                      ></Battito_Cardiaco>
-                      <Battito_Cardiaco
-                          battiti={60}
-                          type={"Min"}
-                      ></Battito_Cardiaco>
-                      <Battito_Cardiaco
-                          battiti={80}
-                          type={"A riposo"}
-                      ></Battito_Cardiaco>
-                    </View>
-                  </View>
-                </View>
-                      */}
+              
               </View>
           )}
         </View>
