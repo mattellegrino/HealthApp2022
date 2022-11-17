@@ -63,7 +63,46 @@ const Profilo = ({navigation,route}) =>  {
             .then((response) => response.json())
             .then((json) =>{ 
                 setlastWeight(Array.of(json[json.length -1])); 
-                setweightValues(Array.of(json))})
+                let map_result = json.map((el,_i)=> {
+
+                  let obj = {"label":"","value":"","id":""};
+
+                  obj.label = el.date;
+                  obj.value = el.weight;
+                  obj.id = el.id;
+
+                  return obj;
+                  })
+
+                  let arrayofwweights = [];
+
+                  map_result.map((el,i)=>{
+
+                    if(arrayofwweights.length == 0)
+                    {
+                      arrayofwweights.push(el);
+                    }
+                    else {
+                      let modifica = 0;
+                      arrayofwweights.forEach((element,_i)=>{
+
+                        if(element.label == el.label && element.id < el.id){
+                          arrayofwweights[_i] = el;
+                          modifica = 1;
+                        }
+
+                      })
+
+                      if(modifica == 0)
+                      arrayofwweights.push(el);
+                    }
+
+                  })
+
+                  setweightValues(arrayofwweights);
+                
+
+              })
             .catch((error) => { console.error(error)})
             .finally(() => {
                 setLoading(false)
@@ -166,7 +205,7 @@ const Profilo = ({navigation,route}) =>  {
                             height={200}
                             width={260}
                             data={
-                                _mocklinedatamonthweight
+                                weightValues
                             }
                             spacing={30}
                             textColor1="black"
