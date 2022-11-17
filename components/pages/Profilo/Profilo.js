@@ -139,10 +139,9 @@ const Profilo = ({navigation,route}) =>  {
                  renderItem={renderItem}
                  keyExtractor={item => item.id}
                 />
-                <View style={{alignItems: 'center'}}>
+                <View style={{alignItems: 'center',marginBottom:30}}>
                     <Text style={s.header(3,"bold")}>Analisi del peso</Text>
-                </View>
-                <View style={{width: 400}}>
+                    <Card style={{width:"80%"}}>
                     <LineChart
                             color="grey"
                             startFillColor="grey"
@@ -164,7 +163,8 @@ const Profilo = ({navigation,route}) =>  {
                             startOpacity={0.1}
                             endOpacity={0.7}
                             initialSpacing={1}
-                            height={250}
+                            height={200}
+                            width={260}
                             data={
                                 _mocklinedatamonthweight
                             }
@@ -184,7 +184,9 @@ const Profilo = ({navigation,route}) =>  {
                             yAxisColor="#000"
                             xAxisColor="#000"
                         />
+                </Card>
                 </View>
+                
                 </>
             )
   )
