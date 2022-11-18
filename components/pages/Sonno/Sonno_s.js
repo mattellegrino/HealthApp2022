@@ -6,6 +6,8 @@ import { Card } from "react-native-shadow-cards";
 const s = require("../../../core/styles");
 import { BarChart } from "react-native-gifted-charts";
 import * as Progress from 'react-native-progress';
+import QuestionnaireAnswered from "../../../classes/QuestionnaireAnswered";
+import Sleep from "../../../classes/Sleep";
 
 export default function Sonno_s({navigation,route}) {
 
@@ -324,8 +326,87 @@ export default function Sonno_s({navigation,route}) {
     return value/yellowthreshold;
   }
 
-  useEffect(() => {
 
+    const fillDates = async (firstweekdayapi,lastweekdayapi,granularity,number_of_days) => {
+        let giorniesistenti = [];
+
+            getSonno(firstweekdayapi,lastweekdayapi).then((_sonnoweek) => {
+
+                    _sonnoweek.forEach((dayelement) => {
+                        giorniesistenti.push(dayelement);
+                    })
+
+                    let _date;
+                    if(_sonnoweek.length > 0)
+                    {
+                        _date= new Date(giorniesistenti[giorniesistenti.length - 1].date);
+                    }
+                    else _date = new Date(firstweekdayapi);
+
+                    let length = giorniesistenti.length;
+                    for (let i = 0; i < number_of_days - length; i++) {
+
+                        _date.setDate(_date.getDate() + 1);
+                        let tempdatestring = _date.toISOString().split("T")[0];
+                        let dayobject= {"date": tempdatestring, "steps": 0}
+                        giorniesistenti.push(dayobject);
+                    }
+                    let _bardata = giorniesistenti.map((el) => {
+                        el.value = el.steps;
+
+                        if (tipoUtente === "sperimentale") {
+                            if (el.value < redthreshold) el.frontColor = "red";
+                            else if (el.value >= redthreshold && el.value < orangethreshold)
+                                el.frontColor = "orange";
+                            else if (el.value >= orangethreshold && el.value < yellowthreshold)
+                                el.frontColor = "#FFEA00";
+                            else if (el.value >= yellowthreshold) el.frontColor = "green";
+                        } else
+                            el.frontColor = "grey";
+                        if(granularity === "week")
+                            el.label = convertDateintoDayoftheWeek(el.date);
+                        else
+                            el.label = convertDateintoNumberDay(el.date);
+
+                        return el;
+                    });
+
+                    if(granularity === "week") {
+                        setBarDataWeek(_bardata);
+                        let average_weekly_sonno = media(_bardata);
+                        setColorNumHoursSleeped(average_weekly_sonno.toFixed(0));
+                        handleColorNumStepsDone(average_weekly_sonno);
+                    }else {
+                        setBarDataMonth(_bardata);
+                        let average_monthly_steps = media(_bardata);
+
+                        setNumStepsDone(average_monthly_steps.toFixed(0));
+                        handleColorNumStepsDone(average_monthly_steps);
+
+                    }
+
+                }
+            ).catch((err) => {
+                console.log(err);
+
+            })
+    }
+
+    async function getSonno(startDate,endDate) {
+        const response = await fetch(`http://${global.enrico}:8080/api/patients/${global.id}/sleep/duration?startDate=${startDate}&endDate=${endDate}`);
+        const sonno_json= await response.json();
+        if (response.ok)
+        {
+            let sonno = sonno_json.map(json => Sleep.from(json));
+            console.log(sonno);
+           return sonno
+        }
+        else {
+            throw sonno_json;
+        }
+    }
+
+  useEffect(() => {
   },[variableGiornoDate])
 
  
@@ -389,7 +470,7 @@ export default function Sonno_s({navigation,route}) {
       
        el.value = formatTime(el.time_ms);
 
-       if(tipoUtente == "sperimentale"){
+       if(tipoUtente === "sperimentale"){
 
        if(el.value < redthreshold)
         el.frontColor = "red";
@@ -422,7 +503,7 @@ export default function Sonno_s({navigation,route}) {
       
       el.value = formatTime(el.time_ms);
 
-      if(tipoUtente == "sperimentale"){
+      if(tipoUtente === "sperimentale"){
 
       if(el.value < redthreshold)
        el.frontColor = "red";
