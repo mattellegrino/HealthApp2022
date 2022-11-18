@@ -81,8 +81,8 @@ export default function Sonno_s({navigation,route}) {
   const [firstWeekDayApi,setFirstWeekDayApi] = useState("");
   const [lastWeekDayApi,setLastWeekDayApi] = useState("");     
   
-  const [firstMonthDay,setFirstMonthDay] = useState("");
-  const [lastMonthDay,setLastMonthDay] = useState("");
+  const [firstmonthday,setFirstMonthDay] = useState("");
+  const [lastmonthday,setLastMonthDay] = useState("");
   const [firstVariableMonthDay,setVariableFirstMonthDay] = useState("");
   const [lastVariableMonthDay,setVariableLastMonthDay] = useState("");
   const [monthdate,setMonthDate] = useState("");
@@ -154,7 +154,16 @@ export default function Sonno_s({navigation,route}) {
         dayafter.setDate(variableGiornoDate.getDate() + 1);
         let dayafterforapi = formatDate(dayafter);
         //Inserire API per sonno giornaliero: /api/patients/{patientID}/sleep/duration (startDate=dayafterforapi, endDate=dayafterforapi)
-        setRangeTime (getday(dayafter));
+          getSonno(dayafterforapi,dayafterforapi).then((_sleepValues) => {
+                if(_sleepValues[0]!==undefined){
+              setNumHoursSleeped(formatTime(_sleepValues[0].durationMs))
+                handleColorSleep(formatTime(_sleepValues[0].durationMs))}
+                else {
+                    setNumHoursSleeped((0));
+                    handleColorSleep(0);
+                }
+          })
+          setRangeTime (getday(dayafter));
         setVariableGiornoDate(dayafter);
         break;
 
@@ -175,6 +184,8 @@ export default function Sonno_s({navigation,route}) {
 
         //Inserire API per sonno settimanale: /api/patients/{patientID}/sleep/duration (startDate=firstdayafterforapi, endDate=lastdayafterforapi)
 
+          fillDates(firstdayafterforapi,lastdayafterforapi,"week",7);
+
         setVariableFirstWeekDay(firstdayafter);
         setVariableLastWeekDay(lastdayafter);
         setRangeTime(firstday_string + " - " + lastday_string);
@@ -189,6 +200,18 @@ export default function Sonno_s({navigation,route}) {
         setVariableLastMonthDay(new Date(monthafter.getFullYear(), monthafter.getMonth() + 1, 0));
         setRangeTime(padTo2Digits(parseInt(monthafter.getMonth()+ Number(1))) + "/" + monthafter.getFullYear());
         setVariableMonthDate(monthafter);
+
+          let firstdaymonthafter = new Date(monthafter.getFullYear(), monthafter.getMonth(), 1);
+          let firstdaymonthafterapi = formatDate(
+              firstdaymonthafter
+          );
+          let lastdaymonthafter = new Date(monthafter.getFullYear(), monthafter.getMonth() + 1, 0);
+          let lastdaymonthafterapi = formatDate(
+              lastdaymonthafter
+          );
+
+          let number_days_of_month = lastdaymonthafter.getDate() - firstdaymonthafter.getDate();
+          fillDates(firstdaymonthafterapi,lastdaymonthafterapi,"month",number_days_of_month);
         break;
       }
 
@@ -203,6 +226,20 @@ export default function Sonno_s({navigation,route}) {
 
         var daybefore = new Date (getdayconvertible(variableGiornoDate));
         daybefore.setDate(variableGiornoDate.getDate() - 1);
+          let daybeforeforapi = formatDate(daybefore);
+
+          getSonno(daybeforeforapi,daybeforeforapi).then((_sleepValues) => {
+
+              if(_sleepValues[0]!==undefined){
+                  setNumHoursSleeped(formatTime(_sleepValues[0].durationMs))
+                  handleColorSleep(formatTime(_sleepValues[0].durationMs))}
+              else {
+                  setNumHoursSleeped((0));
+                  handleColorSleep(0)
+              }
+
+          }).catch((err) => setNumHoursSleeped(0));
+
         setRangeTime (getday(daybefore));
         setVariableGiornoDate(daybefore);
         break;
@@ -223,6 +260,7 @@ export default function Sonno_s({navigation,route}) {
 
         //Inserire API per sonno settimanale: /api/patients/{patientID}/sleep/duration (startDate=firstdayafterforapi, endDate=lastdayafterforapi)
 
+          fillDates(firstdaybeforeforapi,lastdaybeforeforapi,"week",7);
         setRangeTime(firstday_string + " - " + lastday_string);
         break;
       }
@@ -235,6 +273,19 @@ export default function Sonno_s({navigation,route}) {
         setVariableLastMonthDay(new Date(monthbefore.getFullYear(), monthbefore.getMonth() + 1, 0));
         setRangeTime(padTo2Digits(parseInt(monthbefore.getMonth()+ Number(1))) + "/" + monthbefore.getFullYear());
         setVariableMonthDate(monthbefore);
+          let firstdaymonthbefore = new Date(monthbefore.getFullYear(), monthbefore.getMonth(), 1);
+          let firstdaymonthbeforeapi = formatDate(
+              firstdaymonthbefore
+          );
+          let lastdaymonthbefore = new Date(monthbefore.getFullYear(), monthbefore.getMonth() + 1, 0);
+          let lastdaymonthbeforeapi = formatDate(
+              lastdaymonthbefore
+          );
+
+          let number_days_of_month = lastdaymonthbefore.getDate() - firstdaymonthbefore.getDate();
+          fillDates(firstdaymonthbeforeapi,lastdaymonthbeforeapi,"month",number_days_of_month);
+
+
         break;
         
       }
@@ -251,6 +302,46 @@ export default function Sonno_s({navigation,route}) {
     let total = parseInt(hours) + parseFloat(minutes);
     return total;
   }
+
+    const media = (array) => {
+
+        let sum = 0;
+        let lunghezza = 0;
+        array.forEach((el) => {
+            if(el.value !== 0) {
+                lunghezza = lunghezza +1;
+                sum = sum + el.value;
+            }
+        });
+     if(lunghezza!==0)
+        return sum / lunghezza;
+          else
+              return 0;
+    }
+
+  const handleColorSleep = (value) => {
+
+      if(value === 0)
+          setColorNumHoursSleeped("white");
+      else {
+
+          if (value < redthreshold) setColorNumHoursSleeped("red");
+          else if (
+              value >= redthreshold &&
+              value < orangethreshold
+          ) {
+              setColorNumHoursSleeped("orange");
+          } else if (
+              value >= orangethreshold &&
+              value < yellowthreshold
+          ) {
+              setColorNumHoursSleeped("#FFEA00");
+          } else if (value >= yellowthreshold) {
+              setColorNumHoursSleeped("green");
+          }
+      }
+    }
+
 
 
   const convertDateintoDayoftheWeek = (date) => {
@@ -299,6 +390,9 @@ export default function Sonno_s({navigation,route}) {
 
       case "green" :
         return "Ottimo"
+
+        case "white":
+            return ""
 
     }
 
@@ -373,15 +467,17 @@ export default function Sonno_s({navigation,route}) {
 
                     if(granularity === "week") {
                         setBarDataWeek(_bardata);
+                        console.log(_bardata);
                         let average_weekly_sonno = media(_bardata);
-                        setColorNumHoursSleeped(average_weekly_sonno.toFixed(0));
-                        handleColorNumStepsDone(average_weekly_sonno);
+                        console.log("MEDIA" + average_weekly_sonno);
+                        setNumHoursSleeped(average_weekly_sonno.toFixed(2));
+                        handleColorSleep(average_weekly_sonno);
                     }else {
                         setBarDataMonth(_bardata);
-                        let average_monthly_steps = media(_bardata);
+                        let average_monthly_sleep = media(_bardata);
 
-                        setNumStepsDone(average_monthly_steps.toFixed(0));
-                        handleColorNumStepsDone(average_monthly_steps);
+                        setNumHoursSleeped(average_monthly_sleep.toFixed(2));
+                        handleColorSleep(average_monthly_sleep);
 
                     }
 
@@ -398,7 +494,6 @@ export default function Sonno_s({navigation,route}) {
         if (response.ok)
         {
             let sonno = sonno_json.map(json => Sleep.from(json));
-            console.log(sonno);
            return sonno
         }
         else {
@@ -419,27 +514,15 @@ export default function Sonno_s({navigation,route}) {
     setVariableGiornoDate(date);
     setVariableMonthDate(date);
     setMonthDate(date);
-    
 
     let range_giorno = getday(date);
     setRangeTime(range_giorno);
     let dayformattedtime = formatTime(mockbardataday.time_ms).toPrecision(3);
-    console.log("dayformattedtime: " + dayformattedtime);
     //setNumHoursSleeped(dayformattedtime);
     setBarDataDay(dayformattedtime);
     setFirstTime(true);
 
-    if(dayformattedtime < redthreshold)
-    setColorNumHoursSleeped("red");
- 
-   else if(dayformattedtime >= redthreshold && dayformattedtime < orangethreshold)
-    setColorNumHoursSleeped("orange");
- 
-   else if(dayformattedtime >= orangethreshold && dayformattedtime < yellowthreshold)
-    setColorNumHoursSleeped("#FFEA00");
- 
-   else if (dayformattedtime >= yellowthreshold)
-    setColorNumHoursSleeped("green");
+    handleColorSleep(dayformattedtime);
     
     //inizializzo primo e ultimo giorno della settimana 
     let currdate = new Date ();
@@ -466,76 +549,6 @@ export default function Sonno_s({navigation,route}) {
     setVariableLastMonthDay(lastmonthday);
 
 
-    //Inserire API per prendere i dati del sonno settimanale e metterli in mockbardataweek
-    let _bardataweek = mockbardataweek.map((el) => {
-      
-       el.value = formatTime(el.time_ms);
-
-       if(tipoUtente === "sperimentale"){
-
-       if(el.value < redthreshold)
-        el.frontColor = "red";
-  
-       else if(el.value >= redthreshold && el.value < orangethreshold)
-        el.frontColor = "orange";
-
-       else if(el.value >= orangethreshold && el.value <yellowthreshold)
-       el.frontColor = "#FFEA00";
-
-       else if (el.value >= yellowthreshold)
-        el.frontColor = "green";
-
-        else
-        el.frontColor = "#1565C0";   
-       }
-
-       else
-       el.frontColor = "#1565C0";
-
-      el.label = convertDateintoDayoftheWeek(el.date);
-
-      return el;
-    
-    })
-
-    setBarDataWeek(_bardataweek);
-
-    let _bardatamonth = mockbardatamonth.map((el) => {
-      
-      el.value = formatTime(el.time_ms);
-
-      if(tipoUtente === "sperimentale"){
-
-      if(el.value < redthreshold)
-       el.frontColor = "red";
-
-      else if(el.value >= redthreshold && el.value < orangethreshold)
-       el.frontColor = "orange";
-
-      else if(el.value >= orangethreshold && el.value <yellowthreshold)
-      el.frontColor = "#FFEA00";
-
-      else if (el.value >= yellowthreshold)
-       el.frontColor = "green";
-
-      }
-      else
-      el.frontColor = "#1565C0";
-
-      el.label = convertDateintoNumberDay(el.date);
-
-     return el;
-   
-   })
-    
-   setBarDataMonth(_bardatamonth);
-
-
-    //Inserire API per sonno giornaliero: /api/patients/{patientID}/sleep/duration (startDate=dateforapi, endDate=dateforapi)
-    // setBarDataDay con il valore proveniente dall'API
-
-
-
   },[])
 
   useEffect(() => {
@@ -544,52 +557,26 @@ export default function Sonno_s({navigation,route}) {
       case "Giorno": 
   
       let range_giorno = getday(date);
+      let dayforapi = formatDate(date);
       setRangeTime(range_giorno);
 
-      if(bardataday){
-      setNumHoursSleeped(bardataday);
-      console.log("bardataday" + bardataday);
-    
-      if(bardataday < redthreshold)
-      setColorNumHoursSleeped("red");
-
-     else if(bardataday >= redthreshold && bardataday < orangethreshold)
-      setColorNumHoursSleeped("orange");
-
-     else if(bardataday >= orangethreshold && bardataday < yellowthreshold)
-      setColorNumHoursSleeped("#FFEA00");
-
-     else if (bardataday >= yellowthreshold)
-      setColorNumHoursSleeped("green");
-    
-  }
+      /*getSonno(dayforapi,dayforapi).then((_sleepValues) => {
+          console.log(_sleepValues);
+          setNumHoursSleeped(_sleepValues[0].durationMs)
+      })*/
   break;
       
-      case "Settimana": 
-   
+      case "Settimana":
+
+          let firstdayforapi = formatDate(firstWeekDay);
+          let lastdayforapi = formatDate(lastWeekDay);
+
         let firstday_string = getday(firstWeekDay);
         let lastday_string = getday(lastWeekDay);
         setRangeTime(firstday_string + " - " + lastday_string);
 
-        let sum = 0;
-        bardataweek.forEach((el) => {
-          sum = sum + el.value;
-        });
-        let average_week_sleep_hours = sum/bardataweek.length;
+        fillDates(firstdayforapi,lastdayforapi,"week",7);
 
-        setNumHoursSleeped(average_week_sleep_hours.toFixed(2).toString());
-
-        if(average_week_sleep_hours < redthreshold)
-          setColorNumHoursSleeped("red");
-
-         else if(average_week_sleep_hours >= redthreshold && average_week_sleep_hours < orangethreshold)
-          setColorNumHoursSleeped("orange");
-   
-         else if(average_week_sleep_hours >= orangethreshold && average_week_sleep_hours <yellowthreshold)
-          setColorNumHoursSleeped("#FFEA00");
-   
-         else if (average_week_sleep_hours >= yellowthreshold)
-          setColorNumHoursSleeped("green");
         
         //Inserire API per sonno settimanale: /api/patients/{patientID}/sleep/duration (startDate=firstdayforapi, endDate=lastdayforapi)
        break;
@@ -597,26 +584,11 @@ export default function Sonno_s({navigation,route}) {
       case "Mese":
         setRangeTime(padTo2Digits(parseInt(date.getMonth()+ Number(1))) + "/" + date.getFullYear());
 
-        let summonth = 0;
-        bardatamonth.forEach((el) => {
-          summonth = summonth + el.value;
-        });
-        let average_month_sleep_hours = summonth/bardatamonth.length;
+          let firstmonthdayapi = formatDate(firstmonthday);
+          let lastmonthdayapi = formatDate(lastmonthday);
+          let number_days_of_month = lastmonthday.getDate() - firstmonthday.getDate();
+          fillDates(firstmonthdayapi,lastmonthdayapi,"month",number_days_of_month);
 
-        setNumHoursSleeped(average_month_sleep_hours.toFixed(2).toString());
-        
-        if(average_month_sleep_hours < redthreshold)
-          setColorNumHoursSleeped("red");
-
-         else if(average_month_sleep_hours >= redthreshold && average_month_sleep_hours < orangethreshold)
-          setColorNumHoursSleeped("orange");
-   
-         else if(average_month_sleep_hours >= orangethreshold && average_month_sleep_hours <yellowthreshold)
-          setColorNumHoursSleeped("#FFEA00");
-   
-         else if (average_month_sleep_hours >= yellowthreshold)
-          setColorNumHoursSleeped("green");
-        
         break;
     
     

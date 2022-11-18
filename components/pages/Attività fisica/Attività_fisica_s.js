@@ -430,11 +430,17 @@ export default function Attività_fisica_s({ route }) {
   const media = (array) => {
 
     let sum = 0;
+    let lunghezza = 0;
     array.forEach((el) => {
-      sum = sum + el.value;
+      if(el.value !== 0) {
+        lunghezza = lunghezza +1;
+        sum = sum + el.value;
+      }
     });
-
-    return sum / array.length;
+    if(lunghezza!==0)
+      return sum / lunghezza;
+    else
+      return 0;
   }
 
   const handleColorNumStepsDone = (value) => {
@@ -706,42 +712,6 @@ export default function Attività_fisica_s({ route }) {
     setLastMonthDay(lastmonthday);
     setVariableLastMonthDay(lastmonthday);
 
-    //Converto i passi dell'ultima settimana nell'array da mettere nel grafico
- 
-
-   // setBarDataMonth(_bardatamonth);
-
-    //Inizializzazione Dati per linechart del battito
-
-    //Inserire API per prendere i dati settimanali del battito a riposo e metterli in mocklinedataweekhr /api/patients/{patientID}/hrs/rest (startDate=dateforapi, endDate=dateforapi)
-
-
-    let _linedataweekhr = mocklinedataweekhr.map((el) => {
-
-      el.value = el.rest;
-      el.dataPointText = `${el.rest}`;
-      el.label = convertDateintoDayoftheWeek(el.date);
-
-      return el;
-
-    });
-    setLineDataWeekHr(_linedataweekhr);
-
-    //Inserire API per prendere i dati mensili del battito a riposo e metterli in mocklinedatamonthhr /api/patients/{patientID}/hrs/rest (startDate=dateforapi, endDate=dateforapi)
-    let _linedatamonthhr = mocklinedatamonthhr.map((el) => {
-
-      el.value = el.rest;
-      el.dataPointText = `${el.rest}`;
-      el.label = convertDateintoNumberDay(el.date);
-
-      return el;
-
-    });
-
-    setLineDataMonthHr(_linedatamonthhr);
-
-    //Inserire API per sonno giornaliero: /api/patients/{patientID}/sleep/duration (startDate=dateforapi, endDate=dateforapi)
-    // setBarDataDay con il valore proveniente dall'API
   }, []);
 
   useEffect(() => {
@@ -751,11 +721,6 @@ export default function Attività_fisica_s({ route }) {
         let dayforapi = formatDate(date);
         
         setRangeTime(range_giorno);
-
-        if (bardataday) {
-          setNumStepsDone(bardataday);
-          handleColorNumStepsDone(bardataday);
-        }
 
         getSteps(dayforapi,dayforapi).then((_stepsValues) => {
 

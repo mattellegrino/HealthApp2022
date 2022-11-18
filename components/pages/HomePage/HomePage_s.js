@@ -46,7 +46,7 @@ const HomePage_s = ({ navigation, route }) => {
     let total = parseInt(hours) + parseFloat(minutes);
     return total;
   }
-  const dayformattedtime = formatTime(mockbardataday.time_ms).toPrecision(3);
+
   const [allQuests, setAllQuests] = useState([]);
   const [quests, setQuests] = useState([]);
   const [questsTodo, setQuestsTodo] = useState([]);
@@ -177,18 +177,7 @@ const getTodayHrValue = (today) => {
         setGiorno(currentDate);
     let steps_day = mockbardatadaysteps.steps;
     //Inserire API per passi giornalieri
-    //setState(steps_daily_done)
-
-    if(dayformattedtime < redthresholdsleep){
-    setColorNumHoursSleeped("red");
-  }
-    else if (dayformattedtime >= redthresholdsleep && dayformattedtime < orangethresholdsleep)
-    setColorNumHoursSleeped("orange")
-    else if (dayformattedtime >= orangethresholdsleep && dayformattedtime < yellowthresholdsleep)
-    setColorNumHoursSleeped("#FFEA00")
-    else if (dayformattedtime >= yellowthresholdsleep)
-    setColorNumHoursSleeped("green")
-
+    //setState(steps_daily_done
 
     if(steps_day < redthreshold){
       setColorNumStepsDone("red");r
@@ -204,8 +193,6 @@ const getTodayHrValue = (today) => {
      else if (steps_day >= yellowthreshold){
       setColorNumStepsDone("green");
      }
-
-    setNumHoursSleeped(dayformattedtime);
 
     getQuestionnairesAvailable();
 
@@ -331,7 +318,7 @@ const getTodayHrValue = (today) => {
                 </View>  
                   <View style={styles.sleep_details}>
                    <Text>
-                    <Text style={[s.header(2, "medium","#fff")]}>{dayformattedtime}</Text>
+                    <Text style={[s.header(2, "medium","#fff")]}>{sonno_daily_done!==undefined && formatTime(sonno_daily_done.durationMs)}</Text>
                     <Text style={s.smalltext("regular","#fff")}> h</Text>
                    </Text> 
                     <Text style={[s.text("small","#fff")]}>
