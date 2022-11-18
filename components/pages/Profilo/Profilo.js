@@ -11,6 +11,7 @@ const Profilo = ({navigation,route}) =>  {
     const [isLoading, setLoading] = useState(true);
     const [weightValues,setweightValues] = useState([]);
     const [lastWeight,setlastWeight] = useState([]);
+    const [maxWeight,setMaxWeight] = useState(0);
     /* */
     let getweightValuesbyId;
 

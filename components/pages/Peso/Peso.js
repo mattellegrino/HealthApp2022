@@ -38,7 +38,7 @@ const Peso = ({navigation}) => {
               let isValid=validate(peso);
               if(!isValid)
               {
-                  Alert.alert("Errore compilazione","Uno o piu' campi non inseriti, riprovare")
+                  Alert.alert("Errore compilazione","Uno o piu' campi non inseriti o non validi, riprovare")
                   setIsLoading(true)
                   finished=false;
               }
@@ -98,7 +98,7 @@ const validate = (peso) => {
     Keyboard.dismiss();
     let isValid = true;
     console.log("Valore peso:" + {peso})
-        if(peso===null || isNaN(peso))
+        if(peso===null || isNaN(peso) || peso > 250)
         {
             isValid=false;
         }

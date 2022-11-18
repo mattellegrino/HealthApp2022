@@ -15,8 +15,6 @@ import Recommendation from "./components/pages/Recommendation";
 import Alimentazione from "./components/pages/Alimentazione/Alimentazione";
 import InserisciAlimento from "./components/pages/Alimentazione/InserisciAlimento";
 import HomePage_s from "./components/pages/HomePage/HomePage_s";
-import HomePage_c from "./components/pages/HomePage/HomePage_c";
-import Sonno_c from "./components/pages/Sonno/Sonno_c";
 import Sonno_s from "./components/pages/Sonno/Sonno_s";
 import Attività_fisica_s from "./components/pages/Attività fisica/Attività_fisica_s";
 import Attività_fisica_c from "./components/pages/Attività fisica/Attività_fisica_c";
@@ -50,15 +48,7 @@ const App = () => {
                         headerShown: false,
                     }}
                 />
-                <Stack.Screen
-                    name="HomePage_c"
-                    component={HomePage_c}
-                    options={{
-                        title: "Benvenuto",
-                        headerBackTitleVisible: false,
-                        headerShown: false,
-                    }}
-                />
+            
 
                 <Stack.Screen
                     name="Home"
@@ -101,14 +91,7 @@ const App = () => {
                         fontSize: 16
                     }
                 }}/>
-                <Stack.Screen name="Sonno_c" component={Sonno_c} options={{
-                    headerShadowVisible: false,
-                    headerTitleAlign: "center",
-                    title: "Sonno",
-                    headerTitleStyle: {
-                        fontSize: 16
-                    }
-                }}/>
+        
 
                 <Stack.Screen name="Sonno_s" component={Sonno_s} options={{
                     headerShadowVisible: false,

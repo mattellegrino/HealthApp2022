@@ -706,34 +706,8 @@ export default function Attività_fisica_s({ route }) {
     setLastMonthDay(lastmonthday);
     setVariableLastMonthDay(lastmonthday);
 
-    let number_days_of_month = lastmonthday.getDate() - firstmonthday.getDate();
-
     //Converto i passi dell'ultima settimana nell'array da mettere nel grafico
-
-
-    fillDates(firstweekdayapi,lastweekdayapi,"heart_rate","week",7);
-    fillDates(firstmonthdayapi,lastmonthdayapi,"heart_rate","week",7);
-
-
-
-    //Converto i passi dell'ultimo mese nell'array da mettere nel grafico
-    let _bardatamonth = mockbardatamonth.map((el) => {
-      el.value = el.steps;
-
-      if(tipoUtente === "sperimentale"){
-        if (el.value < redthreshold) el.frontColor = "red";
-        else if (el.value >= redthreshold && el.value < orangethreshold)
-          el.frontColor = "orange";
-        else if (el.value >= orangethreshold && el.value < yellowthreshold)
-          el.frontColor = "#FFEA00";
-        else if (el.value >= yellowthreshold) el.frontColor = "green";
-      }
-
-      else
-        el.frontColor = "grey";
-      el.label = convertDateintoNumberDay(el.date);
-      return el;
-    });
+ 
 
    // setBarDataMonth(_bardatamonth);
 
@@ -774,7 +748,7 @@ export default function Attività_fisica_s({ route }) {
     switch (isSelected) {
       case "Giorno":
         let range_giorno = getday(date);
-        let dayafterforapi = formatDate(date);
+        let dayforapi = formatDate(date);
         
         setRangeTime(range_giorno);
 
@@ -783,7 +757,15 @@ export default function Attività_fisica_s({ route }) {
           handleColorNumStepsDone(bardataday);
         }
 
-        getHrValues(dayafterforapi,dayafterforapi).then((_hrValues) => {
+        getSteps(dayforapi,dayforapi).then((_stepsValues) => {
+
+          setNumStepsDone(_stepsValues[0].steps);
+          handleColorNumStepsDone(_stepsValues[0].steps);
+
+        })
+
+
+        getHrValues(dayforapi,dayforapi).then((_hrValues) => {
           setHrRest(_hrValues[0].rest)
           handleColorHrRest(_hrValues[0].rest);
         }).catch((err) => setHrRest(0));
