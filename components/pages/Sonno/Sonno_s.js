@@ -348,11 +348,11 @@ export default function Sonno_s({navigation,route}) {
 
                         _date.setDate(_date.getDate() + 1);
                         let tempdatestring = _date.toISOString().split("T")[0];
-                        let dayobject= {"date": tempdatestring, "steps": 0}
+                        let dayobject= {"date": tempdatestring, "durationMs": 0}
                         giorniesistenti.push(dayobject);
                     }
                     let _bardata = giorniesistenti.map((el) => {
-                        el.value = el.steps;
+                        el.value = formatTime(el.durationMs);
 
                         if (tipoUtente === "sperimentale") {
                             if (el.value < redthreshold) el.frontColor = "red";
@@ -407,6 +407,7 @@ export default function Sonno_s({navigation,route}) {
     }
 
   useEffect(() => {
+      getSonno("2022-10-01","2022-10-30")
   },[variableGiornoDate])
 
  

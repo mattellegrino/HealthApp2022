@@ -15,6 +15,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import QuestionnaireTemplate from "../../../classes/QuestionnaireTemplate";
 import QuestionnaireAnswered from "../../../classes/QuestionnaireAnswered";
+import Sleep from "../../../classes/Sleep";
 const s = require("../../../core/styles");
 
 
@@ -54,6 +55,7 @@ const HomePage_s = ({ navigation, route }) => {
   const [pieData,setPieData] = useState([]);
   const [steps_daily_done,setStepsDailyDone] = useState(undefined);
   const [hr_daily_done,setHrDailyDone] = useState(undefined);
+  const [sonno_daily_done,setSonnoDailyDone] = useState(undefined);
   const [colorNumHoursSleeped, setColorNumHoursSleeped] = useState("orange");
   const [colorNumStepsDone,setColorNumStepsDone] = useState("grey");
   const [redthreshold,setRedThreshold] = useState(1000);
@@ -114,7 +116,6 @@ const getTodayHrValue = (today) => {
         fetch(`http://${global.enrico}:8080/api/patients/${global.id}/hrs/rest?startDate=${today}&endDate=${today}`)
             .then((response) => response.json())
             .then((json) =>{
-                console.log(json)
                 if(json[json.length -1] !== undefined)
                 setHrDailyDone(json[json.length -1]);
                 else
@@ -125,6 +126,24 @@ const getTodayHrValue = (today) => {
             })
             .catch((error) => { console.error(error)})
   }
+
+
+   const getTodaySleepValue= (today) => {
+       fetch(`http://${global.enrico}:8080/api/patients/${global.id}/sleep/duration?startDate=${today}&endDate=${today}`)
+           .then((response) => response.json())
+           .then((json) =>{
+               let sonno = json.map(json => Sleep.from(json));
+               console.log(sonno[sonno.length -1])
+               if(sonno[sonno.length -1] !== undefined)
+                   setSonnoDailyDone(sonno[sonno.length -1]);
+               else
+               {
+                   let value = {"date": today, "durationMs": 0 };
+                   setSonnoDailyDone(value)
+               }
+           })
+           .catch((error) => { console.error(error)})
+    }
 
     const getQuestionnairesAvailable = () => {
         fetch(`http://${global.enrico}:8080/api/questionnaires/templates`)
@@ -153,6 +172,7 @@ const getTodayHrValue = (today) => {
     let currentDateApi = formatDate(currentDate);
     getTodaySteps(currentDateApi);
     getTodayHrValue(currentDateApi);
+    getTodaySleepValue(currentDateApi);
 
         setGiorno(currentDate);
     let steps_day = mockbardatadaysteps.steps;
@@ -171,16 +191,16 @@ const getTodayHrValue = (today) => {
 
 
     if(steps_day < redthreshold){
-      setColorNumStepsDone("red");
+      setColorNumStepsDone("red");r
       }
      else if(steps_day >= redthreshold && steps_day < orangethreshold){
       setColorNumStepsDone("orange");
      }
-    
+
      else if(steps_day >= orangethreshold && steps_day < yellowthreshold){
       setColorNumStepsDone("#FFEA00");
      }
-    
+
      else if (steps_day >= yellowthreshold){
       setColorNumStepsDone("green");
      }
@@ -276,7 +296,7 @@ const getTodayHrValue = (today) => {
         <View style={{ flex: 1, flexDirection: "column" }}>
           <Pressable
             style={{ flex: 1.5 }}
-            onPress={() => navigation.navigate('Sonno_s',{hours_sleeped: dayformattedtime ,color_num_hours_sleeped: colorNumHoursSleeped })}
+            onPress={() => navigation.navigate('Sonno_s',{hours_sleeped: formatTime(sonno_daily_done.durationMs),color_num_hours_sleeped: colorNumHoursSleeped })}
           >
             <View style={styles.container_sonno}>
               <Card
