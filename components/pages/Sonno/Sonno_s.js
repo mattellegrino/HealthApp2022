@@ -429,23 +429,33 @@ export default function Sonno_s({navigation,route}) {
                     _sonnoweek.forEach((dayelement) => {
                         giorniesistenti.push(dayelement);
                     })
+      
+                    let temparray = [];
+                    let tempdate = new Date(firstweekdayapi);
 
-                    let _date;
-                    if(_sonnoweek.length > 0)
-                    {
-                        _date= new Date(giorniesistenti[giorniesistenti.length - 1].date);
+                    for(let i =0; i< number_of_days; i++) {
+
+                      if(i!=0)
+                      tempdate.setDate(tempdate.getDate() + 1);
+                      let tempdatestring = tempdate.toISOString().split("T")[0];
+                      let dayobject= {"date": tempdatestring, "durationMs": 0}
+                      temparray.push(dayobject);
+
                     }
-                    else _date = new Date(firstweekdayapi);
 
-                    let length = giorniesistenti.length;
-                    for (let i = 0; i < number_of_days - length; i++) {
 
-                        _date.setDate(_date.getDate() + 1);
-                        let tempdatestring = _date.toISOString().split("T")[0];
-                        let dayobject= {"date": tempdatestring, "durationMs": 0}
-                        giorniesistenti.push(dayobject);
+
+                    for (let i = 0; i < number_of_days; i++) {
+
+                      giorniesistenti.forEach((el) => {
+                        if(el.date == temparray[i].date){
+                          temparray[i].durationMs = el.durationMs;
+                        }
+                      })
+                     
                     }
-                    let _bardata = giorniesistenti.map((el) => {
+
+                    let _bardata = temparray.map((el) => {
                         el.value = formatTime(el.durationMs);
 
                         if (tipoUtente === "sperimentale") {
@@ -469,7 +479,7 @@ export default function Sonno_s({navigation,route}) {
                         setBarDataWeek(_bardata);
                         console.log(_bardata);
                         let average_weekly_sonno = media(_bardata);
-                        console.log("MEDIA" + average_weekly_sonno);
+                    
                         setNumHoursSleeped(average_weekly_sonno.toFixed(2));
                         handleColorSleep(average_weekly_sonno);
                     }else {
@@ -494,7 +504,7 @@ export default function Sonno_s({navigation,route}) {
         if (response.ok)
         {
             let sonno = sonno_json.map(json => Sleep.from(json));
-           return sonno
+           return sonno.reverse()
         }
         else {
             throw sonno_json;
@@ -526,7 +536,7 @@ export default function Sonno_s({navigation,route}) {
     
     //inizializzo primo e ultimo giorno della settimana 
     let currdate = new Date ();
-    var first = currdate.getDate() - currdate.getDay(); 
+    var first = currdate.getDate() - currdate.getDay() + 1; 
     var last = first + 6; 
     let firstweekday = new Date(currdate.setDate(first));
     let firstdayforapi = formatDate(firstweekday);

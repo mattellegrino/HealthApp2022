@@ -218,12 +218,12 @@ export default function Attività_fisica_s({ route }) {
         //Inserire API per sonno giornaliero: /api/patients/{patientID}/activities/steps (startDate=dayafterforapi, endDate=dayafterforapi)
         getSteps(dayafterforapi,dayafterforapi).then((_steps) => {
             setNumStepsDone(_steps[0].steps)
+            handleColorNumStepsDone(_steps[0].steps);
         }
       ).catch((err) => setNumStepsDone(0));
 
         getHrValues(dayafterforapi,dayafterforapi).then((_hrValues) => {
           setHrRest(_hrValues[0].rest)
-          console.log(_hrValues[0].rest);
         }).catch((err) => setHrRest(0));
         setRangeTime(getday(dayafter));
         setVariableGiornoDate(dayafter);
@@ -299,6 +299,7 @@ export default function Attività_fisica_s({ route }) {
         let daybeforeforapi = formatDate(daybefore);
         getSteps(daybeforeforapi,daybeforeforapi).then((_steps) => {
               setNumStepsDone(_steps[0].steps)
+              handleColorNumStepsDone(_steps[0].steps);
             }
         ).catch((err) => setNumStepsDone(0));
 
@@ -543,22 +544,31 @@ export default function Attività_fisica_s({ route }) {
               giorniesistenti.push(dayelement);
             })
 
-            let _date;
-            if(_stepsweek.length > 0)
-            {
-              _date= new Date(giorniesistenti[giorniesistenti.length - 1].date);
-            }
-            else _date = new Date(firstweekdayapi);
+            let temparray = [];
+            let tempdate = new Date(firstweekdayapi);
 
-            let length = giorniesistenti.length;
-            for (let i = 0; i < number_of_days - length; i++) {
+            for(let i =0; i< number_of_days; i++) {
 
-              _date.setDate(_date.getDate() + 1);
-              let tempdatestring = _date.toISOString().split("T")[0];
+              if(i!=0)
+              tempdate.setDate(tempdate.getDate() + 1);
+              let tempdatestring = tempdate.toISOString().split("T")[0];
               let dayobject= {"date": tempdatestring, "steps": 0}
-              giorniesistenti.push(dayobject);
+              temparray.push(dayobject);
+
             }
-            let _bardata = giorniesistenti.map((el) => {
+
+
+
+            for (let i = 0; i < number_of_days; i++) {
+
+              giorniesistenti.forEach((el) => {
+                if(el.date == temparray[i].date){
+                  temparray[i].steps = el.steps;
+                }
+              })
+             
+            }
+            let _bardata = temparray.map((el) => {
               el.value = el.steps;
 
               if (tipoUtente === "sperimentale") {
@@ -583,11 +593,12 @@ export default function Attività_fisica_s({ route }) {
               let average_weekly_steps = media(_bardata);
 
               setNumStepsDone(average_weekly_steps.toFixed(0));
+              console.log(_bardata);
               handleColorNumStepsDone(average_weekly_steps);
             }else {
               setBarDataMonth(_bardata);
               let average_monthly_steps = media(_bardata);
-
+              console.log(_bardata);
               setNumStepsDone(average_monthly_steps.toFixed(0));
               handleColorNumStepsDone(average_monthly_steps);
 
@@ -607,22 +618,32 @@ export default function Attività_fisica_s({ route }) {
               giorniesistenti.push(dayelement);
             })
 
-            let _date;
-            if(hrweek.length > 0)
-            {
-              _date= new Date(giorniesistenti[giorniesistenti.length - 1].date);
-            }
-            else _date = new Date(firstweekdayapi);
+            let temparray = [];
+            let tempdate = new Date(firstweekdayapi);
 
-            let length = giorniesistenti.length;
-            for (let i = 0; i < number_of_days - length; i++) {
+            for(let i =0; i< number_of_days; i++) {
 
-              _date.setDate(_date.getDate() + 1);
-              let tempdatestring = _date.toISOString().split("T")[0];
+              if(i!=0)
+              tempdate.setDate(tempdate.getDate() + 1);
+              let tempdatestring = tempdate.toISOString().split("T")[0];
               let dayobject= {"date": tempdatestring, "rest": 0}
-              giorniesistenti.push(dayobject);
+              temparray.push(dayobject);
+
             }
-            let _bardatahr = giorniesistenti.map((el) => {
+
+
+
+            for (let i = 0; i < number_of_days; i++) {
+
+              giorniesistenti.forEach((el) => {
+                if(el.date == temparray[i].date){
+                  temparray[i].rest = el.rest;
+                }
+              })
+             
+            }
+
+            let _bardatahr = temparray.map((el) => {
               el.value = el.rest;
 
               if (tipoUtente === "sperimentale") {
@@ -641,7 +662,7 @@ export default function Attività_fisica_s({ route }) {
             });
             if(granularity == "week"){
             setLineDataWeekHr(_bardatahr);
-            console.log(_bardatahr);
+            
             let average_weekly_hr = media(_bardatahr);
 
             setHrRest(average_weekly_hr.toFixed(0));
@@ -682,7 +703,6 @@ export default function Attività_fisica_s({ route }) {
 
     let hr_rest = route.params.hr_rest;
     setLineDataDayHr(hr_rest);
-    console.log(hr_rest);
 
     setFirstTime(true);
 
@@ -692,7 +712,7 @@ export default function Attività_fisica_s({ route }) {
 
     //inizializzo primo e ultimo giorno della settimana
     let currdate = new Date();
-    var first = currdate.getDate() - currdate.getDay();
+    var first = currdate.getDate() - currdate.getDay() + 1;
     var last = first + 6;
     let firstweekday = new Date(currdate.setDate(first));
     setFirstWeekDay(firstweekday);
@@ -727,7 +747,7 @@ export default function Attività_fisica_s({ route }) {
           setNumStepsDone(_stepsValues[0].steps);
           handleColorNumStepsDone(_stepsValues[0].steps);
 
-        })
+        }).catch((err)=> setNumStepsDone(0));
 
 
         getHrValues(dayforapi,dayforapi).then((_hrValues) => {
@@ -738,6 +758,7 @@ export default function Attività_fisica_s({ route }) {
         break;
 
       case "Settimana":
+        
         let firstdayforapi = formatDate(firstWeekDay);
         let lastdayforapi = formatDate(lastWeekDay);
 
@@ -745,16 +766,6 @@ export default function Attività_fisica_s({ route }) {
         let lastday_string = getday(lastWeekDay);
         setRangeTime(firstday_string + " - " + lastday_string);
 
-        //calcolo media passi settimanali
-        /*let average_weekly_steps = media(bardataweek);
-
-        setNumStepsDone(average_weekly_steps.toFixed(0));
-        handleColorNumStepsDone(average_weekly_steps);
-
-        let average_weekly_hr = media(linedataweekhr);
-        setHrRest(average_weekly_hr.toFixed(0));
-        handleColorHrRest(average_weekly_hr);*/
-        console.log(firstdayforapi,lastdayforapi);
 
         fillDates(firstdayforapi,lastdayforapi,"steps","week",7);
         fillDates(firstdayforapi,lastdayforapi,"heart_rate","week",7);
@@ -775,14 +786,7 @@ export default function Attività_fisica_s({ route }) {
         let number_days_of_month = lastmonthday.getDate() - firstmonthday.getDate();
         fillDates(firstmonthdayapi,lastmonthdayapi,"steps","month",number_days_of_month);
         fillDates(firstmonthdayapi,lastmonthdayapi,"heart_rate","month",number_days_of_month);
-        /*let average_monthly_steps = media(bardatamonth);
-
-        setNumStepsDone(average_monthly_steps.toFixed(0));
-        handleColorNumStepsDone(average_monthly_steps);
-
-        let average_monthly_hr = media(linedatamonthhr);
-        setHrRest(average_monthly_hr.toFixed(0));
-        handleColorHrRest(average_monthly_hr);*/
+      
         break;
     }
   }, [isSelected]);
