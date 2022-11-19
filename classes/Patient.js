@@ -1,28 +1,21 @@
 class Patient{
 
-    constructor(id=undefined, firstName, lastName, email, ssn, height, maritalStatus, gender, bmi, birthDate, doctor, password){
+    constructor(id=undefined, firstName, lastName, email, ssn, height, gender, birthDate, doctor,experimental, username){
         this.id = id;
         this.ssn = ssn;
         this.height = height;
-        this.maritalStatus = maritalStatus;
         this.gender = gender;
-        this.bmi = bmi;
         this.birthDate = birthDate;
-        this.doctorId = doctor;
-        this.username = email;
-        this.password = password;
-        this._firstName = firstName;
-        this._lastName = lastName;
-        this._email = email;
-    }
-
-
-    get email() {
-        return this._email;
+        this.doctor = doctor;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.experimental = experimental;
+        this.username = username;
     }
 
     static from(json){
-        return new Patient(json.id, json._firstName, json._lastName, json._email, json.ssn, json.height, json.maritalStatus, json.gender, json.bmi, json.birthDate, json.doctorId, json.password);
+        return new Patient(json.id, json.firstName, json.lastName, json.email, json.ssn, json.height, json.gender, json.birthDate, json.doctor.id,json.experimental,json.user.username);
     }
 }
 

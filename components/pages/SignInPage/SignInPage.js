@@ -32,8 +32,6 @@ const SignInPage = ({ navigation }) =>  {
         try{
 
                 let authUser = await login(username,password,ip_add);
-                console.log(authUser);
-
                 let token_exists = authUser.tokenExists
                 console.log(token_exists)
 
@@ -47,7 +45,8 @@ const SignInPage = ({ navigation }) =>  {
                 global.id = _user.id;
                 console.log(_user);
 
-                let _user_type = await getPatientType(_user.id)
+                let _user_type = _user.experimental;
+
                 console.log("Patient type:( true experimental / false control ) = > " +_user_type)
                 global.patient_type = _user_type
 
@@ -61,20 +60,8 @@ const SignInPage = ({ navigation }) =>  {
                 );
 
         } catch (err) {
-            console.log(err)
+            console.log("Errore di autenticazione" + err)
             authenticationError=true;
-        }
-    }
-
-    async function getPatientType(_user_id) {
-        const response = await fetch(`http://${ip_add}:8080/api/patients/${_user_id}`);
-        const userJson = await response.json();
-        if (response.ok)
-        {
-            return userJson.experimental;
-        }
-        else {
-            throw userJson;
         }
     }
 
@@ -121,13 +108,13 @@ const SignInPage = ({ navigation }) =>  {
                 let username= user_obj.authUser.username;
                 console.log("Userobj username: " +username)
                 let _user = user_obj.user
-                console.log("Userobj user: " +_user)
+                console.log("Userobj user: " +_user.firstName)
 
                 global.id = _user.id;
                 global.patient_type = loggedUser._user_type
 
                 navigation.navigate('HomePage_s', {
-                    username: username,
+                    username: _user.firstName,
                     ip_add: ip_add
                 })
             }
@@ -165,13 +152,13 @@ const SignInPage = ({ navigation }) =>  {
                     }
                     catch (err)
                     {
-                        console.log(err);
+                        console.log(err + "Nessun cookie presente.");
                     }
                 }
                 else
                 {
                     console.log("DATA: "+ loggedUser)
-                    navigation.navigate('HomePage_s',{ username:loggedUser.authUser.username,
+                    navigation.navigate('HomePage_s',{ username:loggedUser.user.firstName,
                         ip_add:ip_add,user:loggedUser.user
                     } )
                 }
@@ -243,7 +230,7 @@ const SignInPage = ({ navigation }) =>  {
                 if (response.ok) {
                     resolve(user);
                     let cookie = response.headers.get('set-cookie').split(";")[0].split("=").pop(); //JSESSIONID=.... split prende il valore finale
-                    console.log(cookie)
+                    console.log("Cookie:" +cookie)
                     try {
                         await SecureStore.setItemAsync(
                             'cookie',

@@ -133,9 +133,11 @@ const getTodayHrValue = (today) => {
            .then((response) => response.json())
            .then((json) =>{
                let sonno = json.map(json => Sleep.from(json));
-               console.log(sonno[sonno.length -1])
                if(sonno[sonno.length -1] !== undefined)
+               {
                    setSonnoDailyDone(sonno[sonno.length -1]);
+                   console.log(sonno[sonno.length -1])
+               }
                else
                {
                    let value = {"date": today, "durationMs": 0 };
@@ -180,7 +182,7 @@ const getTodayHrValue = (today) => {
     //setState(steps_daily_done
 
     if(steps_day < redthreshold){
-      setColorNumStepsDone("red");r
+      setColorNumStepsDone("red");
       }
      else if(steps_day >= redthreshold && steps_day < orangethreshold){
       setColorNumStepsDone("orange");
