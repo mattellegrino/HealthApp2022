@@ -14,6 +14,8 @@ import { Card } from "react-native-shadow-cards";
 import Battito_Cardiaco from "./Battito_Cardiaco";
 const s = require("../../../core/styles");
 import { BarChart, LineChart, PieChart } from "react-native-gifted-charts";
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+import LottieView from 'lottie-react-native';
 import * as Progress from "react-native-progress";
 import LabelComponent from "./LabelComponent";
 export default function Attività_fisica_s({ route }) {
@@ -792,37 +794,19 @@ export default function Attività_fisica_s({ route }) {
   }, [isSelected]);
 
   return (
-      <ScrollView style={{ flex: 1, padding: 10, backgroundColor: "white" }}>
+    <View style={styles.container_main}>
+      <View style={styles.container_navbar}>
         <CustomNavbar
             type={"attività"}
             isSelected={isSelected}
             selezioni={selezioni}
             handleselection={handleselection}
         ></CustomNavbar>
-
-        <View
-            style={{
-              flex: 0,
-              marginTop: 10,
-              marginBottom: 10,
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-        >
-          <Ionicons
-              name="chevron-back-outline"
-              size={24}
-              color="black"
-              onPress={() => minus()}
-          ></Ionicons>
+      </View>
+      <View style={styles.container_rangetime}>
+          <Ionicons name="chevron-back-outline" size={24} color="black" onPress={() => minus()}/>
           <Text style={s.body("medium")}> {range_time} </Text>
-          <Ionicons
-              name="chevron-forward-outline"
-              size={24}
-              color="black"
-              onPress={() => plus()}
-          ></Ionicons>
+          <Ionicons name="chevron-forward-outline" size={24} color="black" onPress={() => plus()}/>
         </View>
 
         <View style={styles.container_multichoice}>
@@ -858,25 +842,23 @@ export default function Attività_fisica_s({ route }) {
           </Pressable>
         </View>
 
-        <View style={{ height: Dimensions.get("window").height }}>
+        <View style={styles.container_grafico}>
           {selectedChoice == "passi" && (
-              <View style={{ marginTop: 30 }}>
+              <View style={{flex:1, marginTop: 0 }}>
                 {/*tab passi*/}
-                <View style={{ height: "30%" }}>
+                <View style={{flex: 0.5 }}>
                   <Text style={[s.smalltext("medium", "grey"), styles.subtitle]}>
                     Passi
                   </Text>
-                  <Card
-                      cornerRadius={20}
-                      elevation={0}
+                  <View
                       style={{
                         backgroundColor: "#fff",
-                        flex: 1,
+                        flex: 0,
                         width: "95%",
                         padding: 10,
-                        margin: 5,
                         marginTop: 10,
                         marginBottom: 10,
+                        alignSelf:"center",
                         alignItems: "center",
                       }}
                   >
@@ -917,7 +899,7 @@ export default function Attività_fisica_s({ route }) {
                             </Text>
                           </>}
                     </View>
-                  </Card>
+                  </View>
                 </View>
 
                 {cardvisible &&
@@ -965,7 +947,7 @@ export default function Attività_fisica_s({ route }) {
           )}
 
           {selectedChoice == "battito" && (
-              <View style={{ marginTop: 30}}>
+              <View style={{flex: 0.5 }}>
 
                 <Text style={[s.smalltext("medium", "grey"), styles.subtitle]}>
                   Battito cardiaco {isSelected != "Giorno" ? "(media)" : ""}
@@ -1055,12 +1037,58 @@ export default function Attività_fisica_s({ route }) {
               </View>
           )}
         </View>
-      </ScrollView>
+        <GestureRecognizer style={styles.container_swipe_gestures} onSwipeLeft={()=> plus()} onSwipeRight={()=> minus()}>
+         <View style={{marginBottom: 20}}>
+          <Text style={s.header(4,"bold")}>SCORRI PER NAVIGARE TRA LE DATE</Text>
+         </View>  
+          <LottieView
+                style={{height:50}}
+                source={require("../../../assets/7666-swipe.json")}
+                loop
+                autoPlay
+      />
+     </GestureRecognizer>    
+      </View>
   );
 }
 
 const styles = StyleSheet.create({
+
+  container_main: {
+    flex: 5,
+    backgroundColor:"white"
+},
+
+container_navbar: {
+  flex:0.5
+},
+container_rangetime: {
+  flex:0,
+  margin:10,
+  justifyContent:"center",
+  alignItems:"center",
+  flexDirection:"row"
+},
+container_grafico : {
+  flex:3,
+  marginTop:30,
+  marginBottom:30
+  },
+
+  container_swipe_gestures: {
+    borderTopWidth:3,
+    borderTopColor: "black",
+    flex: 1,
+    backgroundColor: "#fff",
+    padding:20,
+    marginTop:10,
+    alignItems: "center",
+    justifyContent:"space-evenly"
+},
+
   subtitle: {
+    marginLeft:5,
+    paddingBottom:5,
     borderBottomWidth: 1,
     borderBottomColor: "lightgrey",
   },

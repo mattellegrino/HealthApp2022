@@ -2,12 +2,15 @@ import { View, SafeAreaView, Text, StyleSheet,Dimensions, FlatList, StatusBar,Sc
 import React, { useState, useEffect } from "react";
 import CustomNavbar from "../../CustomNavbar/CustomNavbar";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { Card } from "react-native-shadow-cards";
 const s = require("../../../core/styles");
 import { BarChart } from "react-native-gifted-charts";
 import * as Progress from 'react-native-progress';
 import QuestionnaireAnswered from "../../../classes/QuestionnaireAnswered";
 import Sleep from "../../../classes/Sleep";
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+import LottieView from 'lottie-react-native';
 
 export default function Sonno_s({navigation,route}) {
 
@@ -607,26 +610,27 @@ export default function Sonno_s({navigation,route}) {
 
   return (
    <View style={styles.container_main}>
-     <ScrollView style={{height:Dimensions.get('window').height,padding:10, backgroundColor: "white"}}>
+    <View style={styles.container_navbar}>
       <CustomNavbar type={"sonno"} isSelected={isSelected} selezioni={selezioni} handleselection={handleselection}></CustomNavbar>
+      </View>
         <View style={styles.container_rangetime}>
             <Ionicons name="chevron-back-outline" size={28} color="black" onPress={()=> minus()}></Ionicons>
                 <Text style={s.body("medium")}> {range_time} </Text>
             <Ionicons name="chevron-forward-outline" size={28} color="black" onPress={()=> plus()}></Ionicons>
         </View>
-
+      <View style={styles.container_oresonno}>
         <Text style={[s.smalltext("medium","grey"), styles.subtitle]}>Durata del sonno</Text>
         <Card
                 cornerRadius={20}
                 elevation={3}
                 style={{
                   backgroundColor: "#1565C0",
-                  flex: 1,
+                  flex: 0,
                   width: "55%",
                   alignSelf: "center",
                   padding: 10,
                   margin:5,
-                  marginTop:10,
+                  marginTop:20,
                   marginBottom:10,
                   alignItems: "center",
                 }}
@@ -646,12 +650,16 @@ export default function Sonno_s({navigation,route}) {
             }
            </View>  
         </Card> 
+      </View> 
 
-        {isSelected != "Giorno" && 
-        (<View style={{height:"40%"}}>
+        
+        <View style={styles.container_grafico}>
+          {isSelected != "Giorno" && (
+            <>
           <View style={{marginLeft:15,marginBottom:10}}>
             <Text style={s.body("medium")}>Ore sonno</Text>
           </View>
+       
          <BarChart 
             data={isSelected == "Settimana" ? bardataweek : isSelected =="Giorno" ? bardataday : bardatamonth}
             spacing={isSelected == "Settimana" ? 30 : 10}
@@ -673,12 +681,24 @@ export default function Sonno_s({navigation,route}) {
             dashWidth: 2,
             dashGap: 3,
         }}
+      
             />
-        </View>)}
+            </>)}
+       
+        </View>
         
-
-        <View style={styles.container_sleep_details}>
-            <View style={styles.container_suspensions}>
+      <GestureRecognizer style={styles.container_swipe_gestures} onSwipeLeft={()=> plus()} onSwipeRight={()=> minus()}>
+         <View style={{marginBottom: 20}}>
+          <Text style={s.header(4,"bold")}>SCORRI PER NAVIGARE TRA LE DATE</Text>
+         </View>  
+          <LottieView
+                style={{height:50}}
+                source={require("../../../assets/7666-swipe.json")}
+                loop
+                autoPlay
+      />
+     </GestureRecognizer>    
+            {/*<View style={styles.container_suspensions}>
 
               <View style={{flex:1}}>
                 <Text style={s.body("bold")}> {num_sospensions > 1 || num_sospensions == 0 ? "Sospensioni" : "Sospensione"} </Text>
@@ -705,10 +725,8 @@ export default function Sonno_s({navigation,route}) {
                 <View style={{flex:1}}>
                  <Text style={s.header(3,"regular")}> {num_ciclicompletati} </Text>
                 </View>       
-            </View>
-        </View>      
-    </ScrollView>
-  </View>  
+      </View>*/}
+    </View>
   );
 }
 
@@ -717,9 +735,45 @@ const styles = StyleSheet.create({
 
   
     container_main: {
-        flex: 1,
+        flex: 5,
         backgroundColor:"white"
     },
+
+    container_navbar: {
+      flex:0.5
+    },
+    container_rangetime: {
+      flex:0,
+      margin:10,
+      justifyContent:"center",
+      alignItems:"center",
+      flexDirection:"row"
+    },
+
+    container_oresonno: {
+      flex:1,
+      padding:10,
+      marginBottom:30
+    },
+
+    container_grafico : {
+      flex:3,
+      marginTop:30,
+      marginBottom:30
+      },
+      
+
+    container_swipe_gestures: {
+      borderTopWidth:3,
+      borderTopColor: "#1565C0",
+      flex: 1,
+      backgroundColor: "#fff",
+      padding:20,
+      marginTop:10,
+      alignItems: "center",
+      justifyContent:"space-evenly"
+  },
+ 
 
     container_sleep: {
         borderRadius:20,
@@ -735,16 +789,6 @@ const styles = StyleSheet.create({
       borderBottomColor: "lightgrey"
    
      },
-
-    container_sleep_details: {
-        flex: 1,
-        backgroundColor: "#fff",
-        height:230,
-        padding:20,
-        marginTop:10,
-        flexDirection: "row",
-        justifyContent:"space-evenly"
-    },
 
     container_suspensions: {
 
@@ -772,15 +816,6 @@ const styles = StyleSheet.create({
         borderColor:"lightgrey",
       
     }, 
-
-    container_rangetime: {
-      flex:0.5,
-      margin:10,
-      justifyContent:"center",
-      alignItems:"center",
-      flexDirection:"row"
-    },
-
 
     text_sleep: {
       marginTop:"50%",

@@ -7,7 +7,7 @@ export default function CustomNavbar(props) {
   return (
     <View style={styles.container}>
         <Card cornerRadius={10} elevation={5} style={{
-           flex:1,
+           flex:0,
            backgroundColor:"white",
            flexDirection:"row",
            justifyContent:"space-between", 
@@ -31,7 +31,7 @@ export default function CustomNavbar(props) {
 const styles = StyleSheet.create({
 
   container: {
-    flex:0,
+    flex:1,
     paddingLeft:10,
     justifyContent:"center",
     marginTop:10

@@ -6,7 +6,9 @@ import {
   Text,
   StyleSheet,
   Pressable,
-  ImageBackground
+  ImageBackground,
+  BackHandler,
+  Alert
 } from "react-native";
 
 import { Card } from "react-native-shadow-cards";
@@ -200,7 +202,7 @@ const getTodayHrValue = (today) => {
 
 
 
-    /*const backAction = () => {
+    const backAction = () => {
       Alert.alert("Arrivederci", "Sei sicuro di voler chiudere l'app?", [
         {
           text: "Annulla",
@@ -216,12 +218,12 @@ const getTodayHrValue = (today) => {
         },
       ]);
       return true;
-    };*/
-    /*const backHandler = BackHandler.addEventListener(
+    };
+    const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       backAction
     );
-    return () => backHandler.remove();*/
+    return () => backHandler.remove();
   }, [route.params]);
 
   const image = "../Homepage/background.png";
