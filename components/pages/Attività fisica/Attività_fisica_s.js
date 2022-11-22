@@ -1078,7 +1078,7 @@ container_grafico : {
   container_swipe_gestures: {
     borderTopWidth:3,
     borderTopColor: "black",
-    flex: 1,
+    flex: 0.4,
     backgroundColor: "#fff",
     padding:20,
     marginTop:10,

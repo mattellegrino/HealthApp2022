@@ -97,8 +97,8 @@ export default function Sonno_s({navigation,route}) {
   const [orangethreshold,setOrangeThreshold] = useState(6);
   const [yellowthreshold,setYellowThreshold] = useState(7.30);
   //Ore dormite
-  const [num_hours_sleeped, setNumHoursSleeped] = useState(route.params.hours_sleeped);
-  const [color_num_hours_sleeped, setColorNumHoursSleeped] = useState(route.params.color_hours_sleeped);
+  const [num_hours_sleeped, setNumHoursSleeped] = useState(0);
+  const [color_num_hours_sleeped, setColorNumHoursSleeped] = useState(0);
   //Numero sospensioni
   const [num_sospensions,setNumSospensions] = useState(0);
   //Ore sonno profondo
@@ -515,7 +515,7 @@ export default function Sonno_s({navigation,route}) {
     }
 
   useEffect(() => {
-      getSonno("2022-10-01","2022-10-30")
+      
   },[variableGiornoDate])
 
  
@@ -524,6 +524,11 @@ export default function Sonno_s({navigation,route}) {
     let dateforapi = formatDate(date); //variabile da inserire nell'API per ricavare il sonno giornaliero
     // data odierna, non va MAI cambiata
     // inizializzo date che poi vengono cambiate quando si va avanti/indietro con le frecce
+    getSonno(dateforapi,dateforapi).then((_sleepValues) => {
+      console.log(_sleepValues);
+      setNumHoursSleeped(_sleepValues[0].durationMs)
+  }).catch(() => {setNumHoursSleeped(0)})
+
     setVariableGiornoDate(date);
     setVariableMonthDate(date);
     setMonthDate(date);
@@ -573,10 +578,10 @@ export default function Sonno_s({navigation,route}) {
       let dayforapi = formatDate(date);
       setRangeTime(range_giorno);
 
-      /*getSonno(dayforapi,dayforapi).then((_sleepValues) => {
+      getSonno(dayforapi,dayforapi).then((_sleepValues) => {
           console.log(_sleepValues);
           setNumHoursSleeped(_sleepValues[0].durationMs)
-      })*/
+      }).catch((err) => {setNumHoursSleeped(0)})
   break;
       
       case "Settimana":
@@ -689,10 +694,10 @@ export default function Sonno_s({navigation,route}) {
         
       <GestureRecognizer style={styles.container_swipe_gestures} onSwipeLeft={()=> plus()} onSwipeRight={()=> minus()}>
          <View style={{marginBottom: 20}}>
-          <Text style={s.header(4,"bold")}>SCORRI PER NAVIGARE TRA LE DATE</Text>
+          <Text style={s.body("bold")}>SCORRI PER NAVIGARE TRA LE DATE</Text>
          </View>  
           <LottieView
-                style={{height:50}}
+                style={{height:30}}
                 source={require("../../../assets/7666-swipe.json")}
                 loop
                 autoPlay
@@ -740,7 +745,8 @@ const styles = StyleSheet.create({
     },
 
     container_navbar: {
-      flex:0.5
+      flex:0.7,
+      alignItems:"center"
     },
     container_rangetime: {
       flex:0,
@@ -766,7 +772,7 @@ const styles = StyleSheet.create({
     container_swipe_gestures: {
       borderTopWidth:3,
       borderTopColor: "#1565C0",
-      flex: 1,
+      flex: 0.3,
       backgroundColor: "#fff",
       padding:20,
       marginTop:10,

@@ -19,10 +19,12 @@ import QuestionnaireTemplate from "../../../classes/QuestionnaireTemplate";
 import QuestionnaireAnswered from "../../../classes/QuestionnaireAnswered";
 import Sleep from "../../../classes/Sleep";
 const s = require("../../../core/styles");
+import { useNavigation } from '@react-navigation/native';
 
 
-const HomePage_s = ({ navigation, route }) => {
-  const {username} = route.params;
+const HomePage_s = (props) => {
+  const {username} = props.username;
+  const navigation = useNavigation();
   const [giorno_dell_anno, setGiorno] = useState("");
   const mockbardataday = {
     date: "2022-06-21",
@@ -224,11 +226,13 @@ const getTodayHrValue = (today) => {
       backAction
     );
     return () => backHandler.remove();
-  }, [route.params]);
+  }, []);
 
   const image = "../Homepage/background.png";
 
   return (
+
+
     <View style={{ flex: 1 }}>
       <ImageBackground source={require('../HomePage/background.png')} resizeMode="cover" style={{flex:1,width:"100%"}}>
         <View style={{flex:1,padding:20}}>
@@ -286,7 +290,7 @@ const getTodayHrValue = (today) => {
       >
         <View style={{ flex: 1, flexDirection: "column" }}>
           <Pressable
-            style={{ flex: 1.5 }}
+            style={{ flex: 1.8 }}
             onPress={() => navigation.navigate('Sonno_s',{hours_sleeped: formatTime(sonno_daily_done.durationMs),color_num_hours_sleeped: colorNumHoursSleeped })}
           >
             <View style={styles.container_sonno}>

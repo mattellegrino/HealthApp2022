@@ -9,13 +9,15 @@ export default function Alimentazione({route}) {
 
     const [isSelected,setIsSelected] = useState("Giorno");
     const [range_time,setRangeTime] = useState("");
-    const {data} = route.params;
+    
     
     const handleselection = (selected) => {
     setIsSelected(selected);
     }
 
     useEffect(() => {
+
+      const data = new Date();
 
         switch (isSelected) {
     
@@ -80,7 +82,7 @@ export default function Alimentazione({route}) {
 
   return (
   <SafeAreaView style={styles.container}>
-    <View style={{flex:0.8}}>
+    <View style={{flex:0.8,alignItems: 'center'}}>
         <CustomNavbar type={"questionari"} isSelected={isSelected} selezioni={["Giorno","Settimana","Mese"]} handleselection={handleselection}/>
     </View>
    

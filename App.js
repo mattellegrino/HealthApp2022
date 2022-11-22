@@ -22,10 +22,11 @@ import Analisi from "./components/pages/Analisi/Analisi";
 import AnalisiOutput from "./components/pages/Analisi/AnalisiOutput";
 import FitbitForm from "./components/pages/SignInPage/FitbitForm";
 import Inserimento_Analisi from "./components/pages/Analisi/Inserimento Analisi";
+import Tabs from "./components/Tabs/Tabs";
 
 const Stack = createNativeStackNavigator();
 
-global.enrico = "192.168.1.54";
+global.enrico = "192.168.11.55";
 
 const App = () => {
     const [ipAddress, setIpAddress] = useState("");
@@ -41,7 +42,7 @@ const App = () => {
             <Stack.Navigator initialRouteName='Home'>
                 <Stack.Screen
                     name="HomePage_s"
-                    component={HomePage_s}
+                    component={Tabs}
                     options={{
                         title: "Benvenuto",
                         headerBackTitleVisible: false,
@@ -130,7 +131,7 @@ const App = () => {
                         fontSize: 16
                     }
                 }}/>
-                <Stack.Screen name="Alimentazione" component={Alimentazione} options={{
+                <Stack.Screen name="_Alimentazione" component={Alimentazione} options={{
                     headerShadowVisible: false,
                     headerTitleAlign: "center",
                     headerTitleStyle: {

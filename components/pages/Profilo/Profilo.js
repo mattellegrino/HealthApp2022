@@ -1,4 +1,4 @@
-import {View, Text, ActivityIndicator, Pressable, FlatList, StyleSheet, ScrollView} from 'react-native'
+import {View, Text, ActivityIndicator, Pressable, FlatList, StyleSheet,Modal,Keyboard,Image, Alert, TouchableOpacity} from 'react-native'
 import { BarChart, LineChart, PieChart } from "react-native-gifted-charts";
 import React, {useEffect, useRef, useState} from 'react'
 import Generalità from './Generalità'
@@ -7,42 +7,20 @@ import { Card } from "react-native-shadow-cards";
 const s = require("../../../core/styles");
 import { Avatar } from 'react-native-paper';
 import CustomButton from '../../CustomButton';
+import CustomInput from "../../CustomInput";
 const Profilo = ({navigation,route}) =>  {
     const [isLoading, setLoading] = useState(true);
+    const [Loading, setisLoading] = useState(true);
+    const [peso,setPeso] = useState('')
     const [weightValues,setweightValues] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
     const [lastWeight,setlastWeight] = useState([]);
     const [maxWeight,setMaxWeight] = useState(0);
+    let   [finished, setFinished] = useState(undefined);
     /* */
     let getweightValuesbyId;
 
 
-    const mocklinedatamonthweights = [
-        { id:1, weight:55, bmi:17, date: "2022-06-1"},
-        { id:1, weight:55, bmi:17, date: "2022-06-2" },
-        { id:1, weight:56, bmi:17, date: "2022-06-3" },
-        { id:1, weight:55, bmi:17, date: "2022-06-8" },
-        { id:1, weight:55, bmi:17, date: "2022-06-9" },
-        { id:1, weight:55, bmi:17, date: "2022-06-10" },
-        { id:1, weight:55, bmi:17, date: "2022-06-17" },
-        { id:1, weight:55, bmi:17, date: "2022-06-18" },
-        { id:1, weight:58, bmi:20, date: "2022-06-19" },
-        { id:1, weight:55, bmi:17, date: "2022-06-20" },
-        { id:1, weight:55, bmi:17, date: "2022-06-28" },
-      ];  
-
-      const _mocklinedatamonthweight = [
-        { id:1, value:55, bmi:17, label: "Oct 21"},
-        { id:1, value:55, bmi:17, label: "" },
-        { id:1, value:56, bmi:17, label: "" },
-        { id:1, value:55, bmi:17, label: "" },
-        { id:1, value:55, bmi:17, label: "" },
-        { id:1, value:55, bmi:17, label: "" },
-        { id:1, value:55, bmi:17, label: "" },
-        { id:1, value:55, bmi:17, label: "" },
-        { id:1, value:58, bmi:20, label: "" },
-        { id:1, value:55, bmi:17, label: "Nov 21" },
-        { id:1, value:55, bmi:17, label: "" },
-      ];  
       function formatDate2(data) {
         const year = +data.substring(0, 4);
         const month = +data.substring(5, 7);
@@ -51,7 +29,14 @@ const Profilo = ({navigation,route}) =>  {
         const date = new Date(year, month - 1, day);
         return date;
       }
-      
+    
+
+      const convertDateintoDoubleDate = (data) => {
+        let fordate = formatDate2(data);
+        let doubleDate = fordate.getDate() + "/" + fordate.getMonth();
+        return doubleDate;
+      }
+
       const convertDateintoNumberDay = (data) => {
         let fordate = formatDate2(data);
         let date = fordate.getDate();
@@ -59,6 +44,44 @@ const Profilo = ({navigation,route}) =>  {
         return parseInt(date, 10);
       };
 
+      async function postWeight(peso) {
+
+        // check all AnalisiInput has values
+        //if yes, try to post in the backend
+        //if not, repeat
+        return new Promise ((resolve, reject) => {
+            fetch(`http://${global.enrico}:8080/api/patients/${global.id}/weights`, {
+                method: 'POST',
+                headers: {'Content-Type': "application/json"},
+                body:  JSON.stringify(
+                    {
+                       "weight": peso
+                    }
+                )
+            })
+                .then((response) => {
+                    if(response.ok)
+                    {
+                        setFinished(true);
+                        Alert.alert(
+                          "Peso",
+                          "Peso modificato correttamente!",
+                          [
+                            {
+                              text: "CHIUDI",
+                              onPress: () => handleCloseModal(),
+                              style: "cancel"
+                            },
+                          ]
+                        );
+                        // go to main page
+                        
+                    }
+    
+                })
+                .catch(err => { reject ({'error': 'Cannot communicate with the server'})})
+        })
+    }
     getweightValuesbyId = () => {
         fetch(`http://${global.enrico}:8080/api/patients/${global.id}/weights`)
             .then((response) => response.json())
@@ -68,7 +91,7 @@ const Profilo = ({navigation,route}) =>  {
 
                   let obj = {"label":"","value":"","id":""};
 
-                  obj.label = el.date;
+                  obj.label = convertDateintoDoubleDate(el.date);
                   obj.value = el.weight;
                   obj.id = el.id;
 
@@ -112,35 +135,32 @@ const Profilo = ({navigation,route}) =>  {
 
     useEffect(() => {
         getweightValuesbyId()
-
-        let _bardatamonth = mocklinedatamonthweights.map((el) => {
-            el.value = el.weight;
-      
-            /*if(tipoUtente == "sperimentale"){
-              if (el.value < redthreshold) el.frontColor = "red";
-              else if (el.value >= redthreshold && el.value < orangethreshold)
-                el.frontColor = "orange";
-              else if (el.value >= orangethreshold && el.value < yellowthreshold)
-                el.frontColor = "#FFEA00";
-              else if (el.value >= yellowthreshold) el.frontColor = "green";
-            }
-      
-            else*/
-              el.frontColor = "grey";
-            el.label = convertDateintoNumberDay(el.date);
-            return el;
-          });
-      
-          setweightValues(_bardatamonth);
     }, []);
 
+    const validate = (peso) => {
+      Keyboard.dismiss();
+      let isValid = true;
+      console.log("Valore peso:" + {peso})
+          if(peso===null || isNaN(peso) || peso > 250)
+          {
+              isValid=false;
+          }
+  
+      return isValid;
+  };
+
+    const handleCloseModal = () => {
+      setisLoading(true);
+      setFinished(false);
+      setModalVisible(false);
+    }
 
     useEffect(() => {
         getweightValuesbyId()
-    },[route.params])
+    },[route.params,modalVisible])
 
     const Item = (props) => (
-        <View style={{flex:1, backgroundColor:"white" }}>
+        <View style={{flex:1, backgroundColor:"white"}}>
             <View style={{flex:1, alignItems: "center"}}>
                 <View style={{flex:0,marginTop:30, width:"80%",flexDirection:"row", justifyContent: "space-between"}}>
                     <Avatar.Image size={72} source={require('../../../assets/avatar.png')} />
@@ -154,7 +174,7 @@ const Profilo = ({navigation,route}) =>  {
                     <Generalità nome="Sesso" valore={props.gender} unità={""}></Generalità>
                     <Generalità nome="Data di nascita" valore={props.birth_date} unità ={""}></Generalità>
                     <Generalità nome="Altezza" valore={props.height} unità={"cm"}></Generalità>
-                    <Generalità nome="Peso" valore={props.weight} unità={"kg"} button={<CustomButton onPress={()=> navigation.navigate("Peso")} text={"MODIFICA"} fontSize="small"></CustomButton> }></Generalità>
+                    <Generalità nome="Peso" valore={props.weight} unità={"kg"} button={<CustomButton onPress={()=> setModalVisible(true)} text={"MODIFICA"} fontSize="small"></CustomButton>}></Generalità>
                 </View>
             </View>
     );
@@ -173,15 +193,53 @@ const Profilo = ({navigation,route}) =>  {
   return (
         isLoading ? <ActivityIndicator/> :
             (
-                <>
+                <View keyboardShouldPersistTaps="always">
                 <FlatList
+                 keyboardShouldPersistTaps="always"
                  data={lastWeight}
                  renderItem={renderItem}
                  keyExtractor={item => item.id}
                 />
-                <View style={{alignItems: 'center',marginBottom:30}}>
-                    <Text style={s.header(3,"bold")}>Analisi del peso</Text>
-                    <Card style={{width:"80%"}}>
+                <Modal
+                  transparent={true}
+                  visible={modalVisible}
+                  style={styles.view}>
+                    <View style={styles.view}>
+                      <View style={styles.modalContainer}>
+                        <Text style={s.header(3,"medium")}>Inserisci Peso</Text>
+                      <View style={{ flexDirection: "row", marginBottom:30, marginTop:20, alignItems:"center",justifyContent: "center"}}>
+                        <Card elevation={5} style={styles.card}>
+                          <CustomInput keyboardType="numeric" placeholder="Peso" value={peso} setValue={setPeso} numericInput={true}></CustomInput>
+                          <View style={styles.textDetail}>
+                            <Text style={s.body("bold")}>Kg</Text>
+                          </View>
+                        </Card>
+                      </View>
+                      <View style={styles.bottoni}>
+                        <CustomButton fontSize="medium" button="second" text="Indietro" onPress={()=>handleCloseModal()}/>
+                        <CustomButton fontSize="medium" text={Loading ? "Salva" : finished ? "Salvato" : "Salvataggio.."}
+                          onPress={async () => {
+                              setisLoading(false)
+                              let isValid=validate(peso);
+                              if(!isValid)
+                              {
+                                  Alert.alert("Errore compilazione","Uno o piu' campi non inseriti o non validi, riprovare")
+                                  setisLoading(true)
+                                  
+                              }
+                              else {
+                                  await postWeight(peso)
+                              }
+                        }}
+                        ></CustomButton>
+                       </View>
+                       </View>
+                      </View>
+                     
+              </Modal>
+                <View style={{marginLeft:10,width:"100%",marginTop:40,marginBottom:40}}>
+                    <Text style={[s.header(3,"bold"),styles.textPeso]}>Analisi del peso</Text>
+                    <Card style={{width:"100%"}}>
                     <LineChart
                             color="grey"
                             startFillColor="grey"
@@ -204,11 +262,11 @@ const Profilo = ({navigation,route}) =>  {
                             endOpacity={0.7}
                             initialSpacing={1}
                             height={200}
-                            width={260}
+                            width={360}
                             data={
                                 weightValues
                             }
-                            spacing={30}
+                            spacing={50}
                             textColor1="black"
                             textShiftY={-10}
                             textShiftX={-5}
@@ -227,20 +285,61 @@ const Profilo = ({navigation,route}) =>  {
                 </Card>
                 </View>
                 
-                </>
+                </View>
             )
   )
 }
 
 const styles = StyleSheet.create({
 
-    progressStyle: {
+      textPeso: {
+        marginBottom:5
+      },
+      progressStyle: {
         fontSize:10
       },
       progressXStyle: {
         fontSize: 12,
         width: 50,
         marginLeft: 5,
+      },
+      textDetail: {
+        backgroundColor:"lightgrey",
+        borderRadius:20,
+        padding: 10,
+        borderLeftWidth: 2
+      },
+      card: { 
+        flex:0,
+        flexDirection:"row",
+        justifyContent: "space-around",
+        alignItems: "center",
+        width:100,
+        borderRadius:20,
+    }
+ ,    
+      bottoni: {
+        flex:0,
+        width: "100%",
+        flexDirection:"row",
+        justifyContent: "space-around"
+
+      },
+      view: {
+        flex:1,
+        width:"100%",
+        backgroundColor: "rgba(0,0,0,0.5)",
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin:0
+      },
+      modalContainer: {
+        width: '80%',
+        backgroundColor: 'white',
+        paddingHorizontal: 20,
+        paddingVertical: 30,
+        borderRadius: 20,
+        elevation: 20,
       },  
 })
 export default Profilo;
