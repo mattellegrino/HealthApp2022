@@ -4,7 +4,7 @@ import {
     SafeAreaView,
     StyleSheet,
     ActivityIndicator,
-    Alert, Keyboard
+    Alert, Keyboard, Image
 } from 'react-native'
 
 import CustomInput from  '../../CustomInput'
@@ -184,23 +184,28 @@ const SignInPage = ({ navigation }) =>  {
         if (isValid) {
             await check_userdata_and_login()
         }
+        else
+            Alert.alert("Errore compilazione","Uno o piu' campi non inseriti o non validi, riprovare")
     };
 
     const handleError = (error, input) => {
         setErrors(prevState => ({...prevState, [input]: error}));
     };
 
-
-
     return (
 
         <SafeAreaView style={styles.container}>
             <View style={styles.container_header}>
-                <Header type="h1"> HealthApp </Header>
+                <Image
+                    style={styles_.logo}
+                    source={require('../../../assets/logo.png')}
+                />
             </View>
             <View style={styles.root}>
-                <CustomInput placeholder="Username"  value={username} setValue={setUsername}  onFocus={() => handleError(null, 'username')} error={errors.username}  />
-                <CustomInput placeholder="Password"  value={password} setValue={setPassword} secureTextEntry={true}  onFocus={() => handleError(null, 'password')} error={errors.password} />
+                <CustomInput placeholder="Username"  value={username} setValue={setUsername}
+                             onFocus={() => handleError(null, 'username')} error={errors.username}  />
+                <CustomInput placeholder="Password"  value={password} setValue={setPassword} secureTextEntry={true}
+                             onFocus={() => handleError(null, 'password')} error={errors.password} />
               <View style={styles.loginButton}>
                 <CustomButton  onPress={
                     validate
@@ -244,9 +249,23 @@ const SignInPage = ({ navigation }) =>  {
                     reject(user)
                 }
             })
-            .catch(error => { reject ({'error': 'Cannot communicate with the server or cookie error'})
+            .catch(() => { reject ({'error': 'Cannot communicate with the server or cookie error'})
             })
     })
 }
+
+const styles_ = StyleSheet.create({
+    container: {
+        paddingTop: 50,
+    },
+    tinyLogo: {
+        width: 50,
+        height: 50,
+    },
+    logo: {
+        width: 136,
+        height: 128,
+    },
+});
 
 export default SignInPage

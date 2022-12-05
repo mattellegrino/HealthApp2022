@@ -4,7 +4,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignInPage from "./components/pages/SignInPage/SignInPage";
 import SleepChart from "./components/graphs/SleepChart";
-import ServerData from "./components/pages/SignInPage/ServerData";
 import Impostazioni from "./components/pages/Impostazioni/Impostazioni";
 import Questionari from "./components/pages/Questionari/Questionari";
 import Progressi from "./components/pages/Progressi/Progressi";
@@ -26,18 +25,10 @@ import Tabs from "./components/Tabs/Tabs";
 
 const Stack = createNativeStackNavigator();
 
-global.enrico = "192.168.11.55";
+global.enrico = "192.168.1.54";
 
 const App = () => {
-    const [ipAddress, setIpAddress] = useState("");
-    const displayIp = async () => {
-        const ip = await Network.getIpAddressAsync();
-        console.log("Indirizzo ip = " + ip)
-        setIpAddress(ip)
-    }
-
     return (
-
         <NavigationContainer>
             <Stack.Navigator initialRouteName='Home'>
                 <Stack.Screen
@@ -49,13 +40,12 @@ const App = () => {
                         headerShown: false,
                     }}
                 />
-            
 
                 <Stack.Screen
                     name="Home"
                     component={SignInPage}
                     options={{
-                        title: "Benvenuto in Health App!",
+                        title: "Benvenuto in HealthApp!",
                         headerShadowVisible: false,
                         headerTitleAlign: "center",
                         headerTitleStyle: {
@@ -177,8 +167,6 @@ const App = () => {
                         fontSize: 16
                     }
                 }}/>
-
-                <Stack.Screen name="ServerData" component={ServerData}/>
                 <Stack.Screen name="SleepChart" component={SleepChart}/>
             </Stack.Navigator>
         </NavigationContainer>
