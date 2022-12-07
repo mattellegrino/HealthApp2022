@@ -4,7 +4,7 @@ import {
     SafeAreaView,
     StyleSheet,
     ActivityIndicator,
-    Alert, Keyboard, Image
+    Alert, Keyboard, Image, BackHandler
 } from 'react-native'
 
 import CustomInput from  '../../CustomInput'
@@ -13,6 +13,7 @@ import Header from "../../Headers/Header";
 import Patient from "../../../classes/Patient";
 const styles = require("../../../core/styles");
 import * as SecureStore from 'expo-secure-store';
+import NetInfo from "@react-native-community/netinfo";
 
 const SignInPage = ({ navigation }) =>  {
     const [username,setUsername] = useState('')
@@ -21,7 +22,6 @@ const SignInPage = ({ navigation }) =>  {
     const [errors, setErrors] = useState({});
     let authenticationError= useRef(false);
     let   loggedUser = useRef(undefined)
-    let   type_of_user = useRef(false); // tipologia di paziente se sperimentale o controllo
 
     //indirizzo ip locale, da capire meglio quale ip usare quando i docker del backend saranno pronti.
     let ip_add = global.enrico
@@ -35,8 +35,19 @@ const SignInPage = ({ navigation }) =>  {
                 let token_exists = authUser.tokenExists
                 console.log(token_exists)
 
-                if(token_exists===false)
-                    type_of_user.current=true;
+                if(token_exists===false) {
+                    // handle this situation
+                    console.log("Token necessario")
+
+                    Alert.alert("Token", "Token fitbit non inizializzato, contattare amministratore", [
+                        {
+                            text: "Escita forzata",
+                            onPress: () => {
+                                BackHandler.exitApp();
+                            },
+                        },
+                    ]);
+                }
 
                 let role = authUser.roles[0].authority.split("_")[1]
                 console.log(role)
@@ -139,30 +150,10 @@ const SignInPage = ({ navigation }) =>  {
             if (authenticationError.current===false) {
                 // login andato a buon fine.
                 setIsLoading(true);
-                console.log("Type of user = ",type_of_user)
-                if(type_of_user.current===true)
-                {
-                    try {
-                        const value = await SecureStore.getItemAsync('cookie');
-                        if (value !== null) {
-                            // We have data!!
-                            console.log("Data inside cookie fitbitflag " + value);
-                            navigation.navigate('FitbitForm', { cookie: value })
-                        }
-                    }
-                    catch (err)
-                    {
-                        console.log(err + "Nessun cookie presente.");
-                    }
-                }
-                else
-                {
                     console.log("DATA: "+ loggedUser)
                     navigation.navigate('HomePage_s',{ username:loggedUser.user.firstName,
                         ip_add:ip_add,user:loggedUser.user
                     } )
-                }
-
             } else {
                 Alert.alert("Errore di autenticazione, riprovare")
                 setIsLoading(true)
@@ -223,6 +214,7 @@ const SignInPage = ({ navigation }) =>  {
     const formData  = new FormData();
     formData.append('username', username);
     formData.append('password', password);
+    formData.append('remember-me',"on");
 
     console.log(`http://${ip_add}:8080/login`)
      return new Promise ((resolve, reject) => {
