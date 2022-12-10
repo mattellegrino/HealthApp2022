@@ -13,7 +13,6 @@ import Header from "../../Headers/Header";
 import Patient from "../../../classes/Patient";
 const styles = require("../../../core/styles");
 import * as SecureStore from 'expo-secure-store';
-import NetInfo from "@react-native-community/netinfo";
 
 const SignInPage = ({ navigation }) =>  {
     const [username,setUsername] = useState('')
