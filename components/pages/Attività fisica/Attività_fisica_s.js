@@ -153,7 +153,7 @@ export default function Attività_fisica_s({ route }) {
 
   const [selectedChoice, setSelectedChoice] = useState("passi");
   // Passi fatti
-  const [num_steps_done, setNumStepsDone] = useState(route.params.steps_done);
+  const [num_steps_done, setNumStepsDone] = useState(0);
   const [color_num_steps_done, setColorNumStepsDone] = useState("grey");
 
   //Battito a riposo
@@ -690,7 +690,7 @@ export default function Attività_fisica_s({ route }) {
 
 
   useEffect(() => {
-    let dateforapi = formatDate(date); //variabile da inserire nell'API per ricavare il sonno giornaliero
+    let dayforapi = formatDate(date); //variabile da inserire nell'API per ricavare il sonno giornaliero
 
     // inizializzo date che poi vengono cambiate quando si va avanti/indietro con le frecce
     setVariableGiornoDate(date);
@@ -700,16 +700,23 @@ export default function Attività_fisica_s({ route }) {
     let range_giorno = getday(date);
     setRangeTime(range_giorno);
     //setNumStepsDone(dayformattedtime);
-    let steps_day = route.params.steps_done;
-    setBarDataDay(steps_day);
 
-    let hr_rest = route.params.hr_rest;
-    setLineDataDayHr(hr_rest);
+    getSteps(dayforapi,dayforapi).then((_stepsValues) => {
+
+      setNumStepsDone(_stepsValues[0].steps);
+      handleColorNumStepsDone(_stepsValues[0].steps);
+
+    }).catch((err)=> setNumStepsDone(0));
+
+
+    getHrValues(dayforapi,dayforapi).then((_hrValues) => {
+      setHrRest(_hrValues[0].rest),
+      setLineDataDayHr(hr_rest);
+      handleColorHrRest(_hrValues[0].rest);
+    }).catch((err) => setHrRest(0));
+
 
     setFirstTime(true);
-
-    handleColorNumStepsDone(steps_day);
-    handleColorHrRest(hr_rest);
 
 
     //inizializzo primo e ultimo giorno della settimana
@@ -1060,7 +1067,8 @@ const styles = StyleSheet.create({
 },
 
 container_navbar: {
-  flex:0.5
+  flex:0.5,
+  alignItems: "center"
 },
 container_rangetime: {
   flex:0,
