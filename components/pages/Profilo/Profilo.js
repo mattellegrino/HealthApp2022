@@ -155,6 +155,22 @@ const Profilo = ({navigation,route}) =>  {
       setModalVisible(false);
     }
 
+    const media = (array) => {
+
+        let sum = 0;
+        let lunghezza = 0;
+        array.forEach((el) => {
+            if(el.value !== 0) {
+                lunghezza = lunghezza +1;
+                sum = sum + el.value;
+            }
+        });
+        if(lunghezza!==0)
+            return sum / lunghezza;
+        else
+            return 0;
+    }
+
     useEffect(() => {
         getweightValuesbyId()
     },[route.params,modalVisible])
@@ -246,7 +262,7 @@ const Profilo = ({navigation,route}) =>  {
                             endFillColor="grey"
                             areaChart
                             showReferenceLine1
-                            maxValue={100}referenceLine1Position={60}
+                            maxValue={100}referenceLine1Position={media(weightValues)}
                             referenceLine1Config={{
                             color: "gray",
                             labelText: "Media",
