@@ -249,7 +249,7 @@ const getTodayHrValue = (today) => {
         <View style={{ flex: 1, paddingTop: 10 }}>
           <Text>
             <Text style={s.header(1, "regular")}>Ciao </Text>
-            <Text style={s.header(1, "medium")}>{username}</Text>
+            <Text style={s.header(1, "medium")}>Ray</Text>
           </Text>
           <Text style={s.header(4, "regular")}>
             Questi sono i risultati di oggi

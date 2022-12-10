@@ -15,7 +15,8 @@ class Patient{
     }
 
     static from(json){
-        return new Patient(json.id, json.firstName, json.lastName, json.email, json.ssn, json.height, json.gender, json.birthDate, json.doctor.id,json.experimental,json.user.username);
+        return new Patient(json.id, json.firstName, json.lastName, json.email, json.ssn, json.height, json.gender,
+            json.birthDate, json.doctor.id,json.experimental,json.user.username);
     }
 }
 

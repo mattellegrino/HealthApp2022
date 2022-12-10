@@ -4,7 +4,7 @@ import {
     SafeAreaView,
     StyleSheet,
     ActivityIndicator,
-    Alert, Keyboard
+    Alert, Keyboard, Image, BackHandler
 } from 'react-native'
 
 import CustomInput from  '../../CustomInput'
@@ -21,7 +21,6 @@ const SignInPage = ({ navigation }) =>  {
     const [errors, setErrors] = useState({});
     let authenticationError= useRef(false);
     let   loggedUser = useRef(undefined)
-    let   type_of_user = useRef(false); // tipologia di paziente se sperimentale o controllo
 
     //indirizzo ip locale, da capire meglio quale ip usare quando i docker del backend saranno pronti.
     let ip_add = global.enrico
@@ -35,8 +34,19 @@ const SignInPage = ({ navigation }) =>  {
                 let token_exists = authUser.tokenExists
                 console.log(token_exists)
 
-                if(token_exists===false)
-                    type_of_user.current=true;
+                if(token_exists===false) {
+                    // handle this situation
+                    console.log("Token necessario")
+
+                    Alert.alert("Token", "Token fitbit non inizializzato, contattare amministratore", [
+                        {
+                            text: "Escita forzata",
+                            onPress: () => {
+                                BackHandler.exitApp();
+                            },
+                        },
+                    ]);
+                }
 
                 let role = authUser.roles[0].authority.split("_")[1]
                 console.log(role)
@@ -139,30 +149,10 @@ const SignInPage = ({ navigation }) =>  {
             if (authenticationError.current===false) {
                 // login andato a buon fine.
                 setIsLoading(true);
-                console.log("Type of user = ",type_of_user)
-                if(type_of_user.current===true)
-                {
-                    try {
-                        const value = await SecureStore.getItemAsync('cookie');
-                        if (value !== null) {
-                            // We have data!!
-                            console.log("Data inside cookie fitbitflag " + value);
-                            navigation.navigate('FitbitForm', { cookie: value })
-                        }
-                    }
-                    catch (err)
-                    {
-                        console.log(err + "Nessun cookie presente.");
-                    }
-                }
-                else
-                {
                     console.log("DATA: "+ loggedUser)
                     navigation.navigate('HomePage_s',{ username:loggedUser.user.firstName,
                         ip_add:ip_add,user:loggedUser.user
                     } )
-                }
-
             } else {
                 Alert.alert("Errore di autenticazione, riprovare")
                 setIsLoading(true)
@@ -184,23 +174,28 @@ const SignInPage = ({ navigation }) =>  {
         if (isValid) {
             await check_userdata_and_login()
         }
+        else
+            Alert.alert("Errore compilazione","Uno o piu' campi non inseriti o non validi, riprovare")
     };
 
     const handleError = (error, input) => {
         setErrors(prevState => ({...prevState, [input]: error}));
     };
 
-
-
     return (
 
         <SafeAreaView style={styles.container}>
             <View style={styles.container_header}>
-                <Header type="h1"> HealthApp </Header>
+                <Image
+                    style={styles_.logo}
+                    source={require('../../../assets/logo.png')}
+                />
             </View>
             <View style={styles.root}>
-                <CustomInput placeholder="Username"  value={username} setValue={setUsername}  onFocus={() => handleError(null, 'username')} error={errors.username}  />
-                <CustomInput placeholder="Password"  value={password} setValue={setPassword} secureTextEntry={true}  onFocus={() => handleError(null, 'password')} error={errors.password} />
+                <CustomInput placeholder="Username"  value={username} setValue={setUsername}
+                             onFocus={() => handleError(null, 'username')} error={errors.username}  />
+                <CustomInput placeholder="Password"  value={password} setValue={setPassword} secureTextEntry={true}
+                             onFocus={() => handleError(null, 'password')} error={errors.password} />
               <View style={styles.loginButton}>
                 <CustomButton  onPress={
                     validate
@@ -218,6 +213,7 @@ const SignInPage = ({ navigation }) =>  {
     const formData  = new FormData();
     formData.append('username', username);
     formData.append('password', password);
+    formData.append('remember-me',"on");
 
     console.log(`http://${ip_add}:8080/login`)
      return new Promise ((resolve, reject) => {
@@ -244,9 +240,23 @@ const SignInPage = ({ navigation }) =>  {
                     reject(user)
                 }
             })
-            .catch(error => { reject ({'error': 'Cannot communicate with the server or cookie error'})
+            .catch(() => { reject ({'error': 'Cannot communicate with the server or cookie error'})
             })
     })
 }
+
+const styles_ = StyleSheet.create({
+    container: {
+        paddingTop: 50,
+    },
+    tinyLogo: {
+        width: 50,
+        height: 50,
+    },
+    logo: {
+        width: 136,
+        height: 128,
+    },
+});
 
 export default SignInPage

@@ -14,9 +14,8 @@ export default function Analisi({navigation}) {
     const getBloodValuesById = () => {
         fetch(`http://${global.enrico}:8080/api/patients/${global.id}/bloodAnalysis`)
             .then((response) => response.text())
-            .then((json) =>{ 
-                let bloodAnalysisArray = new Array();
-                bloodAnalysisArray = JSON.parse(json);
+            .then((json) =>{
+                let bloodAnalysisArray = JSON.parse(json);
                 setBloodValues(bloodAnalysisArray)})
             .catch((error) => { 
                 console.log(error.message);
@@ -30,7 +29,6 @@ export default function Analisi({navigation}) {
 
     useEffect(() => {
         getBloodValuesById();
-      
     }, []);
 
    
@@ -71,9 +69,5 @@ const styles = StyleSheet.create({
     button: {
         alignSelf: "center"
         
-    },
-    analisi: {
-        flex:1,
-        padding:10
     }
 })

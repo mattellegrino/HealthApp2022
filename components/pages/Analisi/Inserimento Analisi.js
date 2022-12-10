@@ -9,21 +9,21 @@ const Inserimento_Analisi = ({navigation}) => {
     const [isLoading, setIsLoading] = useState(true);
     let   [finished, setFinished] = useState(undefined)
     let date = formatDate();
-    let eritrociti={ name: "Eritrociti", value: null}
-        ,emoglobina={ name: "Emogoblina", value: null}
-        ,mcv= { name: "Mcv", value: null}
-        ,ht = { name: "Ht", value: null}
-        ,leucociti= { name: "Leucociti", value: null}
-        ,piastrine = { name: "Piastrine", value: null}
-        ,glicemia= { name: "Glicemia", value: null}
-        ,urea = { name: "Urea", value: null}
-        ,na= { name: "Sodio", value: null}
-        ,k= { name: "Potassio", value: null}
-        ,creatinina= { name: "Creatinina", value: null}
-        ,colesterolo_totale= { name: "Colesterolo Totale", value: null}
-        ,colesterolo_hdl ={ name: "Colesterolo HDL", value: null}
-        ,trigliceridi= { name: "Trigliceridi", value: null}
-        ,pcr= { name: "Pcr", value: null}
+    let eritrociti={ name: "Eritrociti (x10^12/L)", value: null}
+        ,emoglobina={ name: "Emoglobina (g/dL)", value: null}
+        ,mcv= { name: "MCV (fL)", value: null}
+        ,ht = { name: "HT (%)", value: null}
+        ,leucociti= { name: "Leucociti (x10^9/L)", value: null}
+        ,piastrine = { name: "Piastrine (x10^9/L)", value: null}
+        ,glicemia= { name: "Glicemia (mg/dL)", value: null}
+        ,urea = { name: "Urea (mg/dL)", value: null}
+        ,na= { name: "Sodio (mmol/L)", value: null}
+        ,k= { name: "Potassio (mmol/L)", value: null}
+        ,creatinina= { name: "Creatinina (mg/dL)", value: null}
+        ,colesterolo_totale= { name: "Colesterolo Totale (mg/dL)", value: null}
+        ,colesterolo_hdl ={ name: "Colesterolo HDL (mg/dl)", value: null}
+        ,trigliceridi= { name: "Trigliceridi (mg/dL)", value: null}
+        ,pcr= { name: "PCR (mg/L)", value: null}
     ;
 
 
@@ -60,10 +60,6 @@ const Inserimento_Analisi = ({navigation}) => {
     }
 
     async function postMedicalValues() {
-
-        // check all AnalisiInput has values
-        //if yes, try to post in the backend
-        //if not, repeat
         return new Promise ((resolve, reject) => {
             fetch(`http://${global.enrico}:8080/api/patients/${global.id}/bloodAnalysis`, {
                 method: 'POST',
