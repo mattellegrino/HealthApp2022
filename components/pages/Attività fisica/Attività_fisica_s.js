@@ -499,7 +499,7 @@ export default function Attività_fisica_s({ route }) {
   };
 
   async function getSteps(startDate,endDate) {
-    const response = await fetch(`http://${global.enrico}:8080/api/patients/${global.id}/activities/steps?startDate=${startDate}&endDate=${endDate}`);
+    const response = await fetch(`${global.enrico}/api/patients/${global.id}/activities/steps?startDate=${startDate}&endDate=${endDate}`);
     const steps= await response.json();
     if (response.ok)
     {
@@ -511,7 +511,7 @@ export default function Attività_fisica_s({ route }) {
   }
 
   async function getHrValues(startDate,endDate) {
-    const response = await fetch(`http://${global.enrico}:8080/api/patients/${global.id}/hrs/rest?startDate=${startDate}&endDate=${endDate}`);
+    const response = await fetch(`${global.enrico}/api/patients/${global.id}/hrs/rest?startDate=${startDate}&endDate=${endDate}`);
     const hrValues= await response.json();
     if (response.ok)
     {

@@ -88,7 +88,7 @@ const HomePage_s = (props) => {
   }
 
   const getQuestionnairesCompiled = (AllQuestionnaireTemplate) => {
-    fetch(`http://${global.enrico}:8080/api/patients/${global.id}/questionnaires`)
+    fetch(`${global.enrico}/api/patients/${global.id}/questionnaires`)
         .then((response) => response.json())
         .then((json) =>{
             let questionari_compilati = json.map(json => QuestionnaireAnswered.from(json));
@@ -102,7 +102,7 @@ const HomePage_s = (props) => {
 
 
 const getTodaySteps = (today) => {
-    fetch(`http://${global.enrico}:8080/api/patients/${global.id}/activities/steps?startDate=${today}&endDate=${today}`)
+    fetch(`${global.enrico}/api/patients/${global.id}/activities/steps?startDate=${today}&endDate=${today}`)
         .then((response) => response.json())
         .then((json) =>{
             if(json[json.length -1] !== undefined)
@@ -117,7 +117,7 @@ const getTodaySteps = (today) => {
 }
 
 const getTodayHrValue = (today) => {
-        fetch(`http://${global.enrico}:8080/api/patients/${global.id}/hrs/rest?startDate=${today}&endDate=${today}`)
+        fetch(`${global.enrico}/api/patients/${global.id}/hrs/rest?startDate=${today}&endDate=${today}`)
             .then((response) => response.json())
             .then((json) =>{
                 if(json[json.length -1] !== undefined)
@@ -133,7 +133,7 @@ const getTodayHrValue = (today) => {
 
 
    const getTodaySleepValue= (today) => {
-       fetch(`http://${global.enrico}:8080/api/patients/${global.id}/sleep/duration?startDate=${today}&endDate=${today}`)
+       fetch(`${global.enrico}/api/patients/${global.id}/sleep/duration?startDate=${today}&endDate=${today}`)
            .then((response) => response.json())
            .then((json) =>{
                let sonno = json.map(json => Sleep.from(json));
@@ -152,7 +152,7 @@ const getTodayHrValue = (today) => {
     }
 
     const getQuestionnairesAvailable = () => {
-        fetch(`http://${global.enrico}:8080/api/questionnaires/templates`)
+        fetch(`${global.enrico}/api/questionnaires/templates`)
             .then((response) => response.json())
             .then((json) =>{
                 let AllQuestionnaireTemplate = json.map(json => QuestionnaireTemplate.from(json));

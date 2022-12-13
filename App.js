@@ -1,19 +1,15 @@
 import React, {useEffect, useState} from "react";
-import * as Network from 'expo-network';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignInPage from "./components/pages/SignInPage/SignInPage";
-import SleepChart from "./components/graphs/SleepChart";
 import Impostazioni from "./components/pages/Impostazioni/Impostazioni";
 import Questionari from "./components/pages/Questionari/Questionari";
-import Progressi from "./components/pages/Progressi/Progressi";
 import Peso from "./components/pages/Peso/Peso";
 import Questionario from "./components/pages/Questionari/Questionario";
 import Profilo from "./components/pages/Profilo/Profilo";
 import Recommendation from "./components/pages/Recommendation";
 import Alimentazione from "./components/pages/Alimentazione/Alimentazione";
 import InserisciAlimento from "./components/pages/Alimentazione/InserisciAlimento";
-import HomePage_s from "./components/pages/HomePage/HomePage_s";
 import Sonno_s from "./components/pages/Sonno/Sonno_s";
 import Attività_fisica_s from "./components/pages/Attività fisica/Attività_fisica_s";
 import Attività_fisica_c from "./components/pages/Attività fisica/Attività_fisica_c";
@@ -25,7 +21,7 @@ import Tabs from "./components/Tabs/Tabs";
 
 const Stack = createNativeStackNavigator();
 
-global.enrico = "192.168.1.54";
+global.enrico = "https://softeng.polito.it/health-core-new";
 
 const App = () => {
     return (
@@ -167,7 +163,6 @@ const App = () => {
                         fontSize: 16
                     }
                 }}/>
-                <Stack.Screen name="SleepChart" component={SleepChart}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

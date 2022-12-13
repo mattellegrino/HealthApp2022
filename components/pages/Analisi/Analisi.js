@@ -12,7 +12,7 @@ export default function Analisi({navigation}) {
     const [bloodValues,setBloodValues] = useState([]);
 
     const getBloodValuesById = () => {
-        fetch(`http://${global.enrico}:8080/api/patients/${global.id}/bloodAnalysis`)
+        fetch(`${global.enrico}/api/patients/${global.id}/bloodAnalysis`)
             .then((response) => response.text())
             .then((json) =>{
                 let bloodAnalysisArray = JSON.parse(json);
