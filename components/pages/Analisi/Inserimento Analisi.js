@@ -61,7 +61,7 @@ const Inserimento_Analisi = ({navigation}) => {
 
     async function postMedicalValues() {
         return new Promise ((resolve, reject) => {
-            fetch(`http://${global.enrico}:8080/api/patients/${global.id}/bloodAnalysis`, {
+            fetch(`${global.enrico}/api/patients/${global.id}/bloodAnalysis`, {
                 method: 'POST',
                 headers: {'Content-Type': "application/json"},
                 body:  JSON.stringify(

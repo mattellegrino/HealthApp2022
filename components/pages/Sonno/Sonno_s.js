@@ -502,7 +502,7 @@ export default function Sonno_s({navigation,route}) {
     }
 
     async function getSonno(startDate,endDate) {
-        const response = await fetch(`http://${global.enrico}:8080/api/patients/${global.id}/sleep/duration?startDate=${startDate}&endDate=${endDate}`);
+        const response = await fetch(`${global.enrico}/api/patients/${global.id}/sleep/duration?startDate=${startDate}&endDate=${endDate}`);
         const sonno_json= await response.json();
         if (response.ok)
         {

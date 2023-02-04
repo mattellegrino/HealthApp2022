@@ -50,7 +50,7 @@ const Profilo = ({navigation,route}) =>  {
         //if yes, try to post in the backend
         //if not, repeat
         return new Promise ((resolve, reject) => {
-            fetch(`http://${global.enrico}:8080/api/patients/${global.id}/weights`, {
+            fetch(`${global.enrico}/api/patients/${global.id}/weights`, {
                 method: 'POST',
                 headers: {'Content-Type': "application/json"},
                 body:  JSON.stringify(
@@ -83,7 +83,7 @@ const Profilo = ({navigation,route}) =>  {
         })
     }
     getweightValuesbyId = () => {
-        fetch(`http://${global.enrico}:8080/api/patients/${global.id}/weights`)
+        fetch(`${global.enrico}/api/patients/${global.id}/weights`)
             .then((response) => response.json())
             .then((json) =>{ 
                 setlastWeight(Array.of(json[json.length -1])); 

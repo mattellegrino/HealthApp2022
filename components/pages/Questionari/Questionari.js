@@ -71,7 +71,7 @@ export default function Questionari({navigation,route}) {
     }
   
     getQuestionnairesCompiled = (AllQuestionnaireTemplate) => {
-        fetch(`http://${global.enrico}:8080/api/patients/${global.id}/questionnaires`)
+        fetch(`${global.enrico}/api/patients/${global.id}/questionnaires`)
             .then((response) => response.json())
             .then((json) =>{
                 let questionari_compilati = json.map(json => QuestionnaireAnswered.from(json));
@@ -86,7 +86,7 @@ export default function Questionari({navigation,route}) {
 
 
     getQuestionnairesAvailable = () => {
-        fetch(`http://${global.enrico}:8080/api/questionnaires/templates`)
+        fetch(`${global.enrico}/api/questionnaires/templates`)
             .then((response) => response.json())
             .then((json) =>{
                 let AllQuestionnaireTemplate = json.map(json => QuestionnaireTemplate.from(json));

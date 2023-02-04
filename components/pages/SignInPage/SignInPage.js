@@ -22,14 +22,14 @@ const SignInPage = ({ navigation }) =>  {
     let   loggedUser = useRef(undefined)
 
     //indirizzo ip locale, da capire meglio quale ip usare quando i docker del backend saranno pronti.
-    let ip_add = global.enrico
+    //let ip_add = global.enrico
     //ip_add = global.matteo
 
 
     const doLogin = async () => {
         try{
 
-                let authUser = await login(username,password,ip_add);
+                let authUser = await login(username,password);
                 let token_exists = authUser.tokenExists
                 console.log(token_exists)
 
@@ -77,7 +77,7 @@ const SignInPage = ({ navigation }) =>  {
 
     async function getUser(username, type) {
 
-        const response = await fetch(`http://${ip_add}:8080/api/users/${username}?userType=${type}`);
+        const response = await fetch(`${global.enrico}/api/users/${username}?userType=${type}`);
         const userJson = await response.json();
         if (response.ok){
             switch (type){
@@ -112,7 +112,7 @@ const SignInPage = ({ navigation }) =>  {
                 //vai direttamente homepage
                 console.log("Attraverso il cookie direttamente homepage");
                 console.log("COOKIE :" + value)
-                ip_add = global.enrico
+                //ip_add = global.enrico
 
                 let username= user_obj.authUser.username;
                 console.log("Userobj username: " +username)
@@ -209,15 +209,15 @@ const SignInPage = ({ navigation }) =>  {
     );
 };
 
- async function login(username, password,ip_add){
+ async function login(username, password){
     const formData  = new FormData();
     formData.append('username', username);
     formData.append('password', password);
     formData.append('remember-me',"on");
 
-    console.log(`http://${ip_add}:8080/login`)
+    console.log(`${global.enrico}/login`)
      return new Promise ((resolve, reject) => {
-        fetch(`http://${ip_add}:8080/login`, {
+        fetch(`${global.enrico}/login`, {
             method: 'POST',
             body: formData
         })

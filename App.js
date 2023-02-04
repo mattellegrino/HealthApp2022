@@ -1,12 +1,9 @@
 import React, {useEffect, useState} from "react";
-import * as Network from 'expo-network';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignInPage from "./components/pages/SignInPage/SignInPage";
-import SleepChart from "./components/graphs/SleepChart";
 import Impostazioni from "./components/pages/Impostazioni/Impostazioni";
 import Questionari from "./components/pages/Questionari/Questionari";
-import Progressi from "./components/pages/Progressi/Progressi";
 import Peso from "./components/pages/Peso/Peso";
 import Questionario from "./components/pages/Questionari/Questionario";
 import Profilo from "./components/pages/Profilo/Profilo";
@@ -25,7 +22,7 @@ import Tabs from "./components/Tabs/Tabs";
 
 const Stack = createNativeStackNavigator();
 
-global.enrico = "192.168.1.127";
+global.enrico = "https://softeng.polito.it/health-core-new";
 
 const App = () => {
     return (
