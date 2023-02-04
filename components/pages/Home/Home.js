@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomePage_s from "../HomePage/HomePage_s";
+import HomePage from "../HomePage/HomePage";
 import Questionari from "../Questionari/Questionari";
 const Tab = createBottomTabNavigator();
 
@@ -12,7 +12,7 @@ export default function Home() {
     <Tab.Navigator>
        <Tab.Screen
                     name="HomePage_"
-                    component={HomePage_s}
+                    component={HomePage}
                     options={{
                         title: "Benvenuto",
                         headerBackTitleVisible: false,

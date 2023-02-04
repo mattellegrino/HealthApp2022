@@ -137,37 +137,7 @@ export default function Questionari({navigation,route}) {
                                questionnaireTemplateId={quest.id}></CopertinaQuestionario>
 
         ))}       
-           
-                  
-           {/*{isLoadingQuests ? <ActivityIndicator/> :
-              (<CopertinaQuestionario titolo={quests_todo[0].questions[3].questionSection.name.substring(0, 6)} domande_e_risposte ={[{testo: quests_todo[0].questions[3].text,risposte:[quests_todo[0].questions[3].possibleQuestionAnswer[0].text,quests_todo[0].questions[3].possibleQuestionAnswer[1].text,quests_todo[0].questions[3].possibleQuestionAnswer[2].text]},
-                      {testo: quests_todo[0].questions[4].text,risposte:[quests_todo[0].questions[4].possibleQuestionAnswer[0].text,quests_todo[0].questions[4].possibleQuestionAnswer[1].text,quests_todo[0].questions[4].possibleQuestionAnswer[2].text]}
-                  ]}
-                  ></CopertinaQuestionario>
-              )}
-
-          {isLoadingQuests ? <ActivityIndicator/> :
-              (<CopertinaQuestionario titolo={quests_todo[0].questions[6].questionSection.name.substring(0, 8)} domande_e_risposte ={[{testo: quests_todo[0].questions[6].text,risposte:[quests_todo[0].questions[6].possibleQuestionAnswer[0].text,quests_todo[0].questions[6].possibleQuestionAnswer[1].text,quests_todo[0].questions[6].possibleQuestionAnswer[2].text]},
-                      {testo: quests_todo[0].questions[7].text,risposte:[quests_todo[0].questions[7].possibleQuestionAnswer[0].text,quests_todo[0].questions[7].possibleQuestionAnswer[1].text,quests_todo[0].questions[7].possibleQuestionAnswer[2].text]}
-                  ]}
-                  ></CopertinaQuestionario>
-              )}
-          {isLoadingQuests ? <ActivityIndicator/> :
-              (<CopertinaQuestionario titolo={"SPMSQ"} domande_e_risposte ={["",""]}>
-                  </CopertinaQuestionario>
-                )} */}
       </View>
-
-        {/*<View style={{flex: 3, alignItems:"center", justifyContent:"center"}}>
-            <View style={{flex:1,borderTopColor:"#000",borderTopWidth:2,width:"100%",alignItems: "center",padding:15}}>
-                <Text style={s.header(2,"bold")}> I consigli della settimana </Text>
-                <Text style={[s.header(4,"regular"),{textAlign: "center", color:"#000",padding:45}]}> Completa almeno un questionario per vedere i consigli della settimana </Text>
-            </View>
-            <View>
-
-            </View>
-              </View>*/}
-
     </ScrollView>
   );
 }

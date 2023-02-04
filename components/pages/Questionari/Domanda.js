@@ -24,7 +24,7 @@ export default function Domanda(props) {
   return (
    <View style={styles.container}>
      <View style={{flex:0.5,alignItems: "center"}}>
-       <Text style={s.body("regular")}>Domanda n° {props.n_domanda + 1} </Text>
+       <Text style={s.body("regular")}>Domanda {props.n_domanda + 1}/{props.questionAnswers.length} </Text>
      </View>
      <View style={{flex:1,alignItems: "center"}}>
        <Text style={s.header(3,"medium")}>{props.testo}</Text>

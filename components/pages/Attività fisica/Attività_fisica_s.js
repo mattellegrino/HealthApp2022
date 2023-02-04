@@ -1046,7 +1046,7 @@ export default function Attività_fisica_s({ route }) {
         </View>
         <GestureRecognizer style={styles.container_swipe_gestures} onSwipeLeft={()=> plus()} onSwipeRight={()=> minus()}>
          <View style={{marginBottom: 20}}>
-          <Text style={s.header(4,"bold")}>SCORRI PER NAVIGARE TRA LE DATE</Text>
+          <Text style={s.body("bold")}>SCORRI PER NAVIGARE TRA LE DATE</Text>
          </View>  
           <LottieView
                 style={{height:50}}

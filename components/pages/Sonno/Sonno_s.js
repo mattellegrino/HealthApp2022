@@ -772,7 +772,7 @@ const styles = StyleSheet.create({
     container_swipe_gestures: {
       borderTopWidth:3,
       borderTopColor: "#1565C0",
-      flex: 0.3,
+      flex: 0.4,
       backgroundColor: "#fff",
       padding:20,
       marginTop:10,

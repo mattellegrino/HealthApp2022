@@ -62,8 +62,6 @@ export default function Questionario({route,navigation},props) {
       return questionAnswer;
     })
 
-    console.log(questionAnswersForAPI)
-
     let body = {
       "description": "Questionario_risposto_numero_"+questionnaireTemplateId,
       "submissionDate": date,

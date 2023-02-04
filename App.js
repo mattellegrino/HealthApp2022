@@ -13,7 +13,7 @@ import Profilo from "./components/pages/Profilo/Profilo";
 import Recommendation from "./components/pages/Recommendation";
 import Alimentazione from "./components/pages/Alimentazione/Alimentazione";
 import InserisciAlimento from "./components/pages/Alimentazione/InserisciAlimento";
-import HomePage_s from "./components/pages/HomePage/HomePage_s";
+import HomePage from "./components/pages/HomePage/HomePage";
 import Sonno_s from "./components/pages/Sonno/Sonno_s";
 import Attività_fisica_s from "./components/pages/Attività fisica/Attività_fisica_s";
 import Attività_fisica_c from "./components/pages/Attività fisica/Attività_fisica_c";
@@ -25,24 +25,18 @@ import Tabs from "./components/Tabs/Tabs";
 
 const Stack = createNativeStackNavigator();
 
-global.enrico = "192.168.1.54";
+global.enrico = "192.168.1.127";
 
 const App = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator initialRouteName='Home'>
-                <Stack.Screen
-                    name="HomePage_s"
-                    component={Tabs}
-                    options={{
+                <Stack.Screen name="HomePage" component={Tabs} options={{
                         title: "Benvenuto",
                         headerBackTitleVisible: false,
                         headerShown: false,
-                    }}
-                />
-
-                <Stack.Screen
-                    name="Home"
+                }}/>   
+                <Stack.Screen name="Home"
                     component={SignInPage}
                     options={{
                         title: "Benvenuto in HealthApp!",
@@ -51,8 +45,7 @@ const App = () => {
                         headerTitleStyle: {
                             fontSize: 16
                         }
-                    }}
-                />
+                }}/>
                 <Stack.Screen name="Impostazioni" component={Impostazioni} options={{
                     headerShadowVisible: false,
                     headerTitleAlign: "center",
@@ -82,8 +75,6 @@ const App = () => {
                         fontSize: 16
                     }
                 }}/>
-        
-
                 <Stack.Screen name="Sonno_s" component={Sonno_s} options={{
                     headerShadowVisible: false,
                     headerTitleAlign: "center",
@@ -142,7 +133,6 @@ const App = () => {
                         fontSize: 16
                     }
                 }}/>
-
                 <Stack.Screen name="Analisi_Output" component={AnalisiOutput} options={{
                     headerShadowVisible: false,
                     headerTitleAlign: "center",
@@ -150,7 +140,6 @@ const App = () => {
                         fontSize: 16
                     }
                 }}/>
-
                 <Stack.Screen name="Inserimento Analisi" component={Inserimento_Analisi} options={{
                     headerShadowVisible: false,
                     headerTitleAlign: "center",
@@ -158,8 +147,6 @@ const App = () => {
                         fontSize: 16
                     }
                 }}/>
-
-
                 <Stack.Screen name="FitbitForm" component={FitbitForm} options={{
                     headerShadowVisible: false,
                     headerTitleAlign: "center",
@@ -167,7 +154,6 @@ const App = () => {
                         fontSize: 16
                     }
                 }}/>
-                <Stack.Screen name="SleepChart" component={SleepChart}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

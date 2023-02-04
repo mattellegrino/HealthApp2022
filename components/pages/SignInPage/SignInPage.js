@@ -9,7 +9,6 @@ import {
 
 import CustomInput from  '../../CustomInput'
 import CustomButton from "../../CustomButton";
-import Header from "../../Headers/Header";
 import Patient from "../../../classes/Patient";
 const styles = require("../../../core/styles");
 import * as SecureStore from 'expo-secure-store';
@@ -40,7 +39,7 @@ const SignInPage = ({ navigation }) =>  {
 
                     Alert.alert("Token", "Token fitbit non inizializzato, contattare amministratore", [
                         {
-                            text: "Escita forzata",
+                            text: "Uscita forzata",
                             onPress: () => {
                                 BackHandler.exitApp();
                             },
@@ -123,7 +122,7 @@ const SignInPage = ({ navigation }) =>  {
                 global.id = _user.id;
                 global.patient_type = loggedUser._user_type
 
-                navigation.navigate('HomePage_s', {
+                navigation.navigate('HomePage', {
                     username: _user.firstName,
                     ip_add: ip_add
                 })
@@ -145,16 +144,16 @@ const SignInPage = ({ navigation }) =>  {
         setIsLoading(false)
             //loggato
               await doLogin()
-        console.log("Errore di autenticazione= ",authenticationError);
             if (authenticationError.current===false) {
                 // login andato a buon fine.
                 setIsLoading(true);
-                    console.log("DATA: "+ loggedUser)
-                    navigation.navigate('HomePage_s',{ username:loggedUser.user.firstName,
+                    navigation.navigate('HomePage',{ username:loggedUser.user.firstName,
                         ip_add:ip_add,user:loggedUser.user
                     } )
             } else {
-                Alert.alert("Errore di autenticazione, riprovare")
+                Alert.alert(
+                "Errore di autenticazione", 
+                "Username o password sono incorretti")
                 setIsLoading(true)
                 authenticationError=false;
             }
@@ -192,12 +191,13 @@ const SignInPage = ({ navigation }) =>  {
                 />
             </View>
             <View style={styles.root}>
-                <CustomInput placeholder="Username"  value={username} setValue={setUsername}
-                             onFocus={() => handleError(null, 'username')} error={errors.username}  />
-                <CustomInput placeholder="Password"  value={password} setValue={setPassword} secureTextEntry={true}
-                             onFocus={() => handleError(null, 'password')} error={errors.password} />
+                <CustomInput placeholder="Username" value={username} setValue={setUsername}
+                             onFocus={() => handleError(null, 'username')} error={errors.username}>
+                </CustomInput>
+                <CustomInput placeholder="Password" value={password} setValue={setPassword} eye={true}
+                             onFocus={() => handleError(null, 'password')} error={errors.password}/>
               <View style={styles.loginButton}>
-                <CustomButton  onPress={
+                <CustomButton  login={true} style={{width:"100%"}}onPress={
                     validate
                 } button={"first"} text={isLoading ? "Accedi" :
                     (loggedUser?"Loggato":<ActivityIndicator/>)
@@ -257,6 +257,14 @@ const styles_ = StyleSheet.create({
         width: 136,
         height: 128,
     },
+
+    input : {
+        width: "100%",
+        borderWidth:1,
+        marginBottom:20,
+        borderRadius: 20,
+        padding:10
+    }
 });
 
 export default SignInPage

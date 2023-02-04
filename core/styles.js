@@ -96,7 +96,8 @@ module.exports = StyleSheet.create({
   },
 
   loginButton: {
-    flex:1,
+    flex:0,
+    width: "100%",
     flexDirection: "row",
     alignSelf: "center"
   },
@@ -115,7 +116,7 @@ module.exports = StyleSheet.create({
   },
   secondary_button: {
     position: "relative",
-    backgroundColor: "#fff",
+    backgroundColor: "white",
     borderColor: "#4E67EB",
     borderRadius: 10,
     shadowColor: "#000000",
@@ -167,6 +168,7 @@ module.exports = StyleSheet.create({
   primary_button_text : size => ({
 
     padding: 8,
+    alignSelf:"center",
     fontWeight: "bold",
     paddingHorizontal: 20,
     fontSize: size=="medium" ? 15 : size=="big" ? 20 : 13,
@@ -183,6 +185,7 @@ module.exports = StyleSheet.create({
   secondary_button_text : size => ({
     padding: 8,
     fontWeight: "bold",
+    alignSelf:"center",
     paddingHorizontal: 20,
     fontSize: size=="medium" ? 15 : size=="big" ? 20 : 13,
     color: "#4E67EB",
@@ -199,6 +202,7 @@ module.exports = StyleSheet.create({
   tertiary_button_text : size => ({
     padding: 8,
     fontWeight: "bold",
+    alignSelf:"center",
     paddingHorizontal: 20,
     fontSize: size=="medium" ? 15 : size=="big" ? 20 : 13,
     color: "#FFF",

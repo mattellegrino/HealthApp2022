@@ -1,9 +1,9 @@
 {
   "expoServerPort": null,
-  "packagerPort": null,
+  "packagerPort": 19000,
   "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://ey-mv9.mattellegrino.healthapp2022.exp.direct",
+  "packagerNgrokUrl": "https://ey-mv9.mattellegrino.healthapp2022.exp.direct",
+  "ngrokPid": 18566,
   "webpackServerPort": null
 }

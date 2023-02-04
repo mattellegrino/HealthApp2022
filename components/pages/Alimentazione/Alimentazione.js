@@ -1,14 +1,17 @@
-import { View, SafeAreaView, Text, StyleSheet, FlatList, StatusBar } from 'react-native'
+import { View, SafeAreaView, Text, StyleSheet, FlatList, BackHandler } from 'react-native'
 import React, {useState,useEffect} from 'react'
 import PastoRow from './PastoRow';
 import CustomNavbar from '../../CustomNavbar/CustomNavbar';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import CaloriesBox from './CaloriesBox';
 const s = require("../../../core/styles");
+import { useRoute } from '@react-navigation/native';
+
 export default function Alimentazione({route}) {
 
     const [isSelected,setIsSelected] = useState("Giorno");
     const [range_time,setRangeTime] = useState("");
+    const _route = useRoute();
     
     
     const handleselection = (selected) => {
@@ -16,6 +19,7 @@ export default function Alimentazione({route}) {
     }
 
     useEffect(() => {
+
 
       const data = new Date();
 
@@ -47,7 +51,8 @@ export default function Alimentazione({route}) {
            var rangetime = data.getDate() + "/" + data.getMonth() + "/" + data.getFullYear();
            setRangeTime(rangetime);
         }
-       
+
+        
       },[isSelected])
 
     const DATA = [
