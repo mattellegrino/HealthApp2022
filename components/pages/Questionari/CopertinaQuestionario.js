@@ -27,7 +27,6 @@ export default function CopertinaQuestionario(props) {
           domande_e_risposte : props.domande_e_risposte,
           compiledAnswers:props.compiledAnswers,
           username:props.username,
-           ip_add: props.ip_add,
            user:props.user,
            compilato:props.compilato,
             questionnaireTemplateId: props.questionnaireTemplateId

@@ -77,7 +77,7 @@ const SignInPage = ({ navigation }) =>  {
 
     async function getUser(username, type) {
 
-        const response = await fetch(`${global.enrico}/api/users/${username}?userType=${type}`);
+        const response = await fetch(`${global.endpoint}/api/users/${username}?userType=${type}`);
         const userJson = await response.json();
         if (response.ok){
             switch (type){
@@ -123,8 +123,7 @@ const SignInPage = ({ navigation }) =>  {
                 global.patient_type = loggedUser._user_type
 
                 navigation.navigate('HomePage', {
-                    username: _user.firstName,
-                    ip_add: ip_add
+                    username: _user.firstName
                 })
             }
         } catch (error) {
@@ -148,7 +147,7 @@ const SignInPage = ({ navigation }) =>  {
                 // login andato a buon fine.
                 setIsLoading(true);
                     navigation.navigate('HomePage',{ username:loggedUser.user.firstName,
-                        ip_add:ip_add,user:loggedUser.user
+                        user:loggedUser.user
                     } )
             } else {
                 Alert.alert(
@@ -215,9 +214,9 @@ const SignInPage = ({ navigation }) =>  {
     formData.append('password', password);
     formData.append('remember-me',"on");
 
-    console.log(`${global.enrico}/login`)
+    console.log(`${global.endpoint}/login`)
      return new Promise ((resolve, reject) => {
-        fetch(`${global.enrico}/login`, {
+        fetch(`${global.endpoint}/login`, {
             method: 'POST',
             body: formData
         })

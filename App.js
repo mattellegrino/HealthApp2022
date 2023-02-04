@@ -10,7 +10,7 @@ import Profilo from "./components/pages/Profilo/Profilo";
 import Recommendation from "./components/pages/Recommendation";
 import Alimentazione from "./components/pages/Alimentazione/Alimentazione";
 import InserisciAlimento from "./components/pages/Alimentazione/InserisciAlimento";
-import HomePage from "./components/pages/HomePage/HomePage";
+import HomePage from "./components/pages/HomePage";
 import Sonno_s from "./components/pages/Sonno/Sonno_s";
 import Attività_fisica_s from "./components/pages/Attività fisica/Attività_fisica_s";
 import Attività_fisica_c from "./components/pages/Attività fisica/Attività_fisica_c";
@@ -22,7 +22,7 @@ import Tabs from "./components/Tabs/Tabs";
 
 const Stack = createNativeStackNavigator();
 
-global.enrico = "https://softeng.polito.it/health-core-new";
+global.endpoint = "http://ec2-13-38-244-89.eu-west-3.compute.amazonaws.com";
 
 const App = () => {
     return (

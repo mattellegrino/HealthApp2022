@@ -31,7 +31,7 @@ export default function Questionario({route,navigation},props) {
   async function postPatientQuestionnaire(body) {
 
     return new Promise ((resolve, reject) => {
-      fetch(`${global.enrico}/api/patients/${global.id}/questionnaires`, {
+      fetch(`${global.endpoint}/api/patients/${global.id}/questionnaires`, {
         method: 'POST',
         headers: {'Content-Type': "application/json"},
         body: JSON.stringify(body)

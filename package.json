@@ -2,7 +2,7 @@
   "name": "HealthApplication",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
-  "proxy": "https://softeng.polito.it/health-core-new",
+  "proxy": "http://ec2-13-38-244-89.eu-west-3.compute.amazonaws.com",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",

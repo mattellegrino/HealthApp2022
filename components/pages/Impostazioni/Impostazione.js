@@ -15,7 +15,7 @@ export default function Impostazione(props) {
        console.log("Logout")
        await SecureStore.deleteItemAsync('cookie')
        await SecureStore.deleteItemAsync('loggedUser')
-       await fetch(`${global.enrico}/logout`);
+       await fetch(`${global.endpoint}/logout`);
    }
 
 

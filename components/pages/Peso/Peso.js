@@ -58,7 +58,7 @@ async function postWeight(peso) {
     //if yes, try to post in the backend
     //if not, repeat
     return new Promise ((resolve, reject) => {
-        fetch(`${global.enrico}/api/patients/${global.id}/weights`, {
+        fetch(`${global.endpoint}/api/patients/${global.id}/weights`, {
             method: 'POST',
             headers: {'Content-Type': "application/json"},
             body:  JSON.stringify(
