@@ -112,11 +112,10 @@ export default function Questionari({navigation,route}) {
   return (
     <ScrollView style={{ flex:8,padding:10, width:"100%", backgroundColor:"#FFFFFF"}}>
          
-       <CustomNavbar type={"questionari"} isSelected={isSelected} selezioni={["Compilare","Compilati"]} handleselection={handleselection}/>
+      <CustomNavbar type={"questionari"} isSelected={isSelected} selezioni={["Compilare","Compilati"]} handleselection={handleselection}/>
 
     
-      <View style={{flex: 8
-        , flexDirection: "column", justifyContent: "space-around", alignItems: "center"}}>
+      <View style={{flex: 8, flexDirection: "column", justifyContent: "space-around", alignItems: "center"}}>
 
 
       {isLoadingQuests ? <ActivityIndicator/> : quests.length == 0 &&

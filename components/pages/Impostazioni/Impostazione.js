@@ -31,7 +31,7 @@ export default function Impostazione(props) {
                   },
                   { text: "Si", onPress: async () => {
                           //doLogout() and redirect home screen
-                          await doLogout().then(() =>  navigation.navigate('Home'));
+                          await doLogout().then(() =>  navigation.replace('Home'));
                       } }
               ]);
           }

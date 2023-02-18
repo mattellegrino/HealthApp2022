@@ -122,7 +122,7 @@ const SignInPage = ({ navigation }) =>  {
                 global.id = _user.id;
                 global.patient_type = loggedUser._user_type
 
-                navigation.navigate('HomePage', {
+                navigation.replace('HomePage', {
                     username: _user.firstName
                 })
             }
@@ -146,7 +146,7 @@ const SignInPage = ({ navigation }) =>  {
             if (authenticationError.current===false) {
                 // login andato a buon fine.
                 setIsLoading(true);
-                    navigation.navigate('HomePage',{ username:loggedUser.user.firstName,
+                    navigation.replace('HomePage',{ username:loggedUser.user.firstName,
                         user:loggedUser.user
                     } )
             } else {
