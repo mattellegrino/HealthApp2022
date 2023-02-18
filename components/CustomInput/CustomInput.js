@@ -4,6 +4,7 @@ import { TextInput, StyleSheet, TouchableOpacity, View} from "react-native";
 const s = require("../../core/styles");
 const  CustomInput = ({value,setValue,placeholder,eye,onFocus,error,keyboardType, numericInput}) => {
 const [showPassword,setShowPassword] = useState(true);
+const [focused,setFocused] = useState(false);
 
 const handleShowPassword = () => {
 
@@ -15,10 +16,11 @@ const handleShowPassword = () => {
             <View style={styles.container}>
                 <TextInput
                     autoCapitalize='none'
-                    onFocus={onFocus}
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
                     placeholder={placeholder}
                     selectionColor={"grey"}
-                    style={numericInput? s.input_num : styles.input}
+                    style={numericInput? s.input_num : styles.input(focused)}
                     value={value}
                        onChangeText={setValue}
                        secureTextEntry={eye ? showPassword : false}
@@ -45,14 +47,16 @@ const handleShowPassword = () => {
 
 const styles = StyleSheet.create({
 
-    input : {
+    input: (focused) => ({
         position:"relative",
         width: "100%",
-        borderWidth:1,
+        borderWidth: focused ? 1.5 : 1,
+        borderColor: focused ? "black" : "grey",
         marginBottom:20,
         borderRadius: 20,
         padding:10
-    },
+    }),
+
     container: {
         flex: 0,
         justifyContent:"center",
