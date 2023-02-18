@@ -1,8 +1,7 @@
 import {View, Text, ActivityIndicator, Pressable, FlatList, StyleSheet,Modal,Keyboard,Image, Alert, TouchableOpacity} from 'react-native'
-import { BarChart, LineChart, PieChart } from "react-native-gifted-charts";
+import { LineChart } from "react-native-gifted-charts";
 import React, {useEffect, useRef, useState} from 'react'
 import Generalità from './Generalità'
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { Card } from "react-native-shadow-cards";
 const s = require("../../../core/styles");
 import { Avatar } from 'react-native-paper';
