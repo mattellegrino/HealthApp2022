@@ -2,14 +2,9 @@ import { View, Text, Modal, Alert} from "react-native";
 import React, {useState, useEffect} from "react";
 import Domanda from "./Domanda";
 import CustomButton from "../../CustomButton";
-import { RadioButton } from 'react-native-paper';
-import PatientQuestionnaire from "../../../classes/PatientQuestionnaire";
-import QuestionAnswer from "../../../classes/QuestionAnswer";
-import zocial from "react-native-vector-icons/Zocial";
-import { set } from "react-hook-form";
 const s = require("../../../core/styles");
 
-export default function Questionario({route,navigation},props) {
+export default function Questionario({route,navigation}) {
 
   const {nomequestionario,domande_e_risposte,update,compilato,compiledAnswers,questionnaireTemplateId} = route.params;
   const [n_domanda,setNumeroDomanda] = useState(0);

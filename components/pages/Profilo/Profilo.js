@@ -215,6 +215,7 @@ const Profilo = ({navigation,route}) =>  {
                  renderItem={renderItem}
                  keyExtractor={item => item.id}
                 />
+                
                 <Modal
                   transparent={true}
                   visible={modalVisible}
